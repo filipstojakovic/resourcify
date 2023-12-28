@@ -16,14 +16,13 @@ public class SecurityConfig {
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeRequests(x->x.anyRequest().authenticated())
+        http.authorizeRequests(x -> x.anyRequest().authenticated())
                 //.mvcMatcher("/**")
                 //.authorizeRequests()
                 //.mvcMatchers("/**")
                 //.access("hasAuthority('SCOPE_message.read')")
                 //.and()
-                .oauth2ResourceServer()
-                .jwt();
+                .oauth2ResourceServer().jwt();
         return http.build();
     }
 }

@@ -1,14 +1,14 @@
 import {APP_INITIALIZER, NgModule} from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import {BrowserModule} from '@angular/platform-browser';
 
-import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import {AppComponent} from './app.component';
+import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {MaterialModule} from "./module/material.module";
 import {HttpClientModule} from "@angular/common/http";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AppRoutingModule} from "./module/app-routing.module";
-import { HomeComponent } from './page/home/home.component';
-import { ResourceComponent } from './page/resource/resource.component';
+import {HomeComponent} from './page/home/home.component';
+import {ResourceComponent} from './page/resource/resource.component';
 import {KeycloakAngularModule, KeycloakService} from "keycloak-angular";
 import {initializeKeycloak} from "./auth/initKeycloack";
 
@@ -16,7 +16,7 @@ import {initializeKeycloak} from "./auth/initKeycloack";
   declarations: [
     AppComponent,
     HomeComponent,
-    ResourceComponent
+    ResourceComponent,
   ],
   imports: [
     BrowserModule,
@@ -26,7 +26,7 @@ import {initializeKeycloak} from "./auth/initKeycloack";
     AppRoutingModule,
     FormsModule,
     ReactiveFormsModule,
-    KeycloakAngularModule
+    KeycloakAngularModule,
   ],
   providers: [
     {
@@ -36,6 +36,7 @@ import {initializeKeycloak} from "./auth/initKeycloack";
       deps: [KeycloakService],
     },
   ],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {
+}

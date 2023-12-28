@@ -12,7 +12,7 @@ export class HomeComponent {
   }
 
   onClick() {
-    this.http.get("http://localhost:8083/messages", {responseType: 'text'}).subscribe({
+    this.http.get("http://localhost:8083/messages", { responseType: 'text' }).subscribe({
           next: (res) => {
             console.log("we are here")
             console.log(res)
