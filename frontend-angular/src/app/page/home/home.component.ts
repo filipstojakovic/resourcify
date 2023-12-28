@@ -8,6 +8,8 @@ import {HttpClient} from '@angular/common/http';
 })
 export class HomeComponent {
 
+  result = "";
+
   constructor(private http: HttpClient) {
   }
 
@@ -15,6 +17,7 @@ export class HomeComponent {
     this.http.get("http://localhost:8083/messages", { responseType: 'text' }).subscribe({
           next: (res) => {
             console.log("we are here")
+            this.result = res;
             console.log(res)
           },
           error: (err) => {
