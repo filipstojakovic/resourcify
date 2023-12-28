@@ -3,7 +3,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 .idea
-**/node_modules/target/
+
+frontend-angular/node_modules
+frontend-angular/.angular
 
 ### IntelliJ IDEA ###
 .idea/modules.xml
