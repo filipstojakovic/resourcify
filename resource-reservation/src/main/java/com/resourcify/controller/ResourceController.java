@@ -33,7 +33,7 @@ public class ResourceController {
   @PreAuthorize("hasRole('client-admin-role')")
   public String getMessagesAdmin(@AuthenticationPrincipal Jwt principal) {
     try {
-      User users = userClient.getUserById("asd");
+      User users = userClient.getUserById("16ec4929-5c03-4fd6-a120-1a524245b00a");
     } catch (FeignException ex) {
       throw new ResponseStatusException(HttpStatus.valueOf(ex.status()), MyUtils.extractMessageFromResponse(ex.getMessage()));
     }
