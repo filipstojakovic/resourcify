@@ -1,0 +1,23 @@
+server:
+  port: 8084
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:9000/realms/resourcify-realm
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+
+
+keycloak:
+  url: "http://localhost:9000"
+  realm: "resourcify-realm"
+  admin:
+    username: "admin"
+    password: "admin"

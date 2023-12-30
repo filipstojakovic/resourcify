@@ -26,6 +26,7 @@
     <modules>
         <module>api-gateway</module>
         <module>resource-reservation</module>
+        <module>user-service</module>
     </modules>
 
     <dependencyManagement>
