@@ -3,6 +3,7 @@ import {RouterModule, Routes} from '@angular/router';
 import {HomeComponent} from '../page/home/home.component';
 import {ResourceComponent} from '../page/resource/resource.component';
 import {canActivateFn} from '../auth/canActivateFn';
+import {paths} from '../constants/paths';
 
 export const routes: Routes = [
   {
@@ -11,14 +12,14 @@ export const routes: Routes = [
     redirectTo: "home",
   },
   {
-    path: 'home',
+    path: paths.HOME,
     pathMatch: 'full',
     canActivate: [canActivateFn],
     component: HomeComponent,
     // data: { role: [RoleEnum.admin, RoleEnum.user] } // example of passing role data
   },
   {
-    path: 'resource',
+    path: paths.RESOURCES,
     pathMatch: 'full',
     // canActivate: [canActivateFn],
     component: ResourceComponent,

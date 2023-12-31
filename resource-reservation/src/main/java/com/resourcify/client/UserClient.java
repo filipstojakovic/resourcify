@@ -11,7 +11,7 @@ import java.util.List;
 public interface UserClient {
 
   @GetMapping("users")
-  List<User> getUsers();
+  List<User> getAllUsers();
 
   @GetMapping("users/{id}")
   User getUserById(@PathVariable String id);

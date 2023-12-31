@@ -11,12 +11,14 @@ import {HomeComponent} from './page/home/home.component';
 import {ResourceComponent} from './page/resource/resource.component';
 import {KeycloakAngularModule, KeycloakService} from "keycloak-angular";
 import {initializeKeycloak} from "./auth/initKeycloack";
+import { HeaderComponent } from './component/header/header.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     ResourceComponent,
+    HeaderComponent,
   ],
   imports: [
     BrowserModule,

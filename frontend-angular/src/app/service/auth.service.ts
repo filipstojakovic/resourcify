@@ -59,10 +59,10 @@ export class AuthService {
   }
 
   logout(): void {
-    this.keycloak.logout("https://localhost:4200/").then();
+    this.keycloak.logout().then();
   }
 
   login() {
-    this.keycloak.login({ redirectUri: "https://localhost:4200/secured" }).then();
+    this.keycloak.login().then();
   }
 }

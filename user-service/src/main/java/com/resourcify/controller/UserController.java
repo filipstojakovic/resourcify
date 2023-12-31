@@ -1,9 +1,8 @@
 package com.resourcify.controller;
 
+import com.resourcify.model.User;
+import com.resourcify.service.UserService;
 import lombok.RequiredArgsConstructor;
-import org.keycloak.admin.client.Keycloak;
-import org.keycloak.representations.idm.UserRepresentation;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,22 +16,17 @@ import java.util.List;
 @RestController
 public class UserController {
 
-  public static final String ID_ATTRIBUTE = "id";
-
-  private final Keycloak keycloak;
-
-  @Value("${keycloak.realm}")
-  private String realm;
+  private final UserService userService;
 
   @GetMapping("users")
-  public ResponseEntity<List<UserRepresentation>> users() {
-    List<UserRepresentation> users = keycloak.realm(realm).users().list();
+  public ResponseEntity<List<User>> users() {
+    List<User> users = userService.getAllUsers();
     return ResponseEntity.ok(users);
   }
 
   @GetMapping("users/{id}")
-  public ResponseEntity<UserRepresentation> userById(@PathVariable String id) {
-    List<UserRepresentation> users = keycloak.realm(realm).users().search(ID_ATTRIBUTE + ":" + id, 1, 1);
+  public ResponseEntity<User> userById(@PathVariable String id) {
+    List<User> users = userService.getUserById(id);
     if (users.isEmpty()) {
       throw new ResponseStatusException(HttpStatus.NOT_FOUND, "user not found");
     }

@@ -1,0 +1,51 @@
+<mat-toolbar color="primary" style="gap: 10px">
+
+  <button mat-button [routerLink]=[paths.HOME]
+          routerLinkActive="active-link">
+    <mat-icon>home</mat-icon>
+    <span>Home</span>
+  </button>
+
+  <button mat-button [routerLink]=[paths.RESOURCES]
+          routerLinkActive="active-link">
+    <mat-icon>devices</mat-icon>
+    <span>Resource</span>
+  </button>
+
+  <span class="spacer"></span>
+
+  <span style="padding-right: 10px">{{getLoggedUserName()}}</span>
+
+  <button mat-button (click)="logout()">
+    <mat-icon>logout</mat-icon>
+    <span>Logout</span>
+  </button>
+
+  <!--  <ng-container *ngIf="isLoggedIn(); else notLoggedIn">-->
+  <!--    <button mat-raised-button [routerLink]="[paths.PURCHASE_HISTORY]"-->
+  <!--            routerLinkActive="selected-button">Purchase history-->
+  <!--    </button>-->
+  <!--    <button mat-raised-button [routerLink]="[paths.USER_PRODUCTS]"-->
+  <!--            routerLinkActive="selected-button">Your products-->
+  <!--    </button>-->
+  <!--    <button mat-raised-button [routerLink]="[paths.SELL_PRODUCT]"-->
+  <!--            routerLinkActive="selected-button">Sell product-->
+  <!--    </button>-->
+  <!--    <button mat-raised-button [routerLink]="[paths.CONTACT_SUPPORT]"-->
+  <!--            routerLinkActive="selected-button">Contact support-->
+  <!--    </button>-->
+
+  <!--    <app-avatar-button style="margin: 0" [id]="id"-->
+  <!--                       [routerLink]="[paths.PROFILE]"></app-avatar-button>-->
+  <!--    <button mat-raised-button (click)="logoutClick()">Logout</button>-->
+  <!--  </ng-container>-->
+
+  <!--  <ng-template #notLoggedIn>-->
+  <!--    <button mat-raised-button [routerLink]="[paths.LOGIN]"-->
+  <!--            routerLinkActive="selected-button">Login-->
+  <!--    </button>-->
+  <!--    <button mat-raised-button [routerLink]="[paths.REGISTER]"-->
+  <!--            routerLinkActive="selected-button">Register-->
+  <!--    </button>-->
+  <!--  </ng-template>-->
+</mat-toolbar>
