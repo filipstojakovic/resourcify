@@ -12,6 +12,8 @@ import {ResourceComponent} from './page/resource/resource.component';
 import {KeycloakAngularModule, KeycloakService} from "keycloak-angular";
 import {initializeKeycloak} from "./auth/initKeycloack";
 import { HeaderComponent } from './component/header/header.component';
+import {FullCalendarModule} from '@fullcalendar/angular';
+import { CalendarComponent } from './component/calendar/calendar.component';
 
 @NgModule({
   declarations: [
@@ -19,6 +21,7 @@ import { HeaderComponent } from './component/header/header.component';
     HomeComponent,
     ResourceComponent,
     HeaderComponent,
+    CalendarComponent,
   ],
   imports: [
     BrowserModule,
@@ -29,6 +32,7 @@ import { HeaderComponent } from './component/header/header.component';
     FormsModule,
     ReactiveFormsModule,
     KeycloakAngularModule,
+    FullCalendarModule
   ],
   providers: [
     {

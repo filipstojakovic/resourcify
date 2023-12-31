@@ -8,3 +8,19 @@ body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
+
+
+.root-container {
+  height: 100%;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+mat-toolbar {
+
+}
+
+.content-container {
+  overflow-y: auto;
+  padding: 1rem;
+}
