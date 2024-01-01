@@ -1,6 +1,6 @@
 package com.resourcify.client;
 
-import com.resourcify.model.User;
+import com.resourcify.common.model.User;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

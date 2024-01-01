@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {CalendarOptions} from '@fullcalendar/core';
+import {CalendarOptions, EventClickArg} from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
-import interactionPlugin from '@fullcalendar/interaction';
+import interactionPlugin, {DateClickArg} from '@fullcalendar/interaction';
 import listPlugin from '@fullcalendar/list'
 
 @Component({
@@ -25,11 +25,24 @@ export class CalendarComponent implements OnInit{
       left: 'prev,next',
       center: 'title',
       right: 'dayGridMonth,dayGridWeek,dayGridDay,listWeek'
-    }
+    },
+
+    dateClick: this.handleDateClick.bind(this),
+    eventClick: this.handleEventClick.bind(this),
 
 
     // events: this.events
   };
+
+  handleDateClick(arg: DateClickArg) {
+    alert(arg.date);
+    console.log(arg);
+  }
+
+  handleEventClick(arg: EventClickArg) {
+    alert(arg.event.title);
+    console.log(arg);
+  }
 
   // https://fullcalendar.io/docs/event-parsing
   events = [
@@ -40,6 +53,4 @@ export class CalendarComponent implements OnInit{
   ngOnInit(): void {
     this.calendarOptions.events = this.events;
   }
-
-
 }

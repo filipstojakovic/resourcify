@@ -1,6 +1,6 @@
 package com.resourcify.controller;
 
-import com.resourcify.model.User;
+import com.resourcify.common.model.User;
 import com.resourcify.service.UserService;
 import com.resourcify.utils.MyUtils;
 import feign.FeignException;

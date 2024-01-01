@@ -1,4 +1,4 @@
-package com.resourcify.model;
+package com.resourcify.common.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
