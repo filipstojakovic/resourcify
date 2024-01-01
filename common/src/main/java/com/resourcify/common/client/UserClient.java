@@ -1,4 +1,4 @@
-package com.resourcify.client;
+package com.resourcify.common.client;
 
 import com.resourcify.common.model.User;
 import org.springframework.cloud.openfeign.FeignClient;

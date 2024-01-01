@@ -1,4 +1,4 @@
-package com.resourcify;
+package com.resourcify.common;
 
 // public class Main {
 //

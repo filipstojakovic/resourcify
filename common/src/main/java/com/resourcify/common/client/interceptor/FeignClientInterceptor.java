@@ -1,4 +1,4 @@
-package com.resourcify.client.interceptor;
+package com.resourcify.common.client.interceptor;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;

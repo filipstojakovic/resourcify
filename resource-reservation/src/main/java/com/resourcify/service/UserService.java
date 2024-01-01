@@ -1,6 +1,6 @@
 package com.resourcify.service;
 
-import com.resourcify.client.UserClient;
+import com.resourcify.common.client.UserClient;
 import com.resourcify.common.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,6 +18,6 @@ public class UserService {
   }
 
   public User getUserById(String id) {
-    return userClient.getUserById("16ec4929-5c03-4fd6-a120-1a524245b00a"); //TODO: fix me
+    return userClient.getUserById(id);
   }
 }
