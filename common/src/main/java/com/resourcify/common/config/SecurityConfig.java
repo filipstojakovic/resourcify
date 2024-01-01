@@ -1,4 +1,4 @@
-package com.resourcify.config;
+package com.resourcify.common.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

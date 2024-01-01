@@ -1,4 +1,4 @@
-package com.resourcify.config;
+package com.resourcify.common.config;
 
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
