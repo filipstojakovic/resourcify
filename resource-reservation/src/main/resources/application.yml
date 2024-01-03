@@ -4,6 +4,16 @@ server:
     include-message: always
 
 spring:
+  data:
+    mongodb:
+      authentication-database: admin
+      username: root
+      password: root
+      database: resource_db
+      host: localhost
+      port: 27017
+      auto-index-creation: true
+
   security:
     oauth2:
       resourceserver:
