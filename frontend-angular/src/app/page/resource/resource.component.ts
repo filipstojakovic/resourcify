@@ -7,7 +7,7 @@ import {UserService} from '../../service/user.service';
   templateUrl: './resource.component.html',
   styleUrls: ['./resource.component.css'],
 })
-export class ResourceComponent implements OnInit{
+export class ResourceComponent implements OnInit {
 
   result = "";
 
@@ -27,7 +27,7 @@ export class ResourceComponent implements OnInit{
   }
 
   onClick() {
-    this.http.get("http://localhost:8083/messages", { responseType: 'text' }).subscribe({
+    this.http.get("/messages", { responseType: 'text' }).subscribe({
           next: (res) => {
             console.log("we are here")
             this.result = res;

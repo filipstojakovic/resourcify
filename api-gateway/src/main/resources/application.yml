@@ -18,7 +18,7 @@ spring:
         - id: resources
           uri: http://localhost:8082
           predicates:
-            Path=/messages/**
+            Path=/resources/**
         - id: users
           uri: http://localhost:8084
           predicates:

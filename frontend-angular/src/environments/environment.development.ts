@@ -3,6 +3,6 @@ export const environment = {
 
   realm: 'resourcify',
   clientId: 'frontend',
-  baseUrl: 'https://localhost:8080',
+  baseUrl: 'http://localhost:8083', // gateway
   authServerPort: 9000,
 };

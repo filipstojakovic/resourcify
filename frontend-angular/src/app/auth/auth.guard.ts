@@ -7,9 +7,6 @@ import {KeycloakAuthGuard, KeycloakService} from 'keycloak-angular';
 })
 export class AuthGuard extends KeycloakAuthGuard {
 
-  /**
-   *  https://www.npmjs.com/package/keycloak-angular#authguard
-   */
   constructor(
       protected override readonly router: Router,
       private readonly keycloak: KeycloakService,
@@ -17,10 +14,7 @@ export class AuthGuard extends KeycloakAuthGuard {
     super(router, keycloak);
   }
 
-  public async isAccessAllowed(
-      route: ActivatedRouteSnapshot,
-      state: RouterStateSnapshot,
-  ): Promise<boolean> {
+  public async isAccessAllowed(route: ActivatedRouteSnapshot, state: RouterStateSnapshot,): Promise<boolean> {
 
     let authenticated = this.keycloak.getKeycloakInstance().authenticated;
     if (!authenticated) {

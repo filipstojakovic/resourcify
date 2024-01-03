@@ -42,7 +42,14 @@ export class AuthService {
   }
 
   getFullName() {
-    return this.keycloak.getKeycloakInstance().tokenParsed[AuthService.FULL_NAME];
+    const keycloakInstance = this.keycloak.getKeycloakInstance();
+
+    if (keycloakInstance.tokenParsed && typeof keycloakInstance.tokenParsed === 'object') {
+      if (AuthService.FULL_NAME in keycloakInstance.tokenParsed) {
+        return keycloakInstance.tokenParsed[AuthService.FULL_NAME];
+      }
+    }
+    return '';
   }
 
   getTokenExpirationDate(): number {

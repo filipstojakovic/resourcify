@@ -24,3 +24,20 @@ mat-toolbar {
   overflow-y: auto;
   padding: 1rem;
 }
+
+mat-dialog-actions {
+  justify-content: center !important;
+}
+
+mat-dialog-content {
+  display: flex;
+  flex-direction: column;
+}
+
+mat-form-field {
+  width: 100%;
+  min-width: 400px;
+  max-height: 200px;
+  margin-bottom: 10px;
+}
+

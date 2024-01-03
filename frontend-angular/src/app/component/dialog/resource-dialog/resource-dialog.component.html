@@ -1,0 +1,26 @@
+<h1 mat-dialog-title>{{ data ? 'Update Resource' : 'Create Resource' }}</h1>
+
+<form [formGroup]="resourceForm">
+  <mat-dialog-content>
+    <mat-form-field>
+      <mat-label>Name</mat-label>
+      <input matInput placeholder="Name" formControlName="name" required/>
+      <mat-error
+          *ngIf="resourceForm.get('name').invalid && resourceForm.get('name').touched">
+        Name is required.
+      </mat-error>
+    </mat-form-field>
+    <mat-form-field>
+      <mat-label>Description</mat-label>
+      <textarea matInput placeholder="Description"
+                formControlName="description"></textarea>
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <button mat-raised-button color="warn" (click)="onCancelClicked()">Cancel
+    </button>
+    <button mat-raised-button color="primary" (click)="onSaveClicked()">Save
+    </button>
+  </mat-dialog-actions>
+</form>
