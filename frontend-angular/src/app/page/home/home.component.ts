@@ -40,6 +40,8 @@ export class HomeComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
+      if (result == null)
+        return;
       console.log('The dialog was closed');
       console.log("home.component.ts > after result(): " + JSON.stringify(result, null, 2));
     });

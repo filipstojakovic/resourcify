@@ -1,6 +1,6 @@
 package com.resourcify.repository;
 
-import com.resourcify.model.Resource;
+import com.resourcify.model.entity.Resource;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 

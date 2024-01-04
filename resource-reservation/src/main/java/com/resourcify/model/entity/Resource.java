@@ -1,11 +1,8 @@
-package com.resourcify.model;
+package com.resourcify.model.entity;
 
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.Id;
@@ -18,11 +15,8 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Getter
-@Setter
-@ToString
-@AllArgsConstructor
 @NoArgsConstructor
+@Data
 @Document
 public class Resource {
 
@@ -32,12 +26,15 @@ public class Resource {
   @Indexed(unique = true)
   private String name;
   private String description;
+  private Integer amount = 1;
+
   private List<Reservation> reservations = new ArrayList<>();
 
-  public Resource(final String id, final String name, final String description) {
+  public Resource(final String id, final String name, final String description, Integer amount) {
     this.id = id;
     this.name = name;
     this.description = description;
+    this.amount = amount;
   }
 
   @CreatedDate

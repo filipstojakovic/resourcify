@@ -24,7 +24,7 @@ export class ResourceDialogComponent {
   }
 
   onCancelClicked(): void {
-    this.dialogRef.close();
+    this.dialogRef.close(null);
   }
 
   onSaveClicked() {

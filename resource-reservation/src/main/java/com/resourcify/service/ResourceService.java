@@ -1,11 +1,12 @@
 package com.resourcify.service;
 
 import com.resourcify.common.exception.NotFoundException;
-import com.resourcify.model.Resource;
+import com.resourcify.mapper.ResourceMapper;
+import com.resourcify.model.entity.Resource;
 import com.resourcify.model.request.ResourceRequest;
+import com.resourcify.model.response.ResourceResponse;
 import com.resourcify.repository.ResourceRepository;
 import lombok.RequiredArgsConstructor;
-import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,28 +18,34 @@ import java.util.List;
 public class ResourceService {
 
   public final ResourceRepository resourceRepository;
-  private final ModelMapper modelMapper;
+  private final ResourceMapper resourceMapper;
 
-  public List<Resource> findAll() {
-    return resourceRepository.findAll();
+  // TODO: remove !isActive reservations
+  public List<ResourceResponse> findAll() {
+    List<Resource> resources = resourceRepository.findAll();
+    return resources.stream().map(resourceMapper::toResponse).toList();
   }
 
-  public Resource findById(String id) {
-    return resourceRepository.findById(id)
+  public ResourceResponse findById(String id) {
+    Resource resource = resourceRepository.findById(id)
         .orElseThrow(() -> new NotFoundException(Resource.class, id));
+    return resourceMapper.toResponse(resource);
   }
 
-  public Resource insert(ResourceRequest resourceRequest) {
-    Resource resource = modelMapper.map(resourceRequest, Resource.class);
+  public ResourceResponse insert(ResourceRequest resourceRequest) {
+    Resource resource = resourceMapper.fromRequest(resourceRequest);
     resource = resourceRepository.save(resource);
-    return resource;
+    return resourceMapper.toResponse(resource);
   }
 
-  public Resource update(String id, ResourceRequest resourceRequest) {
-    Resource resource = findById(id);
+  public ResourceResponse update(String id, ResourceRequest resourceRequest) {
+    Resource resource = resourceRepository.findById(id)
+        .orElseThrow(() -> new NotFoundException(Resource.class, id));
     resource.setName(resourceRequest.getName());
     resource.setDescription(resourceRequest.getDescription());
-    return resourceRepository.save(resource);
+    resource.setAmount(resourceRequest.getAmount());
+    resource = resourceRepository.save(resource);
+    return resourceMapper.toResponse(resource);
   }
 
   public void delete(String id) {

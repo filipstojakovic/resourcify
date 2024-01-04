@@ -13,9 +13,11 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.HandlerMethod;
+import org.springframework.dao.DuplicateKeyException;
 
 @RequiredArgsConstructor
 @ControllerAdvice
@@ -51,11 +53,17 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(status).body(responseMessage);
   }
 
-  @ExceptionHandler(HttpMessageNotReadableException.class)
-  public final ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException e,
-                                                                   HandlerMethod handlerMethod) {
+  @ExceptionHandler({ MethodArgumentNotValidException.class, HttpMessageNotReadableException.class, DuplicateKeyException.class })
+  public final ResponseEntity<Object> handleHttpMessageNotReadable(Exception e,
+                                                                   HandlerMethod handlerMethod,
+                                                                   HttpServletRequest request) {
     LoggingUtil.logException(e, getLog(handlerMethod));
-    return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+    String message = "Bad Request";
+    if (e instanceof MethodArgumentNotValidException ex) {
+      message = ex.getBody().getDetail();
+    }
+    String responseMessage = convertMessageToJson(HttpStatus.BAD_REQUEST.value(), message, request.getRequestURI());
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage);
   }
 
   @ExceptionHandler(Exception.class)

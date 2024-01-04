@@ -1,4 +1,4 @@
-package com.resourcify.config;
+package com.resourcify.common.config.auditaware;
 
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.security.core.Authentication;
