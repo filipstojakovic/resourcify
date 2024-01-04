@@ -17,12 +17,10 @@ import java.util.List;
 public class UserService {
 
   public static final String ID_ATTRIBUTE = "id";
-
-  @Value("${keycloak.realm}")
-  private String realm;
-
   private final Keycloak keycloak;
   private final ModelMapper mapper;
+  @Value("${keycloak.realm}")
+  private String realm;
 
   public List<User> getAllUsers() {
     List<UserRepresentation> users = keycloak.realm(realm).users().list();

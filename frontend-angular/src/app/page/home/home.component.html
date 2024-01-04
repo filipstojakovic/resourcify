@@ -1,7 +1,10 @@
-<button mat-raised-button color="primary" (click)="openDialog()">Create reservation</button>
+<button (click)="openDialog()" color="primary" mat-raised-button>Create
+  reservation
+</button>
 <mat-form-field>
   <mat-label>Select resource</mat-label>
-  <mat-select [(ngModel)]="selectedResource" name="resource" (selectionChange)="onSelectionChange($event.value)">
+  <mat-select (selectionChange)="onSelectionChange($event.value)" [(ngModel)]="selectedResource"
+              name="resource">
     <mat-option *ngFor="let resource of resources" [value]="resource">
       {{resource.name}}
     </mat-option>

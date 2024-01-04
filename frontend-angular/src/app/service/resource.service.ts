@@ -16,7 +16,7 @@ export class ResourceService {
     return this.http.get<ResourceType[]>(`${environment.baseUrl}/${backendUrl.RESOURCES}`);
   }
 
-  findById(id:string){
+  findById(id: string) {
     return this.http.get<ResourceType>(`${environment.baseUrl}/${backendUrl.RESOURCES}/${id}`);
   }
 }

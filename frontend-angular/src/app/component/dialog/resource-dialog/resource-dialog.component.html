@@ -4,7 +4,7 @@
   <mat-dialog-content>
     <mat-form-field>
       <mat-label>Name</mat-label>
-      <input matInput placeholder="Name" formControlName="name" required/>
+      <input formControlName="name" matInput placeholder="Name" required/>
       <mat-error
           *ngIf="resourceForm.get('name').invalid && resourceForm.get('name').touched">
         Name is required.
@@ -12,15 +12,15 @@
     </mat-form-field>
     <mat-form-field>
       <mat-label>Description</mat-label>
-      <textarea matInput placeholder="Description"
-                formControlName="description"></textarea>
+      <textarea formControlName="description" matInput
+                placeholder="Description"></textarea>
     </mat-form-field>
   </mat-dialog-content>
 
   <mat-dialog-actions>
-    <button mat-raised-button color="warn" (click)="onCancelClicked()">Cancel
+    <button (click)="onCancelClicked()" color="warn" mat-raised-button>Cancel
     </button>
-    <button mat-raised-button color="primary" (click)="onSaveClicked()">Save
+    <button (click)="onSaveClicked()" color="primary" mat-raised-button>Save
     </button>
   </mat-dialog-actions>
 </form>

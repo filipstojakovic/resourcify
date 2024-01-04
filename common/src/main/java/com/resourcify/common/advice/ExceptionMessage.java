@@ -1,6 +1,5 @@
 package com.resourcify.common.advice;
 
-import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

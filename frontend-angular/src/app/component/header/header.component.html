@@ -1,12 +1,12 @@
-<mat-toolbar color="primary" class="button-gap app-toolbar">
+<mat-toolbar class="button-gap app-toolbar" color="primary">
 
-  <button mat-button [routerLink]=[paths.HOME]
+  <button [routerLink]=[paths.HOME] mat-button
           routerLinkActive="active-link">
     <mat-icon>home</mat-icon>
     <span>Home</span>
   </button>
 
-  <button mat-button [routerLink]=[paths.RESOURCES]
+  <button [routerLink]=[paths.RESOURCES] mat-button
           routerLinkActive="active-link">
     <mat-icon>devices</mat-icon>
     <span>Resource</span>
@@ -16,7 +16,7 @@
 
   <span style="padding-right: 10px">{{getLoggedUserName()}}</span>
 
-  <button mat-button (click)="logout()">
+  <button (click)="logout()" mat-button>
     <mat-icon>logout</mat-icon>
     <span>Logout</span>
   </button>

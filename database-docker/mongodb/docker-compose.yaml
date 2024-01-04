@@ -14,7 +14,7 @@ services:
       - MONGO_INITDB_DATABASE=resource_db
     volumes:
       - data:/data
-#      - ./mongo-init/init.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
+  #      - ./mongo-init/init.js:/docker-entrypoint-initdb.d/init-mongo.js:ro
 
   mongo-express:
     image: mongo-express

@@ -22,8 +22,11 @@ public class SecurityConfig {
     http
         .authorizeHttpRequests(x -> x.anyRequest().authenticated())
         .oauth2ResourceServer((oauth2) ->
-            oauth2.jwt(j -> j.jwtAuthenticationConverter(jwtAuthConverter)))
+            oauth2.jwt(j -> j.jwtAuthenticationConverter(jwtAuthConverter))
+                .authenticationEntryPoint(new RestAuthenticationEntryPoint())
+        )
         .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
     return http.build();
   }
+
 }

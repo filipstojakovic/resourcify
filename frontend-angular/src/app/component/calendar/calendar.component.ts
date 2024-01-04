@@ -9,10 +9,10 @@ import listPlugin from '@fullcalendar/list'
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.css'],
 })
-export class CalendarComponent implements OnInit{
+export class CalendarComponent implements OnInit {
 
   calendarOptions: CalendarOptions = {
-    plugins: [dayGridPlugin, interactionPlugin, listPlugin ],
+    plugins: [dayGridPlugin, interactionPlugin, listPlugin],
     initialView: 'dayGridMonth',
     firstDay: 1, // Monday
     eventTimeFormat: {
@@ -20,11 +20,11 @@ export class CalendarComponent implements OnInit{
       minute: "2-digit",
       hour12: false,
     },
-    selectable:true,
+    selectable: true,
     headerToolbar: {
       left: 'prev,next',
       center: 'title',
-      right: 'dayGridMonth,dayGridWeek,dayGridDay,listWeek'
+      right: 'dayGridMonth,dayGridWeek,dayGridDay,listWeek',
     },
 
     dateClick: this.handleDateClick.bind(this),
@@ -33,6 +33,12 @@ export class CalendarComponent implements OnInit{
 
     // events: this.events
   };
+  // https://fullcalendar.io/docs/event-parsing
+  events = [
+    {
+      title: 'Meeting', start: Date.now(), allDay: true,
+    },
+  ]
 
   handleDateClick(arg: DateClickArg) {
     alert(arg.date);
@@ -43,12 +49,6 @@ export class CalendarComponent implements OnInit{
     alert(arg.event.title);
     console.log(arg);
   }
-
-  // https://fullcalendar.io/docs/event-parsing
-  events = [
-    {title: 'Meeting', start: Date.now(), allDay:true
-    },
-  ]
 
   ngOnInit(): void {
     this.calendarOptions.events = this.events;
