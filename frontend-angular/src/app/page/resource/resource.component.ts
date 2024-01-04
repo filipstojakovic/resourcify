@@ -1,6 +1,10 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {UserService} from '../../service/user.service';
+import {ResourceType} from '../../model/ResourceType';
+import {MatDialog} from '@angular/material/dialog';
+import {ResourceService} from '../../service/resource.service';
+import {ResourceDialogComponent} from '../../component/dialog/resource-dialog/resource-dialog.component';
 
 @Component({
   selector: 'app-resource',
@@ -9,15 +13,16 @@ import {UserService} from '../../service/user.service';
 })
 export class ResourceComponent implements OnInit {
 
-  result = "";
+  selectedResource: ResourceType | string = "";
+  resources: ResourceType[] = [];
 
-  constructor(private http: HttpClient, private userService: UserService) {
+  constructor(public dialog: MatDialog, private resourceService: ResourceService) {
   }
 
   ngOnInit(): void {
-    this.userService.getAllUsers().subscribe({
+    this.resourceService.findAll().subscribe({
           next: (res) => {
-            console.log("user.service.ts > next(): " + JSON.stringify(res, null, 2));
+            this.resources = res;
           },
           error: (err) => {
             console.error(err.message);
@@ -26,18 +31,22 @@ export class ResourceComponent implements OnInit {
     )
   }
 
-  onClick() {
-    this.http.get("/messages", { responseType: 'text' }).subscribe({
-          next: (res) => {
-            console.log("we are here")
-            this.result = res;
-            console.log(res)
-          },
-          error: (err) => {
-            console.error(err.message);
-          },
-        },
-    )
+  openDialog(): void {
+    const dialogRef = this.dialog.open(ResourceDialogComponent, {
+      data: { name: "asd", description: "qwe" } as ResourceType,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == null)
+        return;
+      console.log('The dialog was closed');
+      console.log("home.component.ts > after result(): " + JSON.stringify(result, null, 2));
+    });
+  }
+
+  onSelectionChange(event: any) {
+
+    console.log("home.component.ts > onSelectionChange(): " + JSON.stringify(event, null, 2));
   }
 
 }

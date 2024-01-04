@@ -36,18 +36,18 @@ export class CalendarComponent implements OnInit {
   // https://fullcalendar.io/docs/event-parsing
   events = [
     {
-      title: 'Meeting', start: Date.now(), allDay: true,
+      id: "123", title: 'Meeting', start: Date.now(), allDay: true,
     },
   ]
 
   handleDateClick(arg: DateClickArg) {
-    alert(arg.date);
     console.log(arg);
+    alert(arg.date);
   }
 
   handleEventClick(arg: EventClickArg) {
+    console.log(arg.event._def);
     alert(arg.event.title);
-    console.log(arg);
   }
 
   ngOnInit(): void {
