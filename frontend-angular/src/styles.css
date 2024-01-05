@@ -9,15 +9,14 @@ body {
   font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
-
-.root-container {
-  height: 100%;
-  display: grid;
-  grid-template-rows: auto 1fr;
+:root {
+  --header-size: 64px;
 }
 
-mat-toolbar {
-
+.root-container {
+  height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr;
 }
 
 .content-container {
@@ -40,4 +39,5 @@ mat-form-field {
   max-height: 200px;
   margin-bottom: 10px;
 }
+
 

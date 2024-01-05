@@ -1,17 +1,19 @@
-<button (click)="openDialog()" color="primary" mat-raised-button>Create
-  reservation
-</button>
-<mat-form-field>
-  <mat-label>Select resource</mat-label>
-  <mat-select (selectionChange)="onSelectionChange($event.value)"
-              [(value)]="selectedResource">
-    <mat-option value="">
-      All resources
-    </mat-option>
-    <mat-option *ngFor="let resource of resources" [value]="resource">
-      {{resource.name}}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
-<app-calendar></app-calendar>
+<div class="fitme">
+  <button (click)="openDialog()" color="primary" mat-raised-button>Create
+    reservation
+  </button>
+  <mat-form-field>
+    <mat-label>Select resource</mat-label>
+    <mat-select (selectionChange)="onSelectionChange($event.value)"
+                [(value)]="selectedResource">
+      <mat-option value="">
+        All resources
+      </mat-option>
+      <mat-option *ngFor="let resource of resources" [value]="resource">
+        {{resource.name}}
+      </mat-option>
+    </mat-select>
+  </mat-form-field>
+  <app-calendar [events]="events"></app-calendar>
 
+</div>

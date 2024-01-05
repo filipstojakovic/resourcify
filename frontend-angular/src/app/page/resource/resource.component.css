@@ -1,0 +1,3 @@
+.fitme {
+  height: calc(100vh - var(--header-size));
+}

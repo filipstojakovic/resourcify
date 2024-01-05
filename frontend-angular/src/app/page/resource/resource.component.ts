@@ -1,6 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {UserService} from '../../service/user.service';
 import {ResourceType} from '../../model/ResourceType';
 import {MatDialog} from '@angular/material/dialog';
 import {ResourceService} from '../../service/resource.service';
@@ -15,6 +13,12 @@ export class ResourceComponent implements OnInit {
 
   selectedResource: ResourceType | string = "";
   resources: ResourceType[] = [];
+
+  events = [
+    {
+      id: "123", title: 'Meeting', start: Date.now(), allDay: true, backgroundColor: "#FF0000"
+    },
+  ]
 
   constructor(public dialog: MatDialog, private resourceService: ResourceService) {
   }
@@ -44,9 +48,14 @@ export class ResourceComponent implements OnInit {
     });
   }
 
-  onSelectionChange(event: any) {
+  onSelectionChange(value: any) {
 
-    console.log("home.component.ts > onSelectionChange(): " + JSON.stringify(event, null, 2));
+    if ("" === value) {
+      //TODO: all selected
+    } else {
+
+    }
+    console.log("home.component.ts > onSelectionChange(): " + JSON.stringify(value, null, 2));
   }
 
 }

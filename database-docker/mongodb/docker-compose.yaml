@@ -4,7 +4,6 @@ services:
 
   mongo:
     image: mongo
-    restart: always
     container_name: mongodb
     ports:
       - 27017:27017
@@ -18,7 +17,6 @@ services:
 
   mongo-express:
     image: mongo-express
-    restart: always
     ports:
       - 9001:8081
     environment:
@@ -28,7 +26,6 @@ services:
       # login username and password
       - ME_CONFIG_BASICAUTH_USERNAME=root
       - ME_CONFIG_BASICAUTH_PASSWORD=root
-
 
 volumes:
   data:
