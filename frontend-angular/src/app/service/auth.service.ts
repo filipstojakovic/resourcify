@@ -9,6 +9,7 @@ export class AuthService {
 
   public static readonly USERNAME = "preferred_username";
   public static readonly FULL_NAME = "name";
+  public static readonly ADMIN_ROLE_NAME = "client-admin-role";
 
   keycloak = inject(KeycloakService);
 
@@ -41,6 +42,11 @@ export class AuthService {
     return this.keycloak?.getKeycloakInstance()?.profile?.id as string;
   }
 
+  isAdmin(): boolean {
+    const keycloakInstance = this.keycloak.getKeycloakInstance();
+    return keycloakInstance.hasRealmRole(AuthService.ADMIN_ROLE_NAME);
+  }
+
   getFullName() {
     const keycloakInstance = this.keycloak.getKeycloakInstance();
 
@@ -66,7 +72,7 @@ export class AuthService {
   }
 
   logout(): void {
-    this.keycloak.logout().then();
+    this.keycloak.logout("http://localhost:4200").then();
   }
 
   login() {

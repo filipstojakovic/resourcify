@@ -1,17 +1,22 @@
-<button (click)="openDialog()" color="primary" mat-raised-button>Create
-  reservation
-</button>
-<mat-form-field>
-  <mat-label>Select resource</mat-label>
-  <mat-select (selectionChange)="onSelectionChange($event.value)"
-              [(value)]="selectedResource">
-    <mat-option value="">
-      All resources
-    </mat-option>
-    <mat-option *ngFor="let resource of resources" [value]="resource">
-      {{resource.name}}
-    </mat-option>
-  </mat-select>
-</mat-form-field>
+<div class="resource-header">
+    <mat-form-field subscriptSizing="dynamic">
+        <mat-label>Select resource</mat-label>
+        <mat-select (selectionChange)="onSelectionChange($event.value)"
+                    [(value)]="selectedResource">
+            <mat-option value="">
+                All resources
+            </mat-option>
+            <mat-option *ngFor="let resource of resources" [value]="resource">
+                {{resource.name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <button (click)="openDialog()" color="primary" mat-raised-button>
+        New reservation
+    </button>
+    <button (click)="openDialog()" color="primary" mat-raised-button *ngIf="authService.isAdmin()">
+        New resource
+    </button>
+</div>
 
 <full-calendar [options]="calendarOptions"></full-calendar>

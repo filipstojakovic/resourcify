@@ -1,3 +1,14 @@
-.calendar-container {
-  height: 100%;
+
+.resource-header {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+    margin-bottom: 10px;
+}
+
+button {
+    width: 40%;
+    height: 100%;
+    min-height: 100%;
+    max-height: 100%;
 }

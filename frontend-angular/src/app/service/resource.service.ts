@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {ResourceType} from '../model/ResourceType';
-import {environment} from '../../environments/environment.development';
 import {backendUrl} from '../constants/backendUrl';
 
 @Injectable({
@@ -13,10 +12,10 @@ export class ResourceService {
   }
 
   findAll() {
-    return this.http.get<ResourceType[]>(`${environment.baseUrl}/${backendUrl.RESOURCES}`);
+    return this.http.get<ResourceType[]>(backendUrl.RESOURCES);
   }
 
-  findById(id: string) {
-    return this.http.get<ResourceType>(`${environment.baseUrl}/${backendUrl.RESOURCES}/${id}`);
+  findById(userId: string) {
+    return this.http.get<ResourceType>(`${backendUrl.RESOURCES}/${userId}`);
   }
 }

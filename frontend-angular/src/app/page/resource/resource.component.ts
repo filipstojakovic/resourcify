@@ -3,12 +3,13 @@ import {ResourceType} from '../../model/ResourceType';
 import {MatDialog} from '@angular/material/dialog';
 import {ResourceService} from '../../service/resource.service';
 import {ResourceDialogComponent} from '../../component/dialog/resource-dialog/resource-dialog.component';
-import {ResourceEventMapperService} from '../../service/resourceEventMapper.service';
+import {ResourceEventMapperService} from '../../mapper/resourceEventMapper.service';
 import {CalendarOptions, EventClickArg} from '@fullcalendar/core';
 import {calendarConfig} from '../../component/calendar/calendarConfig';
 import {DateClickArg} from '@fullcalendar/interaction';
 import {ToastService} from 'angular-toastify';
 import {ResourceReservationType} from '../../model/ResourceReservationType';
+import {AuthService} from "../../service/auth.service";
 
 @Component({
   selector: 'app-resource',
@@ -30,6 +31,7 @@ export class ResourceComponent implements OnInit {
               private resourceService: ResourceService,
               private resourceEventMapper: ResourceEventMapperService,
               private toastService: ToastService,
+              public authService: AuthService,
               private changeDetector: ChangeDetectorRef,
   ) {
   }
@@ -55,7 +57,7 @@ export class ResourceComponent implements OnInit {
 
   openDialog(): void {
     const dialogRef = this.dialog.open(ResourceDialogComponent, {
-      data: { name: "asd", description: "qwe" } as ResourceType,
+      data: {name: "asd", description: "qwe"} as ResourceType,
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -69,26 +71,26 @@ export class ResourceComponent implements OnInit {
   getEvents(resource: ResourceType | string) {
     if (typeof resource === "string") {
       return this.resourceService.findAll().subscribe({
-            next: (res) => {
-              this.resources = res;
-              this.calendarOptions.events = this.resourceEventMapper.mapResourcesToReservationEvents(res);
-            },
-            error: (err) => {
-              console.error(err.message);
-              this.toastService.error('Error fetch resources');
-            },
-          },
-      )
-    }
-    return this.resourceService.findById(resource.id).subscribe({
           next: (res) => {
-            this.calendarOptions.events = this.resourceEventMapper.mapResourceToReservationEvents(res);
+            this.resources = res;
+            this.calendarOptions.events = this.resourceEventMapper.mapResourcesToReservationEvents(res);
           },
           error: (err) => {
             console.error(err.message);
-            this.toastService.error(`Error fetch resource ${resource.name}`);
+            this.toastService.error('Error fetch resources');
           },
         },
+      )
+    }
+    return this.resourceService.findById(resource.id).subscribe({
+        next: (res) => {
+          this.calendarOptions.events = this.resourceEventMapper.mapResourceToReservationEvents(res);
+        },
+        error: (err) => {
+          console.error(err.message);
+          this.toastService.error(`Error fetch resource ${resource.name}`);
+        },
+      },
     )
   }
 }

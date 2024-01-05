@@ -12,6 +12,8 @@ export function initializeKeycloak(keycloak: KeycloakService) {
         },
         initOptions: {
           onLoad: 'check-sso',
+          checkLoginIframe: true,
+          checkLoginIframeInterval: 1000
         },
       });
 }
