@@ -1,4 +1,4 @@
-export type ReservationEventType = {
+export type EventReservationType = {
   id: string;
   title: string;
   start: Date;

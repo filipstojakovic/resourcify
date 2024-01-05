@@ -21,4 +21,5 @@ public class ResourceRequest {
   @NotNull
   @Positive
   private Integer amount;
+  private String backgroundColor;
 }

@@ -12,7 +12,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ReservationResponse {
 
+  private String reservationId;
   private User user;
+  private String description;
   private LocalDateTime reservationDate;
   private boolean isActive;
 }

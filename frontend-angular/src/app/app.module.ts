@@ -13,8 +13,8 @@ import {KeycloakAngularModule, KeycloakService} from "keycloak-angular";
 import {initializeKeycloak} from "./auth/initKeycloack";
 import {HeaderComponent} from './component/header/header.component';
 import {FullCalendarModule} from '@fullcalendar/angular';
-import {CalendarComponent} from './component/calendar/calendar.component';
 import {ResourceDialogComponent} from './component/dialog/resource-dialog/resource-dialog.component';
+import {AngularToastifyModule} from 'angular-toastify';
 
 @NgModule({
   declarations: [
@@ -22,7 +22,6 @@ import {ResourceDialogComponent} from './component/dialog/resource-dialog/resour
     HomeComponent,
     ResourceComponent,
     HeaderComponent,
-    CalendarComponent,
     ResourceDialogComponent,
   ],
   imports: [
@@ -35,6 +34,7 @@ import {ResourceDialogComponent} from './component/dialog/resource-dialog/resour
     ReactiveFormsModule,
     KeycloakAngularModule,
     FullCalendarModule,
+    AngularToastifyModule,
   ],
   providers: [{
     provide: APP_INITIALIZER,

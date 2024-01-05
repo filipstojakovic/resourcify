@@ -44,6 +44,7 @@ public class ResourceService {
     resource.setName(resourceRequest.getName());
     resource.setDescription(resourceRequest.getDescription());
     resource.setAmount(resourceRequest.getAmount());
+    resource.setBackgroundColor(resourceRequest.getBackgroundColor());
     resource = resourceRepository.save(resource);
     return resourceMapper.toResponse(resource);
   }

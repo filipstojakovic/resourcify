@@ -1,8 +1,14 @@
-import {Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ResourceType} from '../../model/ResourceType';
 import {MatDialog} from '@angular/material/dialog';
 import {ResourceService} from '../../service/resource.service';
 import {ResourceDialogComponent} from '../../component/dialog/resource-dialog/resource-dialog.component';
+import {ResourceEventMapperService} from '../../service/resourceEventMapper.service';
+import {CalendarOptions, EventClickArg} from '@fullcalendar/core';
+import {calendarConfig} from '../../component/calendar/calendarConfig';
+import {DateClickArg} from '@fullcalendar/interaction';
+import {ToastService} from 'angular-toastify';
+import {ResourceReservationType} from '../../model/ResourceReservationType';
 
 @Component({
   selector: 'app-resource',
@@ -11,28 +17,40 @@ import {ResourceDialogComponent} from '../../component/dialog/resource-dialog/re
 })
 export class ResourceComponent implements OnInit {
 
+  calendarOptions: CalendarOptions = {
+    ...calendarConfig,
+    dateClick: this.handleDateClick.bind(this),
+    eventClick: this.handleEventClick.bind(this),
+  };
+
   selectedResource: ResourceType | string = "";
   resources: ResourceType[] = [];
 
-  events = [
-    {
-      id: "123", title: 'Meeting', start: Date.now(), allDay: true, backgroundColor: "#FF0000"
-    },
-  ]
-
-  constructor(public dialog: MatDialog, private resourceService: ResourceService) {
+  constructor(public dialog: MatDialog,
+              private resourceService: ResourceService,
+              private resourceEventMapper: ResourceEventMapperService,
+              private toastService: ToastService,
+              private changeDetector: ChangeDetectorRef,
+  ) {
   }
 
   ngOnInit(): void {
-    this.resourceService.findAll().subscribe({
-          next: (res) => {
-            this.resources = res;
-          },
-          error: (err) => {
-            console.error(err.message);
-          },
-        },
-    )
+    this.getEvents(this.selectedResource);
+  }
+
+  onSelectionChange(value: any) {
+    this.getEvents(this.selectedResource);
+  }
+
+  handleDateClick(arg: DateClickArg) {
+    console.log(arg);
+    alert(arg.date);
+  }
+
+  handleEventClick(arg: EventClickArg) {
+    const reservation: ResourceReservationType = arg.event._def.extendedProps['data'];
+    const eventData = arg.event._def;
+    console.log(arg.event._def);
   }
 
   openDialog(): void {
@@ -48,14 +66,29 @@ export class ResourceComponent implements OnInit {
     });
   }
 
-  onSelectionChange(value: any) {
-
-    if ("" === value) {
-      //TODO: all selected
-    } else {
-
+  getEvents(resource: ResourceType | string) {
+    if (typeof resource === "string") {
+      return this.resourceService.findAll().subscribe({
+            next: (res) => {
+              this.resources = res;
+              this.calendarOptions.events = this.resourceEventMapper.mapResourcesToReservationEvents(res);
+            },
+            error: (err) => {
+              console.error(err.message);
+              this.toastService.error('Error fetch resources');
+            },
+          },
+      )
     }
-    console.log("home.component.ts > onSelectionChange(): " + JSON.stringify(value, null, 2));
+    return this.resourceService.findById(resource.id).subscribe({
+          next: (res) => {
+            this.calendarOptions.events = this.resourceEventMapper.mapResourceToReservationEvents(res);
+          },
+          error: (err) => {
+            console.error(err.message);
+            this.toastService.error(`Error fetch resource ${resource.name}`);
+          },
+        },
+    )
   }
-
 }

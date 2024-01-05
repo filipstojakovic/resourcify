@@ -25,6 +25,7 @@
     "@fullcalendar/daygrid": "^6.1.10",
     "@fullcalendar/interaction": "^6.1.10",
     "@fullcalendar/list": "^6.1.10",
+    "angular-toastify": "^1.0.6",
     "date-fns": "^3.0.6",
     "keycloak-angular": "^14.0.0",
     "keycloak-js": "^21.1.2",

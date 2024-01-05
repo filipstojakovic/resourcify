@@ -5,5 +5,6 @@ export type ResourceType = {
   name: string;
   description?: string;
   amount: number;
+  backgroundColor: string;
   reservations: ResourceReservationType[];
 }

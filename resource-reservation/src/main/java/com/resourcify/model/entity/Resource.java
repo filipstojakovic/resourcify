@@ -27,6 +27,7 @@ public class Resource {
   private String name;
   private String description;
   private Integer amount = 1;
+  private String backgroundColor;
 
   private List<Reservation> reservations = new ArrayList<>();
 
