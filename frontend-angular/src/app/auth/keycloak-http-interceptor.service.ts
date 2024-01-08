@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {KeycloakService} from "keycloak-angular";
-import {environment} from "../../environments/environment.development";
+import {environment} from "../../environments/environment";
 import {AuthService} from "../service/auth.service";
 
 @Injectable({
@@ -20,7 +20,7 @@ export class KeycloakHttpInterceptorService implements HttpInterceptor {
       this.authService.logout();
     }
     const apiReq = request.clone({
-      url: `${environment.baseUrl}/${request.url}`,
+      url: `${environment.BACKEND_URL}/${request.url}`,
       setHeaders: {
         Authorization: "Bearer " + this.keycloakService.getKeycloakInstance().token,
       },

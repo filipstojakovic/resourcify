@@ -3,6 +3,8 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 .idea
+/TODO
+/frontend-angular/dist/*
 
 frontend-angular/node_modules
 frontend-angular/.angular
@@ -40,4 +42,3 @@ build/
 
 ### Mac OS ###
 .DS_Store
-/TODO

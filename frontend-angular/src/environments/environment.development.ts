@@ -1,8 +1,9 @@
 export const environment = {
   production: false,
-
-  realm: 'resourcify',
-  clientId: 'frontend',
-  baseUrl: 'http://localhost:8083', // gateway
-  authServerPort: 8080,
+  REALM_NAME: 'resourcify',
+  CLIENT_ID: 'frontend',
+  BACKEND_URL: 'http://localhost:8083', // gateway
+  KEYCLOAK_PORT: 9000,
+  KEYCLOAK_BASE_URL: "http://localhost",
+  ENV_NAME: "development",
 };

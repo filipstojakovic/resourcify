@@ -3,8 +3,7 @@ export const environment = {
   REALM_NAME: 'resourcify',
   CLIENT_ID: 'frontend',
   BACKEND_URL: 'http://localhost:8083', // gateway
-  KEYCLOAK_PORT: 9000,
-  KEYCLOAK_BASE_URL: "http://localhost",
-  ENV_NAME: "empty",
-
+  KEYCLOAK_PORT: 8080,
+  KEYCLOAK_BASE_URL: "http://keycloak",
+  ENV_NAME: "docker",
 };

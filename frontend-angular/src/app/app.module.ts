@@ -51,4 +51,5 @@ import {KeycloakHttpInterceptorService} from "./auth/keycloak-http-interceptor.s
   bootstrap: [AppComponent],
 })
 export class AppModule {
+
 }
