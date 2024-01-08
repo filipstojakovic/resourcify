@@ -2,10 +2,12 @@ package com.resourcify.mapper;
 
 import com.resourcify.common.model.User;
 import com.resourcify.model.entity.Reservation;
+import com.resourcify.model.request.ReserveResourceRequest;
 import com.resourcify.model.response.ReservationResponse;
 import com.resourcify.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -22,5 +24,12 @@ public class ReservationMapper {
         .orElse(null);
     reservationResponse.setUser(userResponse);
     return reservationResponse;
+  }
+
+  public Reservation fromRequest(ReserveResourceRequest request, Jwt jwt) {
+    Reservation reservation = modelMapper.map(request, Reservation.class);
+
+
+    return reservation;
   }
 }

@@ -1,6 +1,7 @@
 package com.resourcify.mapper;
 
 import com.resourcify.common.model.User;
+import com.resourcify.model.entity.Reservation;
 import com.resourcify.model.entity.Resource;
 import com.resourcify.model.request.ResourceRequest;
 import com.resourcify.model.response.ReservationResponse;
@@ -23,8 +24,8 @@ public class ResourceMapper {
   public ResourceResponse toResponse(Resource resource) {
     ResourceResponse resourceResponse = modelMapper.map(resource, ResourceResponse.class);
     List<User> users = userService.getAllUser();
-    List<ReservationResponse> reservationResponses = resource.getReservations()
-        .stream()
+    List<ReservationResponse> reservationResponses = resource.getReservations().stream()
+        .filter(Reservation::isActive) //filter only active reservations
         .map(reservation -> reservationMapper.toReservationResponse(reservation, users))
         .toList();
     resourceResponse.setReservations(reservationResponses);

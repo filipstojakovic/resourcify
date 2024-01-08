@@ -1,7 +1,10 @@
 server:
-  port: 8082
+  port: ${PORT:8082}
   error:
     include-message: always
+keycloak:
+  url: '${KEYCLOAK_URL:http://localhost:9000}'
+  realm: "${KEYCLOAK_REALM:resourcify}"
 
 spring:
   data:
@@ -18,7 +21,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:9000/realms/resourcify
+          issuer-uri: '${keycloak.url}/realms/${keycloak.realm}'
 
 logging:
   level:

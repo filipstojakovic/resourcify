@@ -2,6 +2,7 @@ package com.resourcify.service;
 
 import com.resourcify.common.exception.NotFoundException;
 import com.resourcify.common.model.User;
+import com.resourcify.mapper.ReservationMapper;
 import com.resourcify.mapper.ResourceMapper;
 import com.resourcify.model.entity.Reservation;
 import com.resourcify.model.entity.Resource;
@@ -21,29 +22,34 @@ public class ReservationService {
   private final ResourceRepository resourceRepository;
   private final UserService userService;
   private final ResourceMapper resourceMapper;
+  private final ReservationMapper reservationMapper;
 
-  public ResourceResponse reserveResource(ReserveResourceRequest resourceRequest, Jwt jwt) {
-    Resource resource = resourceRepository.findById(resourceRequest.getResourceId())
-        .orElseThrow(() -> new NotFoundException(Resource.class, resourceRequest.getResourceId()));
+  public ResourceResponse reserveResource(ReserveResourceRequest reserveResourceReq, Jwt jwt) {
+    Resource resource = resourceRepository.findById(reserveResourceReq.getResourceId())
+        .orElseThrow(() -> new NotFoundException(Resource.class, reserveResourceReq.getResourceId()));
+    userService.getUserById(reserveResourceReq.getForUserId()); // check if user exist
 
-    User user = userService.getUserById(resourceRequest.getForUserId()); // check if user exist
     // TODO: check if 12h period
-    Reservation reservation = new Reservation(user.getId(), resourceRequest.getReservationDate(), jwt);
+    Reservation reservation =  reservationMapper.fromRequest(reserveResourceReq,jwt);
     resource.getReservations().add(reservation);
     resource = resourceRepository.save(resource);
+
     return resourceMapper.toResponse(resource);
   }
 
-  public void deleteReservation(final String resourceId, Reservation reservation, Jwt jwt) {
+  public ResourceResponse deleteReservation(final String resourceId, final String reservationId, Jwt jwt) {
     Resource resource = resourceRepository.findById(resourceId)
         .orElseThrow(() -> new NotFoundException(Resource.class, resourceId));
 
-    // TODO: set isActive false?
-    boolean isRemoved = resource.getReservations().remove(reservation);
-    if (!isRemoved) {
-      throw new NotFoundException(reservation);
-    }
-    resourceRepository.save(resource);
+    Reservation reservation = resource.getReservations().stream()
+        .filter(res -> res.getReservationId().equals(reservationId))
+        .findFirst()
+        .orElseThrow(() -> new NotFoundException(Reservation.class, reservationId));
+
+    reservation.setActive(false);
+    resource = resourceRepository.save(resource);
+
+    return resourceMapper.toResponse(resource);
   }
 
 }

@@ -1,14 +1,21 @@
 server:
-  port: 8084
+  port: ${PORT:8084}
   error:
     include-message: always
+
+keycloak:
+  url: '${KEYCLOAK_URL:http://localhost:9000}'
+  realm: "${KEYCLOAK_REALM:resourcify}"
+  admin:
+    username: "${KEYCLOAK_ADMIN_USERNAME:admin}"
+    password: "${KEYCLOAK_ADMIN_PASSWORD:admin}"
 
 spring:
   security:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:9000/realms/resourcify
+          issuer-uri: '${keycloak.url}/realms/${keycloak.realm}'
 
 logging:
   level:
@@ -19,9 +26,3 @@ logging:
 
 
 
-keycloak:
-  url: "http://localhost:9000"
-  realm: "resourcify"
-  admin:
-    username: "admin"
-    password: "admin"

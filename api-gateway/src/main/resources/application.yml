@@ -1,13 +1,49 @@
 server:
-  port: 8083
+  port: ${PORT:8083}
+
+app:
+  eureka-server: 'localhost'
+keycloak:
+  url: '${KEYCLOAK_URL:http://localhost:9000}'
+  realm: "${KEYCLOAK_REALM:resourcify}"
+
+#eureka:
+#  client:
+#    serviceUrl:
+#      defaultZone: 'http://admin:admin@localhost:8888/eureka'
+
+spring:
+  application:
+    name: api-gateway
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: '${keycloak.url}/realms/${keycloak.realm}'
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "${CORS_ALLOWED_ORIGINS:http://localhost:4200,http://ll:4200}"
+            allowedHeaders: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - UPDATE
+              - DELETE
+      routes:
+        - id: resources
+          uri: "${RESOURCES_URI:http://localhost:8082}"
+          predicates:
+            Path=/resources/**
+        - id: users
+          uri: "${USERS_URI:http://localhost:8084}"
+          predicates:
+            Path=/users/**
 
 logging:
   level:
     org:
       springframework:
         security: DEBUG
-
-spring:
-  config:
-    import:
-      - ${GATEWAY_CONFIG_FILE:classpath:gateway.yml}

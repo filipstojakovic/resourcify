@@ -1,5 +1,6 @@
 package com.resourcify.common.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.AbstractAuthenticationToken;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 // this is used for @EnableMethodSecurity
+@Slf4j
 @Component
 public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationToken> {
 
@@ -29,6 +31,8 @@ public class JwtAuthConverter implements Converter<Jwt, AbstractAuthenticationTo
 
   @Override
   public AbstractAuthenticationToken convert(@NonNull Jwt jwt) {
+    log.info("WWWWWWWWWWWWWWWWWWWWWWWWW JwtAuthConverter > convert() : " + jwt.getSubject());
+
     Collection<GrantedAuthority> authorities = Stream.concat(
         jwtGrantedAuthoritiesConverter.convert(jwt).stream(),
         extractResourceRoles(jwt).stream()

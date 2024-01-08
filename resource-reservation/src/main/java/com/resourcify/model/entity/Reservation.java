@@ -18,10 +18,11 @@ public class Reservation {
   private LocalDateTime reservationDate;
   private boolean isActive = true;
 
-  public Reservation(final String forUserId, final LocalDateTime reservationDate, Jwt jwt) {
+  public Reservation(final String forUserId, final LocalDateTime reservationDate, String description, Jwt jwt) {
     this.forUserId = forUserId;
-    this.reservationDate = reservationDate;
     this.createdBy = jwt.getSubject();
+    this.description = description;
+    this.reservationDate = reservationDate;
   }
 
 }

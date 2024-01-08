@@ -25,7 +25,7 @@ public class ReservationController {
 
   private final ReservationService reservationService;
 
-  @PostMapping("reserve")
+  @PostMapping("reservations")
   public ResponseEntity<ResourceResponse> reserveResource(@Valid @RequestBody ReserveResourceRequest resourceRequest,
                                                           @AuthenticationPrincipal Jwt jwt) {
 
@@ -33,13 +33,13 @@ public class ReservationController {
     return new ResponseEntity<>(resource, HttpStatus.CREATED);
   }
 
-  @DeleteMapping("{resourceId}/reserve")
-  public ResponseEntity<Void> deleteReservation(@PathVariable String resourceId,
-                                                @RequestBody Reservation reservation,
+  @DeleteMapping("{resourceId}/reservations/{reservationId}")
+  public ResponseEntity<ResourceResponse> deleteReservation(@PathVariable String resourceId,
+                                                @PathVariable String reservationId,
                                                 @AuthenticationPrincipal Jwt jwt) {
     //todo: check if admin or himself
-    reservationService.deleteReservation(resourceId, reservation, jwt);
-    return new ResponseEntity<>(null, HttpStatus.OK);
+    ResourceResponse resource = reservationService.deleteReservation(resourceId, reservationId, jwt);
+    return new ResponseEntity<>(resource, HttpStatus.OK);
   }
 
 }
