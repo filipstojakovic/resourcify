@@ -10,7 +10,7 @@ import {AppRoutingModule} from "./routing/app-routing.module";
 import {HomeComponent} from './page/home/home.component';
 import {ResourceComponent} from './page/resource/resource.component';
 import {KeycloakAngularModule, KeycloakService} from "keycloak-angular";
-import {initializeKeycloak} from "./auth/initKeycloack";
+import {initializeKeycloak} from "./auth/initKeycloak";
 import {HeaderComponent} from './component/header/header.component';
 import {FullCalendarModule} from '@fullcalendar/angular';
 import {ResourceDialogComponent} from './component/dialog/resource-dialog/resource-dialog.component';

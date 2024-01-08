@@ -4,7 +4,7 @@ server:
 app:
   eureka-server: 'localhost'
 keycloak:
-  url: '${KEYCLOAK_URL:http://localhost:9000}'
+  url: '${KEYCLOAK_URL:http://keycloak:8080}'
   realm: "${KEYCLOAK_REALM:resourcify}"
 
 #eureka:
@@ -15,17 +15,17 @@ keycloak:
 spring:
   application:
     name: api-gateway
-  security:
-    oauth2:
-      resourceserver:
-        jwt:
-          issuer-uri: '${keycloak.url}/realms/${keycloak.realm}'
+#  security:
+#    oauth2:
+#      resourceserver:
+#        jwt:
+#          issuer-uri: 'http://keycloak:8080/realms/resourcify'
   cloud:
     gateway:
       globalcors:
         corsConfigurations:
           '[/**]':
-            allowedOrigins: "${CORS_ALLOWED_ORIGINS:http://localhost:4200,http://ll:4200}"
+            allowedOrigins: "*" #${CORS_ALLOWED_ORIGINS:http://localhost:4200,http://ll:4200}"
             allowedHeaders: "*"
             allowedMethods:
               - GET

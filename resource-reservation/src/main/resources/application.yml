@@ -3,7 +3,7 @@ server:
   error:
     include-message: always
 keycloak:
-  url: '${KEYCLOAK_URL:http://localhost:9000}'
+  url: '${KEYCLOAK_URL:http://keycloak:8080}'
   realm: "${KEYCLOAK_REALM:resourcify}"
 
 spring:

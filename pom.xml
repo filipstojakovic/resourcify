@@ -27,8 +27,6 @@
         <module>api-gateway</module>
         <module>resource-reservation</module>
         <module>user-service</module>
-        <module>common</module>
-        <module>discovery-server</module>
     </modules>
 
     <dependencyManagement>
@@ -44,5 +42,21 @@
         </dependencies>
     </dependencyManagement>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

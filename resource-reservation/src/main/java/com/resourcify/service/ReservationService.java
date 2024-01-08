@@ -1,7 +1,6 @@
 package com.resourcify.service;
 
-import com.resourcify.common.exception.NotFoundException;
-import com.resourcify.common.model.User;
+import com.resourcify.exception.NotFoundException;
 import com.resourcify.mapper.ReservationMapper;
 import com.resourcify.mapper.ResourceMapper;
 import com.resourcify.model.entity.Reservation;

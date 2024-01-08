@@ -4,7 +4,7 @@ server:
     include-message: always
 
 keycloak:
-  url: '${KEYCLOAK_URL:http://localhost:9000}'
+  url: '${KEYCLOAK_URL:http://keycloak:8080}'
   realm: "${KEYCLOAK_REALM:resourcify}"
   admin:
     username: "${KEYCLOAK_ADMIN_USERNAME:admin}"
@@ -15,7 +15,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: '${keycloak.url}/realms/${keycloak.realm}'
+          issuer-uri: 'http://keycloak:8080/realms/resourcify'
 
 logging:
   level:

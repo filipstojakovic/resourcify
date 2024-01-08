@@ -4,18 +4,18 @@ services:
 
   ################## RESOURCE-RESERVATION ##################
 
-  resource-reservation-mongo:
-    image: mongo
-    ports:
-      - "27017:27017"
-    environment:
-      - MONGO_INITDB_ROOT_USERNAME=root
-      - MONGO_INITDB_ROOT_PASSWORD=root
-      - MONGO_INITDB_DATABASE=resource_db
-    volumes:
-      - data:/data
+  #  resource-reservation-mongo:
+  #    image: mongo
+  #    ports:
+  #      - "27017:27017"
+  #    environment:
+  #      - MONGO_INITDB_ROOT_USERNAME=root
+  #      - MONGO_INITDB_ROOT_PASSWORD=root
+  #      - MONGO_INITDB_DATABASE=resource_db
+  #    volumes:
+  #      - data:/data
 
-################## KEYCLOAK ##################
+  ################## KEYCLOAK ##################
   keycloak-postgres:
     image: postgres
     volumes:
@@ -30,7 +30,7 @@ services:
   keycloak:
     image: docker.io/bitnami/keycloak
     ports:
-      - "9000:8080"
+      - "8080:8080"
     environment:
       KEYCLOAK_CREATE_ADMIN_USER: true
       KEYCLOAK_ADMIN: admin
@@ -42,16 +42,13 @@ services:
       KEYCLOAK_DATABASE_USER: root
       KEYCLOAK_DATABASE_PASSWORD: root
       KEYCLOAK_IMPORT: /opt/bitnami/keycloak/data/import/realm-export.json
-      PORT: 9000
     volumes:
       - ./keycloak/realms:/opt/bitnami/keycloak/data/import
     depends_on:
       - keycloak-postgres
     entrypoint: '/opt/bitnami/keycloak/bin/kc.sh start-dev --import-realm'
-    expose:
-      - "9000"
 
-      ################## USER-SERVICE ##################
+    ################## USER-SERVICE ##################
   user-service:
     build: ./user-service
     ports:
@@ -75,7 +72,19 @@ services:
     depends_on:
       - user-service
 
+  frontend:
+    build: ./frontend-angular
+    command: 'sh -c "npm run start-docker"'
+    working_dir: /home/node/app
+    ports:
+      - '4200:4200'
+    volumes:
+      - ./frontend-angular/:/home/node/app
+      - node_modules:/home/node/app/node_modules
+    depends_on:
+      - 'keycloak'
 
 volumes:
   data:
   keycloak_postgres_db:
+  node_modules:

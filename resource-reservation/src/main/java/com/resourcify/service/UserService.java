@@ -1,7 +1,7 @@
 package com.resourcify.service;
 
-import com.resourcify.common.client.UserClient;
-import com.resourcify.common.model.User;
+import com.resourcify.client.UserClient;
+import com.resourcify.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

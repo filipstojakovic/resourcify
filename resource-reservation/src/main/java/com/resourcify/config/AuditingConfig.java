@@ -1,6 +1,6 @@
 package com.resourcify.config;
 
-import com.resourcify.common.config.auditaware.AuditorAwareImpl;
+import com.resourcify.config.auditaware.AuditorAwareImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;

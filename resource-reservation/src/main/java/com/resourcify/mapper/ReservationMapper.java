@@ -1,6 +1,6 @@
 package com.resourcify.mapper;
 
-import com.resourcify.common.model.User;
+import com.resourcify.model.User;
 import com.resourcify.model.entity.Reservation;
 import com.resourcify.model.request.ReserveResourceRequest;
 import com.resourcify.model.response.ReservationResponse;

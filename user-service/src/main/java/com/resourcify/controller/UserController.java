@@ -1,6 +1,6 @@
 package com.resourcify.controller;
 
-import com.resourcify.common.model.User;
+import com.resourcify.model.User;
 import com.resourcify.service.UserService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
