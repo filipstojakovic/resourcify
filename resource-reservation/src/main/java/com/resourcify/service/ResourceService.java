@@ -1,6 +1,6 @@
 package com.resourcify.service;
 
-import com.resourcify.exception.NotFoundException;
+import com.resourcify.common.exception.NotFoundException;
 import com.resourcify.mapper.ResourceMapper;
 import com.resourcify.model.entity.Resource;
 import com.resourcify.model.request.ResourceRequest;

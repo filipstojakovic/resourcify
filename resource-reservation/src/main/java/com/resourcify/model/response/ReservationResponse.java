@@ -1,6 +1,6 @@
 package com.resourcify.model.response;
 
-import com.resourcify.model.User;
+import com.resourcify.common.model.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

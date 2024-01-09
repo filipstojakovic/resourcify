@@ -1,6 +1,6 @@
 package com.resourcify.service;
 
-import com.resourcify.model.User;
+import com.resourcify.common.model.User;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.admin.client.Keycloak;
 import org.keycloak.representations.idm.UserRepresentation;

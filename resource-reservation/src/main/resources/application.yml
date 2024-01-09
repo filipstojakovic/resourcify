@@ -3,7 +3,7 @@ server:
   error:
     include-message: always
 keycloak:
-  url: '${KEYCLOAK_URL:http://keycloak:8080}'
+  url: '${KEYCLOAK_URL:http://localhost:9000}'
   realm: "${KEYCLOAK_REALM:resourcify}"
 
 spring:
@@ -13,8 +13,8 @@ spring:
       username: root
       password: root
       database: resource_db
-      host: localhost
-      port: 27017
+      host: '${MONGO_HOST:localhost}'
+      port: '${MONGO_PORT:27017}'
       auto-index-creation: true
 
   security:
@@ -31,4 +31,4 @@ logging:
 
 feign:
   name: user-client
-  url: "http://localhost:8084"
+  url: "${USER_SERVICE_URL:http://localhost:8084}"

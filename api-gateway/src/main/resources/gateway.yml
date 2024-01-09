@@ -1,0 +1,22 @@
+spring:
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedHeaders: "*"
+            allowedMethods:
+              - GET
+              - POST
+              - UPDATE
+              - DELETE
+      routes:
+        - id: resources
+          uri: "${RESOURCES_URI:http://localhost:8082}"
+          predicates:
+            Path=/resources/**
+        - id: users
+          uri: "${USERS_URI:http://localhost:8084}"
+          predicates:
+            Path=/users/**
