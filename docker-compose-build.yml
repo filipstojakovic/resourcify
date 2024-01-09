@@ -1,6 +1,7 @@
 version: "3.8"
-services:
+name: resourcify-build
 
+services:
 
   ################## RESOURCE-RESERVATION ##################
 
@@ -72,6 +73,7 @@ services:
     depends_on:
       - user-service
 
+  ################## FRONTEND ##################
   frontend:
     build: ./frontend-angular
     command: 'sh -c "npm run start-docker"'
@@ -83,6 +85,8 @@ services:
       - node_modules:/home/node/app/node_modules
     depends_on:
       - 'keycloak'
+      - 'api-gateway'
+      - 'user-service'
 
 volumes:
   data:
