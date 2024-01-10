@@ -12,10 +12,12 @@
         </mat-select>
     </mat-form-field>
     <button (click)="openDialog()" color="primary" mat-raised-button>
-        New reservation
+      <mat-icon>add</mat-icon>
+      <span>New reservation</span>
     </button>
     <button (click)="openDialog()" color="primary" mat-raised-button *ngIf="authService.isAdmin()">
-        New resource
+      <mat-icon>add</mat-icon>
+      <span>New resource</span>
     </button>
 </div>
 

@@ -7,9 +7,11 @@ import {from, Observable} from 'rxjs';
 })
 export class AuthService {
 
-  public static readonly USERNAME = "preferred_username";
-  public static readonly FULL_NAME = "name";
+  public static readonly USER_USERNAME = "preferred_username";
+  public static readonly USER_FULL_NAME = "name";
   public static readonly ADMIN_ROLE_NAME = "client-admin-role";
+  private static readonly KEYCLOAK_CLIENT_NAME = "frontend";
+
 
   keycloak = inject(KeycloakService);
 
@@ -35,7 +37,7 @@ export class AuthService {
 
   getUsername(): string {
     const username = this.keycloak.getKeycloakInstance()?.profile?.username as string;
-    return username ? username : this.keycloak.getKeycloakInstance().tokenParsed[AuthService.USERNAME]
+    return username ? username : this.keycloak.getKeycloakInstance().tokenParsed[AuthService.USER_USERNAME]
   }
 
   getId(): string {
@@ -44,15 +46,16 @@ export class AuthService {
 
   isAdmin(): boolean {
     const keycloakInstance = this.keycloak.getKeycloakInstance();
-    return keycloakInstance.hasRealmRole(AuthService.ADMIN_ROLE_NAME);
+    const isAdmin = keycloakInstance.hasResourceRole(AuthService.ADMIN_ROLE_NAME, AuthService.KEYCLOAK_CLIENT_NAME);
+    return isAdmin;
   }
 
   getFullName() {
     const keycloakInstance = this.keycloak.getKeycloakInstance();
 
     if (keycloakInstance.tokenParsed && typeof keycloakInstance.tokenParsed === 'object') {
-      if (AuthService.FULL_NAME in keycloakInstance.tokenParsed) {
-        return keycloakInstance.tokenParsed[AuthService.FULL_NAME];
+      if (AuthService.USER_FULL_NAME in keycloakInstance.tokenParsed) {
+        return keycloakInstance.tokenParsed[AuthService.USER_FULL_NAME];
       }
     }
     return '';
@@ -60,7 +63,7 @@ export class AuthService {
 
   getTokenExpirationDate(): number {
     const expDate = (this.keycloak.getKeycloakInstance().refreshTokenParsed as { exp: number })['exp'] as number;
-    return expDate ? expDate : this.keycloak.getKeycloakInstance().tokenParsed[AuthService.USERNAME]
+    return expDate ? expDate : this.keycloak.getKeycloakInstance().tokenParsed[AuthService.USER_USERNAME]
   }
 
   refresh(): Observable<any> {
