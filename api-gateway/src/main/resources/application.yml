@@ -10,5 +10,8 @@ logging:
         autoconfigure: INFO # for dev tools logs
 
 spring:
+  devtools:
+    livereload:
+      port: 38083
   config:
     import: classpath:gateway.yml

@@ -3,7 +3,7 @@ export const paths = {
   LOGOUT: "logout",
   ERROR: "error",
   HOME: "home",
-  RESOURCES: "resources",
-
+  RESOURCES_RESERVATION: "resources",
+  ADMIN_RESOURCES: "admin/resources",
 
 } as const;

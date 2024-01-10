@@ -21,4 +21,8 @@ export class HeaderComponent {
   logout() {
     this.authService.logout();
   }
+
+  isAdmin(){
+    return this.authService.isAdmin();
+  }
 }

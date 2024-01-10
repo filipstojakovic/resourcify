@@ -3,7 +3,7 @@ import {BrowserModule} from '@angular/platform-browser';
 
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
-import {MaterialModule} from "./material.module";
+import {MaterialModule} from "./routing/material.module";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AppRoutingModule} from "./routing/app-routing.module";
@@ -16,6 +16,7 @@ import {FullCalendarModule} from '@fullcalendar/angular';
 import {ResourceDialogComponent} from './component/dialog/resource-dialog/resource-dialog.component';
 import {AngularToastifyModule} from 'angular-toastify';
 import {KeycloakHttpInterceptorService} from "./auth/keycloak-http-interceptor.service";
+import { AdminResourceComponent } from './page/admin-resource/admin-resource.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +25,7 @@ import {KeycloakHttpInterceptorService} from "./auth/keycloak-http-interceptor.s
     ResourceComponent,
     HeaderComponent,
     ResourceDialogComponent,
+    AdminResourceComponent,
   ],
   imports: [
     BrowserModule,

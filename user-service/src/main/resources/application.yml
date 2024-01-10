@@ -11,6 +11,9 @@ keycloak:
     password: "${KEYCLOAK_ADMIN_PASSWORD:admin}"
 
 spring:
+  devtools:
+    livereload:
+      port: 38084
   security:
     oauth2:
       resourceserver:

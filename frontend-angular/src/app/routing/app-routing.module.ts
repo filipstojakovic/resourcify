@@ -4,10 +4,12 @@ import {HomeComponent} from '../page/home/home.component';
 import {ResourceComponent} from '../page/resource/resource.component';
 import {canActivateFn} from '../auth/canActivateFn';
 import {paths} from '../constants/paths';
+import {AuthService} from "../service/auth.service";
+import {AdminResourceComponent} from "../page/admin-resource/admin-resource.component";
 
 export const routes: Routes = [
   {
-    path: '',
+    path: '**',
     pathMatch: 'full',
     redirectTo: paths.HOME,
   },
@@ -16,14 +18,19 @@ export const routes: Routes = [
     pathMatch: 'full',
     canActivate: [canActivateFn],
     component: HomeComponent,
-    // data: { role: [RoleEnum.admin, RoleEnum.user] } // example of passing role data
   },
   {
-    path: paths.RESOURCES,
+    path: paths.RESOURCES_RESERVATION,
     pathMatch: 'full',
-    // canActivate: [canActivateFn],
+    canActivate: [canActivateFn],
     component: ResourceComponent,
-    // data: { role: [RoleEnum.admin, RoleEnum.user] } // example of passing role data
+  },
+  {
+    path: paths.ADMIN_RESOURCES,
+    pathMatch: 'full',
+    canActivate: [canActivateFn],
+    component: AdminResourceComponent,
+    data: {role: AuthService.ADMIN_ROLE_NAME}, // example of passing role data
   },
 ];
 

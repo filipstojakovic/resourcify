@@ -1,5 +1,5 @@
 export const backendUrl = {
   USERS: "users",
-  RESOURCES: "resources",
+  RESOURCES_RESERVATION: "resources",
 
 } as const

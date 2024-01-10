@@ -7,6 +7,9 @@ keycloak:
   realm: "${KEYCLOAK_REALM:resourcify}"
 
 spring:
+  devtools:
+    livereload:
+      port: 38082
   data:
     mongodb:
       authentication-database: admin

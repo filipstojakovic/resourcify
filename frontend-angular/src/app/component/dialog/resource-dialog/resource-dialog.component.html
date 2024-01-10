@@ -4,12 +4,29 @@
   <mat-dialog-content>
     <mat-form-field>
       <mat-label>Name</mat-label>
-      <input formControlName="name" matInput placeholder="Name" required/>
+      <input formControlName="name" matInput placeholder="Name"/>
       <mat-error
           *ngIf="resourceForm.get('name').invalid && resourceForm.get('name').touched">
         Name is required.
       </mat-error>
     </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Amount</mat-label>
+      <input formControlName="amount" matInput placeholder="Amount"
+             type="number"/>
+      <mat-error
+          *ngIf="resourceForm.get('amount').invalid && resourceForm.get('amount').touched">
+        Amount is required.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Background color</mat-label>
+      <input formControlName="backgroundColor" matInput
+             placeholder="Background color"/>
+    </mat-form-field>
+
     <mat-form-field>
       <mat-label>Description</mat-label>
       <textarea formControlName="description" matInput

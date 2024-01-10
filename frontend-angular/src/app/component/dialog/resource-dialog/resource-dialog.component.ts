@@ -1,7 +1,7 @@
 import {Component, Inject} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {ResourceType} from '../../../model/ResourceType';
+import {initResource, ResourceType} from '../../../model/ResourceType';
 
 @Component({
   selector: 'app-resource-dialog',
@@ -17,9 +17,12 @@ export class ResourceDialogComponent {
       @Inject(MAT_DIALOG_DATA) public data: ResourceType,
       private fb: FormBuilder,
   ) {
+    const resource = data || initResource();
     this.resourceForm = this.fb.group({
-      name: [data ? data.name : '', Validators.required],
-      description: [data ? data.description : ''],
+      name: [resource.name, Validators.required],
+      amount: [resource.amount, [Validators.required, Validators.min(1)]],
+      backgroundColor: [resource.backgroundColor],
+      description: [resource.description],
     });
   }
 
@@ -32,6 +35,4 @@ export class ResourceDialogComponent {
       this.dialogRef.close(this.resourceForm.value);
     }
   }
-
-
 }

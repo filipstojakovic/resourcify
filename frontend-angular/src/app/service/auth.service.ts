@@ -10,7 +10,7 @@ export class AuthService {
   public static readonly USER_USERNAME = "preferred_username";
   public static readonly USER_FULL_NAME = "name";
   public static readonly ADMIN_ROLE_NAME = "client-admin-role";
-  private static readonly KEYCLOAK_CLIENT_NAME = "frontend";
+  public static readonly KEYCLOAK_CLIENT_NAME = "frontend";
 
 
   keycloak = inject(KeycloakService);

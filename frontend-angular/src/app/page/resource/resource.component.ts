@@ -56,41 +56,48 @@ export class ResourceComponent implements OnInit {
   }
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(ResourceDialogComponent, {
-      data: {name: "asd", description: "qwe"} as ResourceType,
-    });
+    const dialogRef = this.dialog.open(ResourceDialogComponent, { data: null });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result == null)
         return;
-      console.log('The dialog was closed');
-      console.log("home.component.ts > after result(): " + JSON.stringify(result, null, 2));
+      this.resourceService.postResource(result as ResourceType).subscribe({
+            next: (res) => {
+              console.log("resource.component.ts > next(): " + JSON.stringify(res, null, 2));
+              this.toastService.success('Resource saved')
+            },
+            error: (err) => {
+              console.error(err.message);
+              this.toastService.success('Resource not saved')
+            },
+          },
+      )
     });
   }
 
   getEvents(resource: ResourceType | string) {
     if (typeof resource === "string") {
       return this.resourceService.findAll().subscribe({
-          next: (res) => {
-            this.resources = res;
-            this.calendarOptions.events = this.resourceEventMapper.mapResourcesToReservationEvents(res);
+            next: (res) => {
+              this.resources = res;
+              this.calendarOptions.events = this.resourceEventMapper.mapResourcesToReservationEvents(res);
+            },
+            error: (err) => {
+              console.error(err.message);
+              this.toastService.error('Error fetch resources');
+            },
           },
-          error: (err) => {
-            console.error(err.message);
-            this.toastService.error('Error fetch resources');
-          },
-        },
       )
     }
     return this.resourceService.findById(resource.id).subscribe({
-        next: (res) => {
-          this.calendarOptions.events = this.resourceEventMapper.mapResourceToReservationEvents(res);
+          next: (res) => {
+            this.calendarOptions.events = this.resourceEventMapper.mapResourceToReservationEvents(res);
+          },
+          error: (err) => {
+            console.error(err.message);
+            this.toastService.error(`Error fetch resource ${resource.name}`);
+          },
         },
-        error: (err) => {
-          console.error(err.message);
-          this.toastService.error(`Error fetch resource ${resource.name}`);
-        },
-      },
     )
   }
 }

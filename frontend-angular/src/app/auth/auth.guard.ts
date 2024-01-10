@@ -1,6 +1,8 @@
 import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Router, RouterStateSnapshot} from '@angular/router';
 import {KeycloakAuthGuard, KeycloakService} from 'keycloak-angular';
+import {AuthService} from '../service/auth.service';
+import {paths} from '../constants/paths';
 
 @Injectable({
   providedIn: 'root',
@@ -9,31 +11,33 @@ export class AuthGuard extends KeycloakAuthGuard {
 
   constructor(
       protected override readonly router: Router,
-      private readonly keycloak: KeycloakService,
+      private readonly keycloakService: KeycloakService,
   ) {
-    super(router, keycloak);
+    super(router, keycloakService);
   }
 
   public async isAccessAllowed(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<boolean> {
 
-    let authenticated = this.keycloak.getKeycloakInstance().authenticated;
-    if (!authenticated) {
-      await this.keycloak.login({
+    const keycloak = this.keycloakService.getKeycloakInstance();
+    const isAuthenticated = keycloak.authenticated;
+    if (!isAuthenticated) {
+      await this.keycloakService.login({
         redirectUri: window.location.origin + state.url,
       });
     }
 
-    return true;
+    const requiredRoles = route.data['role'];
+    if (requiredRoles == null)
+      return true;
 
-    // const requiredRoles = route.data['role']; // data send through Route in RouterModule, =>  data: { role: [RoleEnum.admin, RoleEnum.user] }
-    //
-    // // Allow the user to proceed if no additional roles are required to access the route.
-    // if (!(requiredRoles instanceof Array) || requiredRoles.length === 0) {
-    //   return true;
-    // }
-    //
-    // // Allow the user to proceed if all the required roles are present.
-    // return requiredRoles.every((role) => this.roles.includes(role));
+    const hasRequiredRole = keycloak.hasResourceRole(requiredRoles, AuthService.KEYCLOAK_CLIENT_NAME)
+
+    if (!hasRequiredRole) {
+      await this.router.navigate([paths.HOME]);
+      return false;
+    }
+
+    return true;
   }
 
 }
