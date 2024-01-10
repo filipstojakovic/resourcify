@@ -16,13 +16,10 @@ spring:
       resourceserver:
         jwt:
           issuer-uri: '${keycloak.url}/realms/${keycloak.realm}'
-
 logging:
   level:
     org:
       springframework:
         security: DEBUG
-
-
-
-
+        boot:
+          autoconfigure: INFO # for dev tools logs

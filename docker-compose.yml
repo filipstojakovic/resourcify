@@ -35,18 +35,6 @@ services:
       - keycloak-postgres
     entrypoint: '/opt/bitnami/keycloak/bin/kc.sh start-dev --import-realm'
 
-    ################## USER-SERVICE ##################
-  user-service:
-    build: ./user-service
-    ports:
-      - '8084:8084'
-    env_file:
-      - ./user-service/.env
-    environment:
-      PORT: 8084
-    depends_on:
-      - keycloak
-
   ################## API-GATEWAY ##################
   api-gateway:
     build: ./api-gateway
@@ -58,6 +46,41 @@ services:
       PORT: 8083
     depends_on:
       - user-service
+
+  ################## RESOURCE-RESERVATION ##################
+  resource-reservation:
+    build: ./resource-reservation
+    ports:
+      - '8082:8082'
+    env_file:
+      - ./resource-reservation/.env
+    environment:
+      PORT: 8082
+    depends_on:
+      - keycloak
+
+  resource-reservation-mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+      - MONGO_INITDB_DATABASE=resource_db
+    volumes:
+      - data:/data
+
+    ################## USER-SERVICE ##################
+  user-service:
+    build: ./user-service
+    ports:
+      - '8084:8084'
+    env_file:
+      - ./user-service/.env
+    environment:
+      PORT: 8084
+    depends_on:
+      - keycloak
 
   ################## FRONTEND ##################
   frontend:

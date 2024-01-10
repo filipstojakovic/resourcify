@@ -28,6 +28,8 @@ logging:
     org:
       springframework:
         security: DEBUG
+        boot:
+          autoconfigure: INFO # for dev tools logs
 
 feign:
   name: user-client

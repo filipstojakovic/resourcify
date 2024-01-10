@@ -6,6 +6,8 @@ logging:
     org:
       springframework:
         security: DEBUG
+      boot:
+        autoconfigure: INFO # for dev tools logs
 
 spring:
   config:
