@@ -6,10 +6,11 @@ import {canActivateFn} from '../auth/canActivateFn';
 import {paths} from '../constants/paths';
 import {AuthService} from "../service/auth.service";
 import {AdminResourceComponent} from "../page/admin-resource/admin-resource.component";
+import {ErrorPageComponent} from '../page/error-page/error-page.component';
 
 export const routes: Routes = [
   {
-    path: '**',
+    path: '',
     pathMatch: 'full',
     redirectTo: paths.HOME,
   },
@@ -30,8 +31,13 @@ export const routes: Routes = [
     pathMatch: 'full',
     canActivate: [canActivateFn],
     component: AdminResourceComponent,
-    data: {role: AuthService.ADMIN_ROLE_NAME}, // example of passing role data
+    data: { role: AuthService.ADMIN_ROLE_NAME }, // example of passing role data
   },
+  {
+    path: '**',
+    pathMatch: 'full',
+    component: ErrorPageComponent,
+  }
 ];
 
 @NgModule({

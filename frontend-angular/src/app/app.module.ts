@@ -17,6 +17,7 @@ import {ResourceDialogComponent} from './component/dialog/resource-dialog/resour
 import {AngularToastifyModule} from 'angular-toastify';
 import {KeycloakHttpInterceptorService} from "./auth/keycloak-http-interceptor.service";
 import { AdminResourceComponent } from './page/admin-resource/admin-resource.component';
+import { ErrorPageComponent } from './page/error-page/error-page.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { AdminResourceComponent } from './page/admin-resource/admin-resource.com
     HeaderComponent,
     ResourceDialogComponent,
     AdminResourceComponent,
+    ErrorPageComponent,
   ],
   imports: [
     BrowserModule,

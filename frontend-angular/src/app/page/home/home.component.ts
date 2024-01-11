@@ -24,16 +24,6 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     console.log("app.module.ts > environment name: " + environment.ENV_NAME);
-    this.socketService.connect().subscribe({
-          next: (res) => {
-            this.toastService.success("Ima nesto");
-            console.log("home.component.ts > next(): " + res);
-          },
-          error: (err) => {
-            console.error(err.message);
-          },
-        },
-    )
 
   }
 

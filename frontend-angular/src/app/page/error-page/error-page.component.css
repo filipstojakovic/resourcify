@@ -1,0 +1,29 @@
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+div {
+  max-width: 600px;
+  text-align: center;
+  margin: 20px;
+}
+
+.oops-text {
+  font-size: calc(7vw + 5px); /* Adjust size based on the viewport width */
+  line-height: 1;
+}
+
+.lost-text {
+  font-size: calc(5vw + 5px);
+  line-height: 1;
+  margin-bottom: 30px; /* Add some spacing below the text */
+}
+
+.page-not-exist-text{
+  font-size: calc(1vw + 5px);
+  line-height: 1;
+  margin-bottom: 30px; /* Add some spacing below the text */
+}
