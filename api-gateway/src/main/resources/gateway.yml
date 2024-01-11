@@ -20,3 +20,7 @@ spring:
           uri: "${USERS_URI:http://localhost:8084}"
           predicates:
             Path=/users/**
+        - id: notification-service
+          uri: "${NOTIFICATION_SERVICE:http://localhost:8000}"
+          predicates:
+            Path=/ws/**

@@ -6,4 +6,5 @@ export const environment = {
   KEYCLOAK_PORT: 8080,
   KEYCLOAK_BASE_URL: "http://keycloak",
   ENV_NAME: "docker",
+  SOCKET_URL: "ws://notification-service:8003", // gateway port
 };

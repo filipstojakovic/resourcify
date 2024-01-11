@@ -5,6 +5,6 @@ export const environment = {
   BACKEND_URL: 'http://localhost:8083', // gateway
   KEYCLOAK_PORT: 9000,
   KEYCLOAK_BASE_URL: "http://localhost",
-  ENV_NAME: "empty",
-
+  ENV_NAME: "development",
+  SOCKET_URL: "ws://localhost:8083",
 };

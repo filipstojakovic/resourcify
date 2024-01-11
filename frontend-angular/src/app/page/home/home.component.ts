@@ -1,6 +1,8 @@
 import {Component, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
+import {SocketService} from '../../service/socket.service';
+import {ToastService} from "angular-toastify";
 
 @Component({
   selector: 'app-home',
@@ -12,11 +14,24 @@ export class HomeComponent implements OnInit {
 
   result = "";
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient,
+              private socketService: SocketService,
+              private toastService: ToastService
+  ) {
   }
 
   ngOnInit(): void {
     console.log("app.module.ts > environment name: " + environment.ENV_NAME);
+    this.socketService.connect().subscribe({
+          next: (res) => {
+            this.toastService.success("Ima nesto");
+            console.log("home.component.ts > next(): " + res);
+          },
+          error: (err) => {
+            console.error(err.message);
+          },
+        },
+    )
 
   }
 
@@ -31,5 +46,9 @@ export class HomeComponent implements OnInit {
           },
         },
     )
+  }
+
+  sendToRabbit() {
+    this.socketService.sendMessage({ message: "test message" });
   }
 }
