@@ -3,8 +3,12 @@ server:
 
 logging:
   level:
+    reactor:
+      netty: INFO
     org:
       springframework:
+        cloud:
+          gateway: TRACE
         security: DEBUG
       boot:
         autoconfigure: INFO # for dev tools logs
