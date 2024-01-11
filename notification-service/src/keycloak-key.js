@@ -1,5 +1,7 @@
+const dotenv = require('dotenv');
+dotenv.config({path: __dirname + `/../.env${process.env.NODE_ENV ? "." + process.env.NODE_ENV.trim() : ""}`});
+
 const jwksClient = require("jwks-rsa");
-require('dotenv').config({path: __dirname + `/../.env${process.env.NODE_ENV ? "." + process.env.NODE_ENV.trim() : ""}`});
 
 const client = jwksClient({
   jwksUri: process.env.JWKS_URI,

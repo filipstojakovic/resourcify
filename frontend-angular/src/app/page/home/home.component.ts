@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {environment} from '../../../environments/environment';
 import {SocketService} from '../../service/socket.service';
 import {ToastService} from "angular-toastify";
+import {KeycloakService} from 'keycloak-angular';
 
 @Component({
   selector: 'app-home',
@@ -16,7 +17,8 @@ export class HomeComponent implements OnInit {
 
   constructor(private http: HttpClient,
               private socketService: SocketService,
-              private toastService: ToastService
+              private toastService: ToastService,
+              private keycloakService: KeycloakService,
   ) {
   }
 
@@ -50,5 +52,11 @@ export class HomeComponent implements OnInit {
 
   sendToRabbit() {
     this.socketService.sendMessage({ message: "test message" });
+  }
+
+  getJwt() {
+    this.keycloakService.getToken().then(res => {
+      this.result = res;
+    })
   }
 }

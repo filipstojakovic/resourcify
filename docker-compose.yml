@@ -82,6 +82,33 @@ services:
     depends_on:
       - keycloak
 
+  ################## RABBITMQ ##################
+  rabbitmq:
+    image: rabbitmq:3.8-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+    ports:
+      - "5672:5672" # default rabbitmq port
+      - "15672:15672" # UI management port
+      - "15674:15674" # RabbitMQ STOMP (WebSocket) port
+      - "61613:61613" # STOMP port
+    volumes:
+      - "./rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins"
+
+  ################## NOTIFICATION-SERVICE ##################
+  notification-service:
+    image: 'node:16.16-alpine'
+    working_dir: '/home/node/app'
+    command: 'sh -c "npm run start-docker"'
+    ports:
+      - '8000:8000'
+    volumes:
+      - ./notification-service:/home/node/app
+    depends_on:
+      - 'keycloak'
+      - 'rabbitmq'
+
   ################## FRONTEND ##################
   frontend:
     image: 'node:16.16-alpine'

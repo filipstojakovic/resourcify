@@ -1,4 +1,4 @@
-require('dotenv').config({path: __dirname + `/../.env${process.env.NODE_ENV ? "." + process.env.NODE_ENV.trim() : ""}`});
+require('dotenv').config({ path: __dirname + `/../.env${process.env.NODE_ENV ? "." + process.env.NODE_ENV.trim() : ""}` });
 
 import * as cors from 'cors'
 import * as express from 'express'
@@ -33,7 +33,7 @@ const httpServer = app.listen(port, async () => {
   rabbitChannel = await rabbitConnection.createChannel();
 });
 
-const ws = new WebSocket.Server({server: httpServer});
+const ws = new WebSocket.Server({ server: httpServer });
 
 // when user establishes connection
 ws.on('connection', (socket, req) => {
@@ -48,7 +48,7 @@ ws.on('connection', (socket, req) => {
     }
     const username = decodedJwt.preferred_username;
 
-    Object.assign(socket, {username: username}); // assign username to socket
+    Object.assign(socket, { username: username }); // assign username to socket
     console.log("connected user: " + username);
 
     receiveFromRabbitMQ(username).catch(console.error);
@@ -59,36 +59,36 @@ ws.on('connection', (socket, req) => {
 async function receiveFromRabbitMQ(username) {
 
   const queueName = username;
-  await rabbitChannel.assertQueue(queueName, {durable: true});
+  await rabbitChannel.assertQueue(queueName, { durable: true });
   rabbitChannel.consume(queueName, (message) => {
-      const content = message.content.toString();
-      console.log('receiving from queue: ' + queueName);
+        const content = message.content.toString();
+        console.log('receiving from queue: ' + queueName);
 
-      ws.clients.forEach((client) => {
-        if (client.username === queueName) {
-          client.send(content);
-        }
-      });
-    }, {noAck: true},
+        ws.clients.forEach((client) => {
+          if (client.username === queueName) {
+            client.send(content);
+          }
+        });
+      }, { noAck: true },
   );
 }
 
 // receive message from microservice and send to queue
-app.get(
-  "/ws/test",
-  passport.authenticate('keycloak', {session: false}),
-  (req, res) => {
-    const username = req['user'];
-    sendToRabbitMQ(username, req.body).catch(console.error);
-    res.send("pong");
-  },
+app.post(
+    "/ws/test",
+    passport.authenticate('keycloak', { session: false }),
+    (req, res) => {
+      const username = req['user'];
+      sendToRabbitMQ(username, req.body).catch(console.error);
+      res.send("pong");
+    },
 );
 
 
 async function sendToRabbitMQ(username, message: any) {
   // const chatMessage = JSON.parse(message);
   const queueName = username; // TODO: The message body must include the intended recipient's username
-  await rabbitChannel.assertQueue(queueName, {durable: true});
+  await rabbitChannel.assertQueue(queueName, { durable: true });
   console.log('sending to queue: ' + queueName);
-  rabbitChannel.sendToQueue(queueName, Buffer.from(message));
+  rabbitChannel.sendToQueue(queueName, Buffer.from(JSON.stringify(message)));
 }
