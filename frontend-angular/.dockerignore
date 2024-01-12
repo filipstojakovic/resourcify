@@ -1,5 +1,7 @@
 node_modules
-Dockerfile
 .dockerignore
 .idea
-.env
+.git
+Concepts
+*.jar
+.angular
