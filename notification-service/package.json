@@ -1,11 +1,11 @@
 {
   "name": "notification-service",
   "version": "1.0.0",
-  "main": "src/app.js",
+  "main": "app.js",
   "scripts": {
-    "start": "npx nodemon src/app.ts",
-    "start-docker": "set NODE_ENV=docker&&npx ts-node src/app.ts",
-    "build": "npx ts-node src/app.ts"
+    "start": "npx nodemon app.ts",
+    "start-docker": "npx nodemon -r dotenv/config app.ts dotenv_config_path=.env.docker",
+    "build": "npx ts-node app.ts"
   },
   "author": "Filip Stojakovic",
   "dependencies": {

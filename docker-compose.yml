@@ -28,6 +28,7 @@ services:
       KEYCLOAK_DATABASE_NAME: keycloak_postgres_db
       KEYCLOAK_DATABASE_USER: root
       KEYCLOAK_DATABASE_PASSWORD: root
+      KC_HEALTH_ENABLED: true
       KEYCLOAK_IMPORT: /opt/bitnami/keycloak/data/import/realm-export.json
     volumes:
       - ./keycloak/realms:/opt/bitnami/keycloak/data/import
@@ -101,6 +102,7 @@ services:
     image: 'node:16.16-alpine'
     working_dir: '/home/node/app'
     command: 'sh -c "npm run start-docker"'
+    restart: always
     ports:
       - '8000:8000'
     volumes:

@@ -1,16 +1,27 @@
-require('dotenv').config({ path: __dirname + `/../.env${process.env.NODE_ENV ? "." + process.env.NODE_ENV.trim() : ""}` });
+require('dotenv').config();
 
 import * as cors from 'cors'
 import * as express from 'express'
 import {WebSocket} from 'ws';
-import {getKeycloakKey} from "./keycloak-key.js";
 import * as passport from 'passport';
 import amqplib = require('amqplib');
 import KeycloakBearerStrategy = require("passport-keycloak-bearer");
-
 const jwt = require('jsonwebtoken');
+const jwksClient = require("jwks-rsa");
 
-passport.initialize();
+console.log("environment: " + process.env.TEST);
+
+const client = jwksClient({
+  jwksUri: process.env.JWKS_URI,
+});
+
+function getKeycloakKey(header, callback) {
+  client.getSigningKey(header.kid, (err, key) => {
+    const signingKey = key.publicKey || key.rsaPublicKey;
+    callback(null, signingKey);
+  });
+}
+
 passport.use(new KeycloakBearerStrategy({
   "realm": process.env.KEYCLOAK_REALM_NAME,
   "url": process.env.KEYCLOAK_BASEURL,
