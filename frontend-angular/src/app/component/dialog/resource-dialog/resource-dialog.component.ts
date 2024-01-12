@@ -1,4 +1,4 @@
-import {Component, Inject} from '@angular/core';
+import {Component, Inject, OnInit} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {initResource, ResourceType} from '../../../model/ResourceType';
@@ -11,6 +11,8 @@ import {initResource, ResourceType} from '../../../model/ResourceType';
 export class ResourceDialogComponent {
 
   resourceForm: FormGroup;
+  backgroundColor = '#3788d8';
+  toggle: boolean = false;
 
   constructor(
       public dialogRef: MatDialogRef<ResourceDialogComponent>,
@@ -32,7 +34,14 @@ export class ResourceDialogComponent {
 
   onSaveClicked() {
     if (this.resourceForm.valid) {
+      console.log("resource-dialog.component.ts > onSaveClicked(): "+ JSON.stringify(this.resourceForm.value, null, 2));
       this.dialogRef.close(this.resourceForm.value);
     }
   }
+
+  public onChangeColor(backgroundColor: string): void {
+    this.backgroundColor = backgroundColor;
+    this.resourceForm.patchValue({ backgroundColor });
+  }
+
 }

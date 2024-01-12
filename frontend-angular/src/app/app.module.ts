@@ -18,6 +18,7 @@ import {AngularToastifyModule} from 'angular-toastify';
 import {KeycloakHttpInterceptorService} from "./auth/keycloak-http-interceptor.service";
 import { AdminResourceComponent } from './page/admin-resource/admin-resource.component';
 import { ErrorPageComponent } from './page/error-page/error-page.component';
+import {ColorPickerModule} from 'ngx-color-picker';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { ErrorPageComponent } from './page/error-page/error-page.component';
     KeycloakAngularModule,
     FullCalendarModule,
     AngularToastifyModule,
+    ColorPickerModule
   ],
   providers: [{
     provide: APP_INITIALIZER,

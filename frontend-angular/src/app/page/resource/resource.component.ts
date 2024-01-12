@@ -64,6 +64,7 @@ export class ResourceComponent implements OnInit {
       this.resourceService.postResource(result as ResourceType).subscribe({
             next: (res) => {
               console.log("resource.component.ts > next(): " + JSON.stringify(res, null, 2));
+              this.resources.push(res);
               this.toastService.success('Resource saved')
             },
             error: (err) => {

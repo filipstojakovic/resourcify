@@ -21,11 +21,22 @@
       </mat-error>
     </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>Background color</mat-label>
-      <input formControlName="backgroundColor" matInput
-             placeholder="Background color"/>
-    </mat-form-field>
+    <div style="display:flex; gap: 10px; margin-bottom: 20px">
+      <button #ignoredButton mat-raised-button (click)="toggle=!toggle"
+              color="primary">
+        Change color
+      </button>
+      <input #ignoredInput
+             class="color-box"
+             [cpIgnoredElements]="[ignoredButton, ignoredInput]"
+             [cpOutputFormat]="'hex'"
+             [style.background]="backgroundColor"
+             [(cpToggle)]="toggle"
+             (colorPickerChange)="onChangeColor($event)"
+             readonly
+             value="Event example"
+             [(colorPicker)]="backgroundColor"/>
+    </div>
 
     <mat-form-field>
       <mat-label>Description</mat-label>

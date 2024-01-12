@@ -53,7 +53,7 @@ public class GlobalExceptionHandler {
     return ResponseEntity.status(status).body(responseMessage);
   }
 
-  @ExceptionHandler({ MethodArgumentNotValidException.class, HttpMessageNotReadableException.class, DuplicateKeyException.class })
+  @ExceptionHandler({ MethodArgumentNotValidException.class, HttpMessageNotReadableException.class })
   public final ResponseEntity<Object> handleHttpMessageNotReadable(Exception e,
                                                                    HandlerMethod handlerMethod,
                                                                    HttpServletRequest request) {
@@ -62,6 +62,16 @@ public class GlobalExceptionHandler {
     if (e instanceof MethodArgumentNotValidException ex) {
       message = ex.getBody().getDetail();
     }
+    String responseMessage = convertMessageToJson(HttpStatus.BAD_REQUEST.value(), message, request.getRequestURI());
+    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage);
+  }
+
+  @ExceptionHandler({ org.springframework.dao.DuplicateKeyException.class })
+  public final ResponseEntity<Object> handleDuplicateKeyException(DuplicateKeyException e,
+                                                                  HandlerMethod handlerMethod,
+                                                                  HttpServletRequest request) {
+    LoggingUtil.logException(e, getLog(handlerMethod));
+    String message = e.getMessage();
     String responseMessage = convertMessageToJson(HttpStatus.BAD_REQUEST.value(), message, request.getRequestURI());
     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMessage);
   }
