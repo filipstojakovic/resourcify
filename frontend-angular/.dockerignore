@@ -5,3 +5,5 @@ node_modules
 Concepts
 *.jar
 .angular
+**/node_modules
+node_modules/**

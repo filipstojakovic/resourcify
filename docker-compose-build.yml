@@ -40,6 +40,8 @@ services:
   api-gateway:
     build:
       dockerfile: ./api-gateway/build.Dockerfile
+      args:
+        DOCKER_BUILDKIT: 1
       #context: ./api-gateway # Note: we don't use this because then we can't copy parent from this context. We need parent folder to build jars
     ports:
       - '8083:8083'
@@ -54,6 +56,8 @@ services:
   resource-reservation:
     build:
       dockerfile: ./resource-reservation/build.Dockerfile
+      args:
+        DOCKER_BUILDKIT: 1
     ports:
       - '8082:8082'
     env_file:
@@ -78,6 +82,8 @@ services:
   user-service:
     build:
       dockerfile: ./user-service/build.Dockerfile
+      args:
+        DOCKER_BUILDKIT: 1
     ports:
       - '8084:8084'
     env_file:

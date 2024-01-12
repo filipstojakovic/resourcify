@@ -118,6 +118,7 @@ services:
     command: 'sh -c "npm run start-docker"'
     ports:
       - '4200:4200'
+      - "49153:49153"  # This is for LiveReload
     volumes:
       - ./frontend-angular:/home/node/app
     depends_on:
