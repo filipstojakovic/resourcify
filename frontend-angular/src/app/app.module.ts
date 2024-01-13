@@ -19,6 +19,7 @@ import {KeycloakHttpInterceptorService} from "./auth/keycloak-http-interceptor.s
 import { AdminResourceComponent } from './page/admin-resource/admin-resource.component';
 import { ErrorPageComponent } from './page/error-page/error-page.component';
 import {ColorPickerModule} from 'ngx-color-picker';
+import { ConfirmDialogComponent } from './component/dialog/confirm-dialog/confirm-dialog.component';
 
 @NgModule({
   declarations: [
@@ -29,6 +30,7 @@ import {ColorPickerModule} from 'ngx-color-picker';
     ResourceDialogComponent,
     AdminResourceComponent,
     ErrorPageComponent,
+    ConfirmDialogComponent,
   ],
   imports: [
     BrowserModule,

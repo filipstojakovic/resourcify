@@ -45,7 +45,7 @@ public class ReservationService {
         .findFirst()
         .orElseThrow(() -> new NotFoundException(Reservation.class, reservationId));
 
-    reservation.setActive(false);
+    reservation.setApproved(false);
     resource = resourceRepository.save(resource);
 
     return resourceMapper.toResponse(resource);

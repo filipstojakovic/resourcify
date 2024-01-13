@@ -16,5 +16,5 @@ public class ReservationResponse {
   private User user;
   private String description;
   private LocalDateTime reservationDate;
-  private boolean isActive;
+  private boolean isApproved;
 }

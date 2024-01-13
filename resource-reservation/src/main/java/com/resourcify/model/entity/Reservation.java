@@ -16,7 +16,7 @@ public class Reservation {
   private String createdBy;
   private String description;
   private LocalDateTime reservationDate;
-  private boolean isActive = true;
+  private boolean isApproved = true; //TODO: change to false
 
   public Reservation(final String forUserId, final LocalDateTime reservationDate, String description, Jwt jwt) {
     this.forUserId = forUserId;
