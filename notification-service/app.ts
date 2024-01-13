@@ -6,21 +6,17 @@ import {WebSocket} from 'ws';
 import * as passport from 'passport';
 import amqplib = require('amqplib');
 import KeycloakBearerStrategy = require("passport-keycloak-bearer");
+
 const jwt = require('jsonwebtoken');
-const jwksClient = require("jwks-rsa");
+const { getKeycloakKey } = require('./authUtils.js'); // Adjust the path accordingly
 
-console.log("environment: " + process.env.TEST);
 
-const client = jwksClient({
-  jwksUri: process.env.JWKS_URI,
-});
-
-function getKeycloakKey(header, callback) {
-  client.getSigningKey(header.kid, (err, key) => {
-    const signingKey = key.publicKey || key.rsaPublicKey;
-    callback(null, signingKey);
-  });
+type NotificationMessage = {
+  forUsername: string;
+  message: string;
 }
+
+console.log("running environment: " + process.env.ENV_NAME);
 
 passport.use(new KeycloakBearerStrategy({
   "realm": process.env.KEYCLOAK_REALM_NAME,
@@ -68,15 +64,14 @@ ws.on('connection', (socket, req) => {
 
 // receive message from queue and send to user
 async function receiveFromRabbitMQ(username) {
-
   const queueName = username;
   await rabbitChannel.assertQueue(queueName, { durable: true });
   rabbitChannel.consume(queueName, (message) => {
         const content = message.content.toString();
-        console.log('receiving from queue: ' + queueName);
+        console.log('receiving from queue name: ' + queueName);
 
         ws.clients.forEach((client) => {
-          if (client.username === queueName) {
+          if (client.username === username) {
             client.send(content);
           }
         });
@@ -86,20 +81,32 @@ async function receiveFromRabbitMQ(username) {
 
 // receive message from microservice and send to queue
 app.post(
-    "/ws/test",
+    "/ws/notifications",
     passport.authenticate('keycloak', { session: false }),
-    (req, res) => {
-      const username = req['user'];
-      sendToRabbitMQ(username, req.body).catch(console.error);
+    (req: express.Request<{}, {}, NotificationMessage>, res) => {
+      const body: NotificationMessage = req.body;
+      if (!isValidNotificationMessage(body)) {
+        return res.status(400).json({ error: 'Invalid request body' });
+      }
+
+      sendToRabbitMQ(body).catch(console.error);
       res.send("pong");
     },
 );
 
 
-async function sendToRabbitMQ(username, message: any) {
-  // const chatMessage = JSON.parse(message);
-  const queueName = username; // TODO: The message body must include the intended recipient's username
+async function sendToRabbitMQ(notificationMessage: NotificationMessage) {
+  const queueName = notificationMessage.forUsername;
   await rabbitChannel.assertQueue(queueName, { durable: true });
   console.log('sending to queue: ' + queueName);
-  rabbitChannel.sendToQueue(queueName, Buffer.from(JSON.stringify(message)));
+  rabbitChannel.sendToQueue(queueName, Buffer.from(notificationMessage.message));
+}
+
+function isValidNotificationMessage(obj: any): obj is NotificationMessage {
+  return (
+      typeof obj === 'object' &&
+      obj !== null &&
+      typeof obj.forUsername === 'string' &&
+      typeof obj.message === 'string'
+  );
 }
