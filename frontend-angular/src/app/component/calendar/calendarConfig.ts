@@ -16,6 +16,6 @@ export const calendarConfig: CalendarOptions = {
   headerToolbar: {
     left: 'prev,next',
     center: 'title',
-    right: 'dayGridMonth,dayGridWeek,dayGridDay,listWeek',
+    right: 'today dayGridMonth,dayGridWeek,listWeek',
   },
 }

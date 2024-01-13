@@ -1,7 +1,5 @@
 package com.resourcify.controller;
 
-import com.resourcify.model.entity.Reservation;
-import com.resourcify.model.entity.Resource;
 import com.resourcify.model.request.ReserveResourceRequest;
 import com.resourcify.model.response.ResourceResponse;
 import com.resourcify.service.ReservationService;

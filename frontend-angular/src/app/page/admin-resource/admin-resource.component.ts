@@ -1,27 +1,31 @@
-import {Component} from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
-import {ResourceDialogComponent} from "../../component/dialog/resource-dialog/resource-dialog.component";
 import {MatDialog} from "@angular/material/dialog";
 import {ConfirmDialogComponent} from "../../component/dialog/confirm-dialog/confirm-dialog.component";
+import {ResourceType} from "../../model/ResourceType";
+import {ResourceDialogComponent} from "../../component/dialog/resource-dialog/resource-dialog.component";
+import {ResourceService} from "../../service/resource.service";
+import {ToastService} from "angular-toastify";
 
-export interface PeriodicElement {
-  name: string;
-  position: number;
-  weight: number;
-  symbol: string;
-}
-
-const ELEMENT_DATA: PeriodicElement[] = [
-  {position: 1, name: 'Hydrogen', weight: 1.0079, symbol: 'H'},
-  {position: 2, name: 'Helium', weight: 4.0026, symbol: 'He'},
-  {position: 3, name: 'Lithium', weight: 6.941, symbol: 'Li'},
-  {position: 4, name: 'Beryllium', weight: 9.0122, symbol: 'Be'},
-  {position: 5, name: 'Boron', weight: 10.811, symbol: 'B'},
-  {position: 6, name: 'Carbon', weight: 12.0107, symbol: 'C'},
-  {position: 7, name: 'Nitrogen', weight: 14.0067, symbol: 'N'},
-  {position: 8, name: 'Oxygen', weight: 15.9994, symbol: 'O'},
-  {position: 9, name: 'Fluorine', weight: 18.9984, symbol: 'F'},
-  {position: 10, name: 'Neon', weight: 20.1797, symbol: 'Ne'},
+const ELEMENT_DATA: ResourceType[] = [
+  {
+    name: "Wood",
+    description: "A renewable resource used for construction",
+    amount: 100,
+    backgroundColor: "#8B4513", // Brown color
+  },
+  {
+    name: "Iron Ore",
+    description: "Raw material for producing iron and steel",
+    amount: 50,
+    backgroundColor: "#43464B", // Dark gray color
+  },
+  {
+    name: "Gold",
+    amount: 10,
+    description: "Raw material for producing iron and steel",
+    backgroundColor: "#FFD700", // Gold color
+  },
 ];
 
 @Component({
@@ -29,20 +33,64 @@ const ELEMENT_DATA: PeriodicElement[] = [
   templateUrl: './admin-resource.component.html',
   styleUrls: ['./admin-resource.component.css'],
 })
-export class AdminResourceComponent {
-  displayedColumns: string[] = ['demo-position', 'demo-name', 'demo-weight', 'demo-symbol', 'edit', 'delete'];
-  dataSource = new MatTableDataSource(ELEMENT_DATA);
+export class AdminResourceComponent implements OnInit {
+
+  displayedColumns: string[] = ['name', 'description', 'amount', 'backgroundColor', 'edit', 'delete'];
+  dataSource = new MatTableDataSource([]);
 
 
-  constructor(public dialog: MatDialog) {
+  constructor(public dialog: MatDialog, private resourceService: ResourceService, private toastService: ToastService) {
   }
 
-  deleteElement(element: PeriodicElement) {
-    console.log("admin-resource.component.ts > deleteElement(): " + JSON.stringify(element, null, 2));
+  ngOnInit() {
+    this.resourceService.findAll().subscribe({
+        next: (res) => {
+          this.dataSource = new MatTableDataSource(res);
+        },
+        error: (err) => {
+          console.error(err.message);
+        },
+      },
+    )
+  }
+
+  createNewResource() {
+    const dialogRef = this.dialog.open(ResourceDialogComponent);
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == null)
+        return;
+      this.resourceService.postResource(result as ResourceType).subscribe({
+          next: (res) => {
+            const data = this.dataSource.data;
+            data.push(res);
+            this.dataSource.data = data;
+            this.toastService.success('Resource saved')
+          },
+          error: (err) => {
+            console.error(err.message);
+            this.toastService.success('Resource not saved')
+          },
+        },
+      )
+    });
+  }
+
+  editRow(row: ResourceType) {
+    console.log("admin-resource.component.ts > deleteElement(): " + JSON.stringify(row, null, 2));
+    const dialogRef = this.dialog.open(ResourceDialogComponent, {data: row});
+    dialogRef.afterClosed().subscribe(dialogResult => {
+      console.log("admin-resource.component.ts > edit dialog");
+      //TODO: update resource
+    })
+  }
+
+  deleteRow(row: ResourceType) {
+    console.log("admin-resource.component.ts > deleteElement(): " + JSON.stringify(row, null, 2));
     const dialogRef = this.dialog.open(ConfirmDialogComponent);
     dialogRef.afterClosed().subscribe(dialogResult => {
       if (dialogResult) {
-        console.log("admin-resource.component.ts > "+ "she said yes!");
+        console.log("admin-resource.component.ts > " + "she said yes!");
+        //TODO: delete resource
       }
     });
   }
@@ -52,7 +100,4 @@ export class AdminResourceComponent {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  editElement(element: PeriodicElement) {
-    console.log("admin-resource.component.ts > deleteElement(): " + JSON.stringify(element, null, 2));
-  }
 }

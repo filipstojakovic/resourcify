@@ -1,51 +1,58 @@
 /* You can add global styles to this file, and also import other style files */
 
 body, html {
-  height: 100%;
+    height: 100%;
 }
 
 body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
 }
 
 :root {
-  --header-size: 64px;
+    --header-size: 64px;
 }
 
 .fc-event-title {
-  font-weight: bold;
+    font-weight: bold;
 }
 
 .root-container {
-  height: 100vh;
-  display: grid;
-  grid-template-rows: auto 1fr;
+    height: 100vh;
+    display: grid;
+    grid-template-rows: auto 1fr;
 }
 
 .content-container {
-  overflow-y: auto;
-  padding: 1rem;
+    overflow-y: auto;
+    padding: 1rem;
 }
 
 mat-dialog-actions {
-  justify-content: center !important;
+    justify-content: center !important;
 }
 
 mat-dialog-content {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 mat-form-field {
-  width: 100%;
-  min-width: 300px;
+    width: 100%;
+    min-width: 300px;
 }
 
 .perfect-center {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.resource-header {
+    display: flex;
+    align-items: center;
+    column-gap: 10px;
+    margin-bottom: 10px;
 }

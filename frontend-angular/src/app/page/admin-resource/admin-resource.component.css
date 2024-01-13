@@ -1,33 +1,13 @@
-.demo-table {
+.my-mat-table {
     width: 100%;
 }
 
-.mat-column-demo-position {
-    width: 32px;
-    border-right: 1px solid currentColor;
-    padding-right: 24px;
+td, th {
+    justify-content: center !important;
+}
+
+.mat-column-backgroundColor, .mat-column-amount, .mat-column-edit, .mat-column-delete {
     text-align: center;
-}
-
-.mat-column-demo-name {
-    padding-left: 16px;
-    font-size: 20px;
-}
-
-.mat-column-demo-weight {
-    font-style: italic;
-}
-
-.mat-column-demo-symbol {
-    width: 32px;
-    text-align: center;
-    font-weight: bold;
-}
-
-.mat-column-demo-symbol {
-    width: 32px;
-    text-align: center;
-    font-weight: bold;
 }
 
 .mat-column-edit {
@@ -35,8 +15,22 @@
     text-align: center;
     font-weight: bold;
 }
+
 .mat-column-delete {
     width: 32px;
     text-align: center;
     font-weight: bold;
+}
+
+.color-box {
+    color: white;
+    text-align: center;
+    border-radius: 15px
+}
+
+button {
+    width: 40%;
+    height: 100%;
+    min-height: 100%;
+    max-height: 100%;
 }

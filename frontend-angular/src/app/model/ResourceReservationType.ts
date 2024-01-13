@@ -4,5 +4,5 @@ export type ResourceReservationType = {
   reservationId: string;
   user: UserType;
   reservationDate: Date;
-  active: boolean;
+  isApproved: boolean;
 }
