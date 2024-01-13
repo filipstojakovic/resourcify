@@ -1,7 +1,7 @@
 {
   "name": "notification-service",
   "version": "1.0.0",
-  "main": "app.js",
+  "main": "app.ts",
   "scripts": {
     "start": "npx nodemon app.ts",
     "start-docker": "npx nodemon -r dotenv/config app.ts dotenv_config_path=.env.docker",

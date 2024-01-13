@@ -4,7 +4,7 @@ const client = jwksClient({
   jwksUri: process.env.JWKS_URI,
 });
 
-function getKeycloakKey(header, callback) {
+export function getKeycloakKey(header, callback) {
   client.getSigningKey(header.kid, (err, key) => {
     const signingKey = key.publicKey || key.rsaPublicKey;
     callback(null, signingKey);
