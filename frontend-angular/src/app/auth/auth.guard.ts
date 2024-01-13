@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {ActivatedRouteSnapshot, Router, RouterStateSnapshot} from '@angular/router';
 import {KeycloakAuthGuard, KeycloakService} from 'keycloak-angular';
 import {AuthService} from '../service/auth.service';
-import {paths} from '../constants/paths';
+import {Paths} from '../constants/paths';
 
 @Injectable({
   providedIn: 'root',
@@ -33,7 +33,7 @@ export class AuthGuard extends KeycloakAuthGuard {
     const hasRequiredRole = keycloak.hasResourceRole(requiredRoles, AuthService.KEYCLOAK_CLIENT_NAME)
 
     if (!hasRequiredRole) {
-      await this.router.navigate([paths.HOME]);
+      await this.router.navigate([Paths.HOME]);
       return false;
     }
 

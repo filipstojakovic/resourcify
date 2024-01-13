@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {UserType} from '../model/UserType';
-import {backendUrl} from "../constants/backendUrl";
+import {BackendUrl} from "../constants/backendUrl";
 
 @Injectable({
   providedIn: 'root',
@@ -12,7 +12,7 @@ export class UserService {
   }
 
   getAllUsers() {
-    return this.http.get<UserType[]>(backendUrl.USERS);
+    return this.http.get<UserType[]>(BackendUrl.USERS);
   }
 }
 

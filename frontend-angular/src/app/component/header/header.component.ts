@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {paths} from '../../constants/paths';
+import {Paths} from '../../constants/paths';
 import {AuthService} from '../../service/auth.service';
 import {SocketService} from '../../service/socket.service';
 import {ToastService} from 'angular-toastify';
@@ -11,7 +11,7 @@ import {ToastService} from 'angular-toastify';
 })
 export class HeaderComponent implements OnInit {
 
-  protected readonly paths = paths;
+  protected readonly paths = Paths;
 
   constructor(private authService: AuthService,
               private socketService: SocketService,

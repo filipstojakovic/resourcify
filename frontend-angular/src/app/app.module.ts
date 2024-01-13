@@ -21,6 +21,7 @@ import { ErrorPageComponent } from './page/error-page/error-page.component';
 import {ColorPickerModule} from 'ngx-color-picker';
 import { ConfirmDialogComponent } from './component/dialog/confirm-dialog/confirm-dialog.component';
 import { LoadingComponent } from './component/loading/loading.component';
+import { AdminResourceReservationComponent } from './page/admin-resource-reservation/admin-resource-reservation.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { LoadingComponent } from './component/loading/loading.component';
     ErrorPageComponent,
     ConfirmDialogComponent,
     LoadingComponent,
+    AdminResourceReservationComponent,
   ],
   imports: [
     BrowserModule,

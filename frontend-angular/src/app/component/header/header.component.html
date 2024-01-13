@@ -1,32 +1,60 @@
 <mat-toolbar class="button-gap app-toolbar" color="primary">
 
-  <button [routerLink]=[paths.HOME] mat-button
-          routerLinkActive="active-link">
-    <mat-icon>home</mat-icon>
-    <span>Home</span>
-  </button>
+    <button [routerLink]=[paths.HOME] mat-button
+            routerLinkActive="active-link">
+        <mat-icon>home</mat-icon>
+        <span>Home</span>
+    </button>
 
-  <button [routerLink]=[paths.RESOURCES_RESERVATION] mat-button
-          routerLinkActive="active-link">
-    <mat-icon>devices</mat-icon>
-    <span>Resource Reservation</span>
-  </button>
+    <button [routerLink]=[paths.RESOURCES_RESERVATION] mat-button
+            routerLinkActive="active-link">
+        <mat-icon>devices</mat-icon>
+        <span>Resource Reservation</span>
+    </button>
 
-  <button [routerLink]=[paths.ADMIN_RESOURCES]
-          *ngIf="isAdmin()"
-          mat-button
-          routerLinkActive="active-link">
-    <mat-icon>devices</mat-icon>
-    <span>Admin Resources</span>
-  </button>
+    <button [routerLink]=[paths.ADMIN_RESOURCES]
+            *ngIf="isAdmin()"
+            mat-button
+            routerLinkActive="active-link"
+            [routerLinkActiveOptions]="{exact: true}">
+        <mat-icon>devices</mat-icon>
+        <span>Admin Resources</span>
+    </button>
 
-  <span class="spacer"></span>
+    <button [routerLink]=[paths.ADMIN_RESOURCES_RESERVATION]
+            *ngIf="isAdmin()"
+            mat-button
+            routerLinkActive="active-link"
+            [routerLinkActiveOptions]="{exact: true}">
+        <mat-icon>thumb_up</mat-icon>
+        <span>Resource Approvals</span>
+    </button>
 
-  <span style="padding-right: 10px">{{getLoggedUserName()}}</span>
+    <button [routerLink]=[paths.ADMIN_WORKSPACE]
+            *ngIf="isAdmin()"
+            mat-button
+            routerLinkActive="active-link"
+            [routerLinkActiveOptions]="{exact: true}">
+        <mat-icon>location_city</mat-icon>
+        <span>Workspace</span>
+    </button>
 
-  <button (click)="logout()" mat-button>
-    <mat-icon>logout</mat-icon>
-    <span>Logout</span>
-  </button>
+    <button [routerLink]=[paths.ADMIN_WORKSPACE_RESERVATION]
+            *ngIf="isAdmin()"
+            mat-button
+            routerLinkActive="active-link"
+            [routerLinkActiveOptions]="{exact: true}">
+        <mat-icon>thumb_up</mat-icon>
+        <span>Workspace Approvals</span>
+    </button>
+
+    <span class="spacer"></span>
+
+    <span style="padding-right: 10px">{{getLoggedUserName()}}</span>
+
+    <button (click)="logout()" mat-button>
+        <mat-icon>logout</mat-icon>
+        <span>Logout</span>
+    </button>
 
 </mat-toolbar>

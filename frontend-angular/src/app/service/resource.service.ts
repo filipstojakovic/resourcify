@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {ResourceType} from '../model/ResourceType';
-import {backendUrl} from '../constants/backendUrl';
+import {BackendUrl} from '../constants/backendUrl';
 
 @Injectable({
   providedIn: 'root',
@@ -12,14 +12,14 @@ export class ResourceService {
   }
 
   findAll() {
-    return this.http.get<ResourceType[]>(backendUrl.RESOURCES_RESERVATION);
+    return this.http.get<ResourceType[]>(BackendUrl.RESOURCES_RESERVATION);
   }
 
   findById(userId: string) {
-    return this.http.get<ResourceType>(`${backendUrl.RESOURCES_RESERVATION}/${userId}`);
+    return this.http.get<ResourceType>(`${BackendUrl.RESOURCES_RESERVATION}/${userId}`);
   }
 
   postResource(resource: ResourceType) {
-    return this.http.post<ResourceType>(`${backendUrl.RESOURCES_RESERVATION}`, resource);
+    return this.http.post<ResourceType>(`${BackendUrl.RESOURCES_RESERVATION}`, resource);
   }
 }

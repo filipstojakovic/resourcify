@@ -1,5 +1,4 @@
-export const backendUrl = {
-  USERS: "users",
-  RESOURCES_RESERVATION: "resources",
-
-} as const
+export class BackendUrl {
+  static readonly USERS = "users";
+  static readonly RESOURCES_RESERVATION = "resources";
+}

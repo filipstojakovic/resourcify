@@ -1,5 +1,5 @@
 import {ResourceReservationType} from './ResourceReservationType';
-import {constants} from "../constants/constants";
+import {Constants} from "../constants/constants";
 
 export type ResourceType = {
   id?: string;
@@ -16,7 +16,7 @@ export function initResource(): ResourceType {
     name: "",
     description: "",
     amount: 1,
-    backgroundColor: constants.DEFAULT_EVENT_COLOR,
+    backgroundColor: Constants.DEFAULT_EVENT_COLOR,
     reservations: [],
   } as ResourceType;
 }
