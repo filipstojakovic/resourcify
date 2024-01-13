@@ -1,10 +1,11 @@
 require('dotenv').config();
-
 import * as cors from 'cors';
 import * as express from 'express';
 import {setupWebSocketServer} from './websocket';
 import {setupExpressApp} from './express-app';
 import {connectToRabbitMQ} from './rabbitmq';
+
+console.log("running environment: " + process.env.ENV_NAME);
 
 const app = express();
 app.use(cors());

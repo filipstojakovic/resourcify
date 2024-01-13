@@ -2,7 +2,6 @@
 import {WebSocket} from 'ws';
 import {getKeycloakKey} from './authUtils';
 import {receiveFromRabbitMQ} from './rabbitmq';
-
 const jwt = require('jsonwebtoken');
 
 export function setupWebSocketServer(httpServer) {

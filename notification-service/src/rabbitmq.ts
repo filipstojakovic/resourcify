@@ -1,5 +1,4 @@
 import amqplib = require('amqplib');
-
 let rabbitChannel = null; // Define your RabbitMQ channel here
 
 export async function connectToRabbitMQ() {
