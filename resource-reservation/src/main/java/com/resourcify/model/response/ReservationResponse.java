@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class ReservationResponse {
 
+  private String resourceId;
   private String reservationId;
   private User user;
   private String description;

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {MatDialog} from "@angular/material/dialog";
 import {ConfirmDialogComponent} from "../../component/dialog/confirm-dialog/confirm-dialog.component";
@@ -6,27 +6,8 @@ import {ResourceType} from "../../model/ResourceType";
 import {ResourceDialogComponent} from "../../component/dialog/resource-dialog/resource-dialog.component";
 import {ResourceService} from "../../service/resource.service";
 import {ToastService} from "angular-toastify";
-
-const ELEMENT_DATA: ResourceType[] = [
-  {
-    name: "Wood",
-    description: "A renewable resource used for construction",
-    amount: 100,
-    backgroundColor: "#8B4513", // Brown color
-  },
-  {
-    name: "Iron Ore",
-    description: "Raw material for producing iron and steel",
-    amount: 50,
-    backgroundColor: "#43464B", // Dark gray color
-  },
-  {
-    name: "Gold",
-    amount: 10,
-    description: "Raw material for producing iron and steel",
-    backgroundColor: "#FFD700", // Gold color
-  },
-];
+import {MatSort, Sort, MatSortModule} from '@angular/material/sort';
+import {LiveAnnouncer} from '@angular/cdk/a11y';
 
 @Component({
   selector: 'app-admin-resource',
@@ -37,15 +18,20 @@ export class AdminResourceComponent implements OnInit {
 
   displayedColumns: string[] = ['name', 'description', 'amount', 'backgroundColor', 'edit', 'delete'];
   dataSource = new MatTableDataSource([] as ResourceType[]);
+  @ViewChild(MatSort) sort: MatSort;
 
-
-  constructor(public dialog: MatDialog, private resourceService: ResourceService, private toastService: ToastService) {
+  constructor(public dialog: MatDialog,
+              private resourceService: ResourceService,
+              private toastService: ToastService,
+              private _liveAnnouncer: LiveAnnouncer,
+  ) {
   }
 
   ngOnInit() {
     this.resourceService.findAll().subscribe({
           next: (res) => {
             this.dataSource = new MatTableDataSource(res);
+            this.dataSource.sort = this.sort;
           },
           error: (err) => {
             console.error(err.message);
@@ -121,6 +107,14 @@ export class AdminResourceComponent implements OnInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  announceSortChange(sortState: Sort) {
+    if (sortState.direction) {
+      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
+    } else {
+      this._liveAnnouncer.announce('Sorting cleared');
+    }
   }
 
 }

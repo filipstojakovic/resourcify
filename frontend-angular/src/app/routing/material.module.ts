@@ -125,6 +125,8 @@ const materialModules = [
   PortalModule,
   ScrollingModule,
   DialogModule,
+  MatTableModule,
+  MatSortModule
 ];
 
 @NgModule({
