@@ -66,7 +66,6 @@ const materialModules = [
   MatSelectModule,
   MatSidenavModule,
   MatSnackBarModule,
-  MatSortModule,
   MatTableModule,
   MatTabsModule,
   MatToolbarModule,
@@ -126,7 +125,6 @@ const materialModules = [
   ScrollingModule,
   DialogModule,
   MatTableModule,
-  MatSortModule
 ];
 
 @NgModule({

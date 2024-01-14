@@ -22,20 +22,20 @@
     </mat-form-field>
 
     <div style="display:flex; gap: 10px; margin-bottom: 20px">
-      <button #ignoredButton mat-raised-button (click)="toggle=!toggle"
-              color="primary">
+      <button #ignoredButton (click)="toggle=!toggle" color="primary"
+              mat-raised-button>
         Change color
       </button>
       <input #ignoredInput
-             class="color-box"
+             (colorPickerChange)="onChangeColor($event)"
+             [(colorPicker)]="backgroundColor"
+             [(cpToggle)]="toggle"
              [cpIgnoredElements]="[ignoredButton, ignoredInput]"
              [cpOutputFormat]="'hex'"
              [style.background]="backgroundColor"
-             [(cpToggle)]="toggle"
-             (colorPickerChange)="onChangeColor($event)"
+             class="color-box"
              readonly
-             value="Event example"
-             [(colorPicker)]="backgroundColor"/>
+             value="Event example"/>
     </div>
 
     <mat-form-field>

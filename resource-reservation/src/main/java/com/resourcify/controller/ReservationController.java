@@ -33,9 +33,9 @@ public class ReservationController {
 
   @DeleteMapping("{resourceId}/reservations/{reservationId}")
   public ResponseEntity<ResourceResponse> deleteReservation(@PathVariable String resourceId,
-                                                @PathVariable String reservationId,
-                                                @AuthenticationPrincipal Jwt jwt) {
-    //todo: check if admin or himself
+                                                            @PathVariable String reservationId,
+                                                            @AuthenticationPrincipal Jwt jwt) {
+    // todo: check if admin or himself
     ResourceResponse resource = reservationService.deleteReservation(resourceId, reservationId, jwt);
     return new ResponseEntity<>(resource, HttpStatus.OK);
   }

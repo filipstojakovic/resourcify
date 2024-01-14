@@ -58,22 +58,22 @@ export class ResourceComponent implements OnInit {
   }
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(ResourceDialogComponent, {data: null});
+    const dialogRef = this.dialog.open(ResourceDialogComponent, { data: null });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result == null)
         return;
       this.resourceService.postResource(result as ResourceType).subscribe({
-          next: (res) => {
-            console.log("resource.component.ts > next(): " + JSON.stringify(res, null, 2));
-            this.resources.push(res);
-            this.toastService.success('Resource saved')
+            next: (res) => {
+              console.log("resource.component.ts > next(): " + JSON.stringify(res, null, 2));
+              this.resources.push(res);
+              this.toastService.success('Resource saved')
+            },
+            error: (err) => {
+              console.error(err.message);
+              this.toastService.success('Resource not saved')
+            },
           },
-          error: (err) => {
-            console.error(err.message);
-            this.toastService.success('Resource not saved')
-          },
-        },
       )
     });
   }
@@ -82,30 +82,30 @@ export class ResourceComponent implements OnInit {
     this.loading = true;
     if (typeof resource === "string") {
       return this.resourceService.findAll().subscribe({
-          next: (res) => {
-            this.resources = res;
-            this.calendarOptions.events = this.resourceEventMapper.mapResourcesToReservationEvents(res);
-            this.loading=false;
+            next: (res) => {
+              this.resources = res;
+              this.calendarOptions.events = this.resourceEventMapper.mapResourcesToReservationEvents(res);
+              this.loading = false;
+            },
+            error: (err) => {
+              console.error(err.message);
+              this.toastService.error('Error fetch resources');
+              this.loading = false;
+            },
           },
-          error: (err) => {
-            console.error(err.message);
-            this.toastService.error('Error fetch resources');
-            this.loading=false;
-          },
-        },
       )
     }
     return this.resourceService.findById(resource.id).subscribe({
-        next: (res) => {
-          this.calendarOptions.events = this.resourceEventMapper.mapResourceToReservationEvents(res);
-          this.loading=false;
+          next: (res) => {
+            this.calendarOptions.events = this.resourceEventMapper.mapResourceToReservationEvents(res);
+            this.loading = false;
+          },
+          error: (err) => {
+            console.error(err.message);
+            this.toastService.error(`Error fetch resource ${resource.name}`);
+            this.loading = false;
+          },
         },
-        error: (err) => {
-          console.error(err.message);
-          this.toastService.error(`Error fetch resource ${resource.name}`);
-          this.loading=false;
-        },
-      },
     )
   }
 }

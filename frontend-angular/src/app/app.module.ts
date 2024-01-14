@@ -16,12 +16,14 @@ import {FullCalendarModule} from '@fullcalendar/angular';
 import {ResourceDialogComponent} from './component/dialog/resource-dialog/resource-dialog.component';
 import {AngularToastifyModule} from 'angular-toastify';
 import {KeycloakHttpInterceptorService} from "./auth/keycloak-http-interceptor.service";
-import { AdminResourceComponent } from './page/admin-resource/admin-resource.component';
-import { ErrorPageComponent } from './page/error-page/error-page.component';
+import {AdminResourceComponent} from './page/admin-resource/admin-resource.component';
+import {ErrorPageComponent} from './page/error-page/error-page.component';
 import {ColorPickerModule} from 'ngx-color-picker';
-import { ConfirmDialogComponent } from './component/dialog/confirm-dialog/confirm-dialog.component';
-import { LoadingComponent } from './component/loading/loading.component';
-import { AdminResourceReservationComponent } from './page/admin-resource-reservation/admin-resource-reservation.component';
+import {ConfirmDialogComponent} from './component/dialog/confirm-dialog/confirm-dialog.component';
+import {LoadingComponent} from './component/loading/loading.component';
+import {
+  AdminResourceReservationComponent,
+} from './page/admin-resource-reservation/admin-resource-reservation.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +49,7 @@ import { AdminResourceReservationComponent } from './page/admin-resource-reserva
     KeycloakAngularModule,
     FullCalendarModule,
     AngularToastifyModule,
-    ColorPickerModule
+    ColorPickerModule,
   ],
   providers: [{
     provide: APP_INITIALIZER,

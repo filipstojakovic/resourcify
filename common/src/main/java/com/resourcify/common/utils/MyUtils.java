@@ -1,7 +1,5 @@
 package com.resourcify.common.utils;
 
-import org.springframework.security.oauth2.jwt.Jwt;
-
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 

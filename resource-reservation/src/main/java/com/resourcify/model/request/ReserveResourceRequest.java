@@ -11,10 +11,10 @@ public class ReserveResourceRequest {
 
   @NotNull
   @NotEmpty
-  private String forUserId;
+  private String resourceId;
   @NotNull
   @NotEmpty
-  private String resourceId;
+  private String forUserId;
   private String description;
   @NotNull
   private LocalDateTime reservationDate;

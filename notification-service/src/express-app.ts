@@ -1,7 +1,7 @@
 import * as passport from 'passport';
 import {sendToRabbitMQ} from './rabbitmq';
-import KeycloakBearerStrategy = require('passport-keycloak-bearer');
 import {Request} from 'express'
+import KeycloakBearerStrategy = require('passport-keycloak-bearer');
 
 passport.use(new KeycloakBearerStrategy({
   "realm": process.env.KEYCLOAK_REALM_NAME,
@@ -23,7 +23,7 @@ export function setupExpressApp(app) {
       '/ws/notifications',
       passport.authenticate('keycloak', { session: false }),
       (req: Request<{}, {}, NotificationMessage>, res) => {
-        const body : NotificationMessage = req.body;
+        const body: NotificationMessage = req.body;
         if (!isValidNotificationMessage(body)) {
           return res.status(400).json({ error: 'Invalid request body' });
         }

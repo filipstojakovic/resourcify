@@ -32,7 +32,7 @@ public class ResourceMapper {
         return reservation1.isApproved();
       }
       return true;
-    }).map(reservation -> reservationMapper.toReservationResponse(resource.getId(), reservation, users)).toList();
+    }).map(reservation -> reservationMapper.toReservationResponse(resource.getName(), reservation, users)).toList();
     resourceResponse.setReservations(reservationResponses);
     return resourceResponse;
   }

@@ -1,0 +1,14 @@
+.my-mat-table {
+  width: 100%;
+}
+
+::ng-deep .mat-sort-header-container {
+  justify-content: center;
+  text-align: center;
+}
+
+
+td, th {
+  text-align: center !important;
+  vertical-align: middle !important;
+}

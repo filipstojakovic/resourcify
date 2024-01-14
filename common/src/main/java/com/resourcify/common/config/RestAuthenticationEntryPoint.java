@@ -17,7 +17,7 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
                        AuthenticationException e) throws IOException {
     String token = httpServletRequest.getHeader("Authorization");
     if (token != null) {
-      System.out.println(token.replace("Bearer ","")); //TODO: delete me
+      System.out.println(token.replace("Bearer ", "")); // TODO: delete me
     }
     log.error("Responding with unauthorized error. Message - {}", e.getMessage());
     httpServletResponse.sendError(HttpServletResponse.SC_UNAUTHORIZED, e.getLocalizedMessage());

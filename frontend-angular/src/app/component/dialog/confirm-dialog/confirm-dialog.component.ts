@@ -16,11 +16,11 @@ export class ConfirmDialogComponent {
   message: string;
 
   constructor(
-    public dialogRef: MatDialogRef<ConfirmDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogModel,
+      public dialogRef: MatDialogRef<ConfirmDialogComponent>,
+      @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogModel,
   ) {
     if (data == null) {
-      data = {title: "Confirm Action", message: "Are you sure you want to do this?"} as ConfirmDialogModel
+      data = { title: "Confirm Action", message: "Are you sure you want to do this?" } as ConfirmDialogModel
     }
     this.title = data.title;
     this.message = data.message;

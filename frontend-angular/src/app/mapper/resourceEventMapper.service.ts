@@ -1,15 +1,13 @@
 import {Injectable} from '@angular/core';
 import {EventReservationType} from '../model/calendar/EventReservationType';
 import {ResourceType} from '../model/ResourceType';
+
 // import * as Color from 'color';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ResourceEventMapperService {
-
-  constructor() {
-  }
 
   mapResourceToReservationEvents(resource: ResourceType): EventReservationType[] {
     if (resource.reservations == null)
@@ -22,7 +20,7 @@ export class ResourceEventMapperService {
     return reservations.map(reservation => {
       return {
         id: reservation.reservationId,
-        title: reservation.user.username + " (" + resourceName+")",
+        title: reservation.user.username + " (" + resourceName + ")",
         start: reservation.reservationDate,
         allDay: true,
         backgroundColor: resource.backgroundColor, // || "#FF0000" //default color

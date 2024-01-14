@@ -30,21 +30,18 @@ public class Resource {
   private String backgroundColor;
 
   private List<Reservation> reservations = new ArrayList<>();
-
+  @CreatedDate
+  private LocalDateTime createdDate;
+  @CreatedBy
+  private String createdByUser;
+  @LastModifiedDate
+  private LocalDateTime lastModifiedDate;
+  @LastModifiedBy
+  private String modifiedByUser;
   public Resource(final String id, final String name, final String description, Integer amount) {
     this.id = id;
     this.name = name;
     this.description = description;
     this.amount = amount;
   }
-
-  @CreatedDate
-  private LocalDateTime createdDate;
-  @CreatedBy
-  private String createdByUser;
-
-  @LastModifiedDate
-  private LocalDateTime lastModifiedDate;
-  @LastModifiedBy
-  private String modifiedByUser;
 }

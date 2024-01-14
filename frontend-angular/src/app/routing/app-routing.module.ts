@@ -8,7 +8,7 @@ import {AuthService} from "../service/auth.service";
 import {AdminResourceComponent} from "../page/admin-resource/admin-resource.component";
 import {ErrorPageComponent} from '../page/error-page/error-page.component';
 import {
-  AdminResourceReservationComponent
+  AdminResourceReservationComponent,
 } from "../page/admin-resource-reservation/admin-resource-reservation.component";
 
 export const routes: Routes = [
@@ -47,7 +47,7 @@ export const routes: Routes = [
     path: '**',
     pathMatch: 'full',
     component: ErrorPageComponent,
-  }
+  },
 ];
 
 @NgModule({

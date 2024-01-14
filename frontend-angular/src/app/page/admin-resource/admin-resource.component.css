@@ -2,12 +2,12 @@
   width: 100%;
 }
 
-.mat-column-backgroundColor, .mat-column-amount {
-  text-align: center;
+::ng-deep .mat-sort-header-container {
+  justify-content: center;
 }
 
-::ng-deep .mat-sort-header-container{
-  justify-content: center;
+.mat-column-backgroundColor, .mat-column-amount {
+  text-align: center;
 }
 
 .mat-column-edit {

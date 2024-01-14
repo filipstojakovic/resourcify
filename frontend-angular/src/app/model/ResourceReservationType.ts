@@ -1,9 +1,10 @@
 import {UserType} from './UserType';
 
 export type ResourceReservationType = {
-  resourceId: string;
   reservationId: string;
+  resourceName: string;
   user: UserType;
+  description: string;
   reservationDate: Date;
   isApproved: boolean;
 }

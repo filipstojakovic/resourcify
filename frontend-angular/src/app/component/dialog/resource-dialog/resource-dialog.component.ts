@@ -15,9 +15,9 @@ export class ResourceDialogComponent {
   toggle: boolean = false;
 
   constructor(
-    public dialogRef: MatDialogRef<ResourceDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: ResourceType,
-    private fb: FormBuilder,
+      public dialogRef: MatDialogRef<ResourceDialogComponent>,
+      @Inject(MAT_DIALOG_DATA) public data: ResourceType,
+      private fb: FormBuilder,
   ) {
     const resource = data || initResource();
     this.backgroundColor = resource.backgroundColor;
@@ -42,7 +42,7 @@ export class ResourceDialogComponent {
 
   public onChangeColor(backgroundColor: string): void {
     this.backgroundColor = backgroundColor;
-    this.resourceForm.patchValue({backgroundColor});
+    this.resourceForm.patchValue({ backgroundColor });
   }
 
 }

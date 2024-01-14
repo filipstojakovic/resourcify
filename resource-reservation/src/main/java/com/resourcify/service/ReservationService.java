@@ -29,7 +29,7 @@ public class ReservationService {
     userService.getUserById(reserveResourceReq.getForUserId()); // check if user exist
 
     // TODO: check if 12h period
-    Reservation reservation =  reservationMapper.fromRequest(reserveResourceReq,jwt);
+    Reservation reservation = reservationMapper.fromRequest(reserveResourceReq, jwt);
     resource.getReservations().add(reservation);
     resource = resourceRepository.save(resource);
 

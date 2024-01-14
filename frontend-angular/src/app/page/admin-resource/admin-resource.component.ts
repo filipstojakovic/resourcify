@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from "@angular/material/table";
 import {MatDialog} from "@angular/material/dialog";
 import {ConfirmDialogComponent} from "../../component/dialog/confirm-dialog/confirm-dialog.component";
@@ -6,8 +6,7 @@ import {ResourceType} from "../../model/ResourceType";
 import {ResourceDialogComponent} from "../../component/dialog/resource-dialog/resource-dialog.component";
 import {ResourceService} from "../../service/resource.service";
 import {ToastService} from "angular-toastify";
-import {MatSort, Sort, MatSortModule} from '@angular/material/sort';
-import {LiveAnnouncer} from '@angular/cdk/a11y';
+import {MatSort} from '@angular/material/sort';
 
 @Component({
   selector: 'app-admin-resource',
@@ -23,7 +22,6 @@ export class AdminResourceComponent implements OnInit {
   constructor(public dialog: MatDialog,
               private resourceService: ResourceService,
               private toastService: ToastService,
-              private _liveAnnouncer: LiveAnnouncer,
   ) {
   }
 
@@ -107,14 +105,6 @@ export class AdminResourceComponent implements OnInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
-  announceSortChange(sortState: Sort) {
-    if (sortState.direction) {
-      this._liveAnnouncer.announce(`Sorted ${sortState.direction}ending`);
-    } else {
-      this._liveAnnouncer.announce('Sorting cleared');
-    }
   }
 
 }
