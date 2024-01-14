@@ -22,4 +22,12 @@ export class ResourceService {
   postResource(resource: ResourceType) {
     return this.http.post<ResourceType>(`${BackendUrl.RESOURCES_RESERVATION}`, resource);
   }
+
+  updateResource(resourceId: string, newResource: ResourceType) {
+    return this.http.put<ResourceType>(`${BackendUrl.RESOURCES_RESERVATION}/${resourceId}`, newResource);
+  }
+
+  deleteResource(resourceId: string) {
+    return this.http.delete<ResourceType>(`${BackendUrl.RESOURCES_RESERVATION}/${resourceId}`);
+  }
 }

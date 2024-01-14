@@ -36,7 +36,7 @@ const ELEMENT_DATA: ResourceType[] = [
 export class AdminResourceComponent implements OnInit {
 
   displayedColumns: string[] = ['name', 'description', 'amount', 'backgroundColor', 'edit', 'delete'];
-  dataSource = new MatTableDataSource([]);
+  dataSource = new MatTableDataSource([] as ResourceType[]);
 
 
   constructor(public dialog: MatDialog, private resourceService: ResourceService, private toastService: ToastService) {
@@ -44,13 +44,13 @@ export class AdminResourceComponent implements OnInit {
 
   ngOnInit() {
     this.resourceService.findAll().subscribe({
-        next: (res) => {
-          this.dataSource = new MatTableDataSource(res);
+          next: (res) => {
+            this.dataSource = new MatTableDataSource(res);
+          },
+          error: (err) => {
+            console.error(err.message);
+          },
         },
-        error: (err) => {
-          console.error(err.message);
-        },
-      },
     )
   }
 
@@ -60,27 +60,42 @@ export class AdminResourceComponent implements OnInit {
       if (result == null)
         return;
       this.resourceService.postResource(result as ResourceType).subscribe({
-          next: (res) => {
-            const data = this.dataSource.data;
-            data.push(res);
-            this.dataSource.data = data;
-            this.toastService.success('Resource saved')
+            next: (res) => {
+              const data = this.dataSource.data;
+              data.push(res);
+              this.dataSource.data = data;
+              this.toastService.success('Resource saved')
+            },
+            error: (err) => {
+              console.error(err.message);
+              this.toastService.success('Resource not saved')
+            },
           },
-          error: (err) => {
-            console.error(err.message);
-            this.toastService.success('Resource not saved')
-          },
-        },
       )
     });
   }
 
-  editRow(row: ResourceType) {
+  updateRow(row: ResourceType) {
     console.log("admin-resource.component.ts > deleteElement(): " + JSON.stringify(row, null, 2));
-    const dialogRef = this.dialog.open(ResourceDialogComponent, {data: row});
+    const dialogRef = this.dialog.open(ResourceDialogComponent, { data: row });
     dialogRef.afterClosed().subscribe(dialogResult => {
-      console.log("admin-resource.component.ts > edit dialog");
-      //TODO: update resource
+      if (JSON.stringify(row) === JSON.stringify(dialogResult)) {
+        console.log("no changes");
+        return;
+      }
+      this.resourceService.updateResource(row.id, dialogResult).subscribe({
+            next: (res) => {
+              this.dataSource.data = this.dataSource.data.map(item => {
+                if (item.id === row.id) return res;
+                return item;
+              })
+              this.toastService.success("Resource updated successfully!");
+            },
+            error: (err) => {
+              console.error(err.message);
+            },
+          },
+      )
     })
   }
 
@@ -89,8 +104,16 @@ export class AdminResourceComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmDialogComponent);
     dialogRef.afterClosed().subscribe(dialogResult => {
       if (dialogResult) {
-        console.log("admin-resource.component.ts > " + "she said yes!");
-        //TODO: delete resource
+        this.resourceService.deleteResource(row.id).subscribe({
+              next: (res) => {
+                this.dataSource.data = this.dataSource.data.filter(item => item.id != row.id);
+                this.toastService.success("Resource deleted successfully!")
+              },
+              error: (err) => {
+                console.error(err.message);
+              },
+            },
+        )
       }
     });
   }
