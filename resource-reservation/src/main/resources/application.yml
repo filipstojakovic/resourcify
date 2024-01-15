@@ -35,5 +35,10 @@ logging:
           autoconfigure: INFO # for dev tools logs
 
 feign:
-  name: user-client
-  url: "${USER_SERVICE_URL:http://localhost:8084}"
+  user:
+    name: 'user-client'
+    url: "${USER_SERVICE_URL:http://localhost:8084}"
+  notification-service:
+    name: 'notification-client'
+    url: "${NOTIFICATION_SERVICE_URL:http://localhost:8000}"
+

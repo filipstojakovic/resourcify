@@ -16,6 +16,7 @@ passport.use(new KeycloakBearerStrategy({
 type NotificationMessage = {
   forUsername: string;
   message: string;
+  approved: boolean;
 }
 
 export function setupExpressApp(app) {
@@ -39,6 +40,7 @@ function isValidNotificationMessage(obj: any): obj is NotificationMessage {
       typeof obj === 'object' &&
       obj !== null &&
       typeof obj.forUsername === 'string' &&
-      typeof obj.message === 'string'
+      typeof obj.message === 'string' &&
+      typeof obj.approved === 'boolean'
   );
 }

@@ -40,10 +40,6 @@ export class HomeComponent implements OnInit {
     )
   }
 
-  sendToRabbit() {
-    this.socketService.sendMessage({ message: "test message" });
-  }
-
   getJwt() {
     this.keycloakService.getToken().then(res => {
       this.result = res;

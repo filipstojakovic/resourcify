@@ -3,6 +3,7 @@ import {Paths} from '../../constants/paths';
 import {AuthService} from '../../service/auth.service';
 import {SocketService} from '../../service/socket.service';
 import {ToastService} from 'angular-toastify';
+import {NotificationMessage} from '../../model/NotificationMessage';
 
 @Component({
   selector: 'app-header',
@@ -36,7 +37,12 @@ export class HeaderComponent implements OnInit {
         this.socketService.connect().subscribe({
               next: (res) => {
                 console.log("header.component.ts > next(): " + JSON.stringify(res, null, 2));
-                this.toastService.success("Ima nesto: " + res);
+                const notificationMessage: NotificationMessage = JSON.parse(res);
+                if (notificationMessage.approved) {
+                  this.toastService.success(notificationMessage.message);
+                } else {
+                  this.toastService.error(notificationMessage.message);
+                }
               },
               error: (err) => {
                 console.error(err.message);

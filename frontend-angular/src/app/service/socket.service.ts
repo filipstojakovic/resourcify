@@ -8,7 +8,6 @@ import {environment} from '../../environments/environment';
 })
 export class SocketService {
 
-  static readonly SOCKET_CONNECTED: number = 1;
   ws: WebSocket;
 
   constructor(private auth: AuthService) {
@@ -20,20 +19,25 @@ export class SocketService {
     this.ws = new WebSocket(url);
     return new Observable(observer => {
       this.ws.onmessage = (event) => observer.next(event.data);
-      this.ws.onerror = (event) => observer.error(event);
-      this.ws.onclose = (event) => observer.complete();
-      return () => this.ws.close(1000, "User disconnected");
+      this.ws.onerror = (event) => {
+        console.log("socket.service.ts > onerror()");
+        observer.error(event);
+      }
+      this.ws.onclose = (event) => {
+        console.log("socket.service.ts > onclose()");
+        observer.complete();
+      }
+      return () => {
+        console.log('WebSocket connection closed');
+        this.reconnect();
+      }
     })
   }
 
-  //just for testing
-  sendMessage(message: any) {
-    if (this.ws.readyState === SocketService.SOCKET_CONNECTED) {
-      const stringMessage = JSON.stringify(message);
-      this.ws.send(stringMessage);
-    } else {
-      console.log("socket.service.ts > sendMessage(): " + "socket not connected");
-    }
+  private reconnect(): void {
+    console.log("socket.service.ts > reconnect()" + "");
+    setTimeout(() => {
+      this.connect();
+    }, 2000);
   }
-
 }

@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.List;
 
-@FeignClient(name = "${feign.name}", url = "${feign.url}")
+@FeignClient(name = "${feign.user.name}", url = "${feign.user.url}")
 public interface UserClient {
 
   @GetMapping("users")

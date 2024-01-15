@@ -56,7 +56,6 @@ export class AdminResourceReservationComponent implements OnInit {
                 return res;
               return reservation;
             });
-            this.toastService.success("yey you changed it");
           },
           error: (err) => {
             console.error(err.message);

@@ -11,7 +11,7 @@ export async function sendToRabbitMQ(notificationMessage) {
   const queueName = notificationMessage.forUsername;
   await rabbitChannel.assertQueue(queueName, { durable: true });
   console.log('sending to queue: ' + queueName);
-  rabbitChannel.sendToQueue(queueName, Buffer.from(notificationMessage.message));
+  rabbitChannel.sendToQueue(queueName, Buffer.from(JSON.stringify(notificationMessage)));
 }
 
 // receive message from queue and send to user
