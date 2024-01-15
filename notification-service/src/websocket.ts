@@ -1,30 +1,33 @@
 // websocket.js
 import {WebSocket} from 'ws';
 import {getKeycloakKey} from './authUtils';
-import {receiveFromRabbitMQ} from './rabbitmq';
+import {consumeFromChannel, createUserRabbitChannel, disconnectUserChannel} from './rabbitmq';
 
 const jwt = require('jsonwebtoken');
 
 export function setupWebSocketServer(httpServer) {
-  const ws = new WebSocket.Server({ server: httpServer });
+  const ws = new WebSocket.Server({server: httpServer});
 
-  ws.on('connection', (socket, req) => {
+  ws.on('connection',  (socket, req) => {
     const url = new URL(`${req.headers.host}${req.url}`);
     const tokenStr = url.searchParams.get('token');
 
     if (!tokenStr) throw new Error('Token is missing');
-    jwt.verify(tokenStr, getKeycloakKey, null, function (err, decodedJwt) {
+    jwt.verify(tokenStr, getKeycloakKey, null, async function (err, decodedJwt) {
       if (err) {
         throw new Error('token not valid');
       }
       const username = decodedJwt.preferred_username;
 
-      Object.assign(socket, { username: username }); // assign username to socket
+      Object.assign(socket, {username: username}); // assign username to socket
       console.log('connected user: ' + username);
 
-      receiveFromRabbitMQ(ws, username).catch(console.error);
+      await createUserRabbitChannel(username).catch(console.error);
+      await consumeFromChannel(username, ws);
 
-      socket.on('close', () => {
+
+      socket.on('close', async () => {
+        await disconnectUserChannel(socket['username']);
         console.log('User disconnected: ' + socket['username'])
       });
 

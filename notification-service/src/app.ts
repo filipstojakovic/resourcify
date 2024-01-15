@@ -14,8 +14,10 @@ app.use(express.json());
 const port = process.env.PORT;
 const httpServer = app.listen(port, async () => {
   console.log(`WebSocket server running on port ${port}`);
-  await connectToRabbitMQ(); // Connect to RabbitMQ
-  setupExpressApp(app); // Setup Express app
 });
 
-setupWebSocketServer(httpServer); // Setup WebSocket server
+connectToRabbitMQ().then(() => {
+  setupExpressApp(app);
+  setupWebSocketServer(httpServer);
+});
+
