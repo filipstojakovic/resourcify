@@ -23,6 +23,12 @@ export function setupWebSocketServer(httpServer) {
       console.log('connected user: ' + username);
 
       receiveFromRabbitMQ(ws, username).catch(console.error);
+
+      socket.on('close', () => {
+        console.log('User disconnected: ' + socket['username'])
+      });
+
+
     });
   });
   return ws;

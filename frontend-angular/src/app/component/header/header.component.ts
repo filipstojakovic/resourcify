@@ -47,6 +47,9 @@ export class HeaderComponent implements OnInit {
               error: (err) => {
                 console.error(err.message);
               },
+              complete: () => {
+                console.log("socket complete")
+              },
             },
         )
       }

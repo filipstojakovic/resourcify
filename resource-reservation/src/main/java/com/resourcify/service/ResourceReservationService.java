@@ -3,6 +3,7 @@ package com.resourcify.service;
 import com.resourcify.common.client.NotificationClient;
 import com.resourcify.common.exception.NotFoundException;
 import com.resourcify.common.model.NotificationMessage;
+import com.resourcify.common.utils.LoggingUtil;
 import com.resourcify.mapper.ReservationMapper;
 import com.resourcify.mapper.ResourceMapper;
 import com.resourcify.model.entity.Reservation;
@@ -57,7 +58,11 @@ public class ResourceReservationService {
         "Your resource (" + resource.getName() + ") reservation has been " + (reservation.isApproved() ? "approved" : "declined"),
         reservationResponse.isApproved()
     );
-    this.notificationClient.sendNotificationMessage(message);
+    try {
+      this.notificationClient.sendNotificationMessage(message);
+    } catch (Exception ex) {
+      LoggingUtil.logException(ex, NotificationClient.class);
+    }
 
     return reservationResponse;
   }
