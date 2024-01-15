@@ -6,6 +6,7 @@ import com.resourcify.mapper.ResourceMapper;
 import com.resourcify.model.entity.Reservation;
 import com.resourcify.model.entity.Resource;
 import com.resourcify.model.request.ReserveResourceRequest;
+import com.resourcify.model.response.ReservationResponse;
 import com.resourcify.model.response.ResourceResponse;
 import com.resourcify.repository.ResourceRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 @Service
 @Transactional
-public class ReservationService {
+public class ResourceReservationService {
 
   private final ResourceRepository resourceRepository;
   private final UserService userService;
@@ -36,7 +37,23 @@ public class ReservationService {
     return resourceMapper.toResponse(resource);
   }
 
-  public ResourceResponse deleteReservation(final String resourceId, final String reservationId, Jwt jwt) {
+  public ReservationResponse handleResourceReservationApproval(String resourceId, String reservationId) {
+    Resource resource = resourceRepository.findById(resourceId)
+        .orElseThrow(() -> new NotFoundException(Resource.class, resourceId));
+    // TODO: check if in future/past
+    Reservation reservation = resource.getReservations().stream()
+        .filter(res -> res.getReservationId().equals(reservationId))
+        .findFirst()
+        .orElseThrow(() -> new NotFoundException(Reservation.class, reservationId));
+
+    reservation.setApproved(!reservation.isApproved());
+    resource = resourceRepository.save(resource);
+    // TODO: notify service
+
+    return reservationMapper.toReservationResponse(resource.getName(),reservation);
+  }
+
+  public void deleteReservation(final String resourceId, final String reservationId, Jwt jwt) {
     Resource resource = resourceRepository.findById(resourceId)
         .orElseThrow(() -> new NotFoundException(Resource.class, resourceId));
 
@@ -45,10 +62,7 @@ public class ReservationService {
         .findFirst()
         .orElseThrow(() -> new NotFoundException(Reservation.class, reservationId));
 
-    reservation.setApproved(false);
-    resource = resourceRepository.save(resource);
-
-    return resourceMapper.toResponse(resource);
+    resourceRepository.deleteById(resourceId);
   }
 
 }

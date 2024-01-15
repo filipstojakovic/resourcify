@@ -14,7 +14,7 @@ spring:
               - GET
               - POST
               - PUT
-              - UPDATE
+              - PATCH
               - DELETE
       routes:
         - id: resources

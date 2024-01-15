@@ -12,22 +12,22 @@ export class ResourceService {
   }
 
   findAll() {
-    return this.http.get<ResourceType[]>(BackendUrl.RESOURCES_RESERVATION);
+    return this.http.get<ResourceType[]>(BackendUrl.RESOURCES);
   }
 
   findById(userId: string) {
-    return this.http.get<ResourceType>(`${BackendUrl.RESOURCES_RESERVATION}/${userId}`);
+    return this.http.get<ResourceType>(`${BackendUrl.RESOURCES}/${userId}`);
   }
 
   postResource(resource: ResourceType) {
-    return this.http.post<ResourceType>(`${BackendUrl.RESOURCES_RESERVATION}`, resource);
+    return this.http.post<ResourceType>(`${BackendUrl.RESOURCES}`, resource);
   }
 
   updateResource(resourceId: string, newResource: ResourceType) {
-    return this.http.put<ResourceType>(`${BackendUrl.RESOURCES_RESERVATION}/${resourceId}`, newResource);
+    return this.http.put<ResourceType>(`${BackendUrl.RESOURCES}/${resourceId}`, newResource);
   }
 
   deleteResource(resourceId: string) {
-    return this.http.delete<ResourceType>(`${BackendUrl.RESOURCES_RESERVATION}/${resourceId}`);
+    return this.http.delete<ResourceType>(`${BackendUrl.RESOURCES}/${resourceId}`);
   }
 }

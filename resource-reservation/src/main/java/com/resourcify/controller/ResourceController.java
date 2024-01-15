@@ -42,23 +42,23 @@ public class ResourceController {
     return ResponseEntity.ok(resource);
   }
 
-  @PostMapping
   @PreAuthorize("hasRole('client-admin-role')")
+  @PostMapping
   public ResponseEntity<ResourceResponse> insert(@Valid @RequestBody ResourceRequest resourceRequest) {
     ResourceResponse resource = resourceService.insert(resourceRequest);
     return ResponseEntity.status(HttpStatus.CREATED).body(resource);
   }
 
-  @PutMapping("{id}")
   @PreAuthorize("hasRole('client-admin-role')")
+  @PutMapping("{id}")
   public ResponseEntity<ResourceResponse> update(@PathVariable String id,
                                                  @Valid @RequestBody ResourceRequest resourceRequest) {
     ResourceResponse resource = resourceService.update(id, resourceRequest);
     return ResponseEntity.ok(resource);
   }
 
-  @DeleteMapping("{id}")
   @PreAuthorize("hasRole('client-admin-role')")
+  @DeleteMapping("{id}")
   public ResponseEntity<Void> delete(@PathVariable String id) {
     resourceService.delete(id);
     return new ResponseEntity<>(HttpStatus.OK);

@@ -5,6 +5,7 @@ import com.resourcify.common.utils.JwtUtils;
 import com.resourcify.model.entity.Reservation;
 import com.resourcify.model.request.ReserveResourceRequest;
 import com.resourcify.model.response.ReservationResponse;
+import com.resourcify.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -17,6 +18,7 @@ import java.util.List;
 public class ReservationMapper {
 
   private final ModelMapper modelMapper;
+  private final UserService userService;
 
   public ReservationResponse toReservationResponse(String resourceName,
                                                    Reservation reservation,
@@ -26,6 +28,15 @@ public class ReservationMapper {
         .filter(user -> user.getId().equals(reservation.getForUserId()))
         .findFirst()
         .orElse(null);
+    reservationResponse.setUser(userResponse);
+    reservationResponse.setResourceName(resourceName);
+    return reservationResponse;
+  }
+
+  public ReservationResponse toReservationResponse(String resourceName,
+                                                   Reservation reservation) {
+    ReservationResponse reservationResponse = modelMapper.map(reservation, ReservationResponse.class);
+    User userResponse = this.userService.getUserById(reservation.getForUserId());
     reservationResponse.setUser(userResponse);
     reservationResponse.setResourceName(resourceName);
     return reservationResponse;
