@@ -57,27 +57,6 @@ export class ResourceComponent implements OnInit {
     console.log(arg.event._def);
   }
 
-  openDialog(): void {
-    const dialogRef = this.dialog.open(ResourceDialogComponent, { data: null });
-
-    dialogRef.afterClosed().subscribe(result => {
-      if (result == null)
-        return;
-      this.resourceService.postResource(result as ResourceType).subscribe({
-            next: (res) => {
-              console.log("resource.component.ts > next(): " + JSON.stringify(res, null, 2));
-              this.resources.push(res);
-              this.toastService.success('Resource saved')
-            },
-            error: (err) => {
-              console.error(err.message);
-              this.toastService.success('Resource not saved')
-            },
-          },
-      )
-    });
-  }
-
   getEvents(resource: ResourceType | string) {
     this.loading = true;
     if (typeof resource === "string") {
@@ -107,5 +86,26 @@ export class ResourceComponent implements OnInit {
           },
         },
     )
+  }
+
+  openReservationDialog() {
+    const dialogRef = this.dialog.open(ResourceDialogComponent, { data: null });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result == null)
+        return;
+      this.resourceService.postResource(result as ResourceType).subscribe({
+            next: (res) => {
+              console.log("resource.component.ts > next(): " + JSON.stringify(res, null, 2));
+              this.resources.push(res);
+              this.toastService.success('Resource saved')
+            },
+            error: (err) => {
+              console.error(err.message);
+              this.toastService.success('Resource not saved')
+            },
+          },
+      )
+    });
   }
 }

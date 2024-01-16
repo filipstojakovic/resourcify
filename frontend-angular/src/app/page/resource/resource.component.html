@@ -11,15 +11,12 @@
       </mat-option>
     </mat-select>
   </mat-form-field>
-  <button (click)="openDialog()" color="primary" mat-raised-button>
+
+  <button (click)="openReservationDialog()" color="primary" mat-raised-button>
     <mat-icon>add</mat-icon>
     <span>New reservation</span>
   </button>
-  <button (click)="openDialog()" *ngIf="authService.isAdmin()" color="primary"
-          mat-raised-button>
-    <mat-icon>add</mat-icon>
-    <span>New resource</span>
-  </button>
+
 </div>
 
 <full-calendar [options]="calendarOptions"></full-calendar>
