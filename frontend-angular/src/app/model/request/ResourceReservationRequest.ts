@@ -1,15 +1,15 @@
 export type ResourceReservationRequest = {
-  userId: string,
+  forUserId: string,
   resourceId: string,
-  date: Date,
+  reservationDate: Date,
   description: string
 }
 
 export function initResourceReservationReq() {
   return {
-    userId: "",
+    forUserId: "",
     resourceId: "",
-    date: new Date(),
+    reservationDate: new Date(),
     description: "",
   } as ResourceReservationRequest;
 }

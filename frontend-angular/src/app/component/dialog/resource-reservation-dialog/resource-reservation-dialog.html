@@ -4,43 +4,43 @@
   <mat-dialog-content>
     <mat-form-field>
       <mat-label>User</mat-label>
-      <mat-select formControlName="userId">
+      <mat-select formControlName="forUserId">
         <mat-option *ngFor="let user of users" [value]="user.id">
           {{user.firstName + " " + user.lastName}}
         </mat-option>
       </mat-select>
       <mat-error
-          *ngIf="resourceReservationForm.get('selectedResourceId').invalid
-                    && resourceReservationForm.get('selectedResourceId').touched">
+          *ngIf="resourceReservationForm.get('forUserId').invalid
+                    && resourceReservationForm.get('forUserId').touched">
         Resource is required.
       </mat-error>
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Select resource</mat-label>
-      <mat-select formControlName="selectedResourceId">
+      <mat-select formControlName="resourceId">
         <mat-option *ngFor="let resource of resources" [value]="resource.id">
           {{resource.name}}
         </mat-option>
       </mat-select>
       <mat-error
-          *ngIf="resourceReservationForm.get('selectedResourceId').invalid
-                    && resourceReservationForm.get('selectedResourceId').touched">
+          *ngIf="resourceReservationForm.get('resourceId').invalid
+                    && resourceReservationForm.get('resourceId').touched">
         Resource is required.
       </mat-error>
     </mat-form-field>
 
     <mat-form-field>
       <input matInput [ngxMatDatetimePicker]="picker"
-             placeholder="Choose a date" formControlName="date"
+             placeholder="Choose a date" formControlName="reservationDate"
              [min]="minDate">
       <ngx-mat-datepicker-toggle matSuffix
                                  [for]="picker"></ngx-mat-datepicker-toggle>
       <ngx-mat-datetime-picker #picker>
       </ngx-mat-datetime-picker>
       <mat-error
-          *ngIf="resourceReservationForm.get('date').invalid
-                    && resourceReservationForm.get('date').touched">
+          *ngIf="resourceReservationForm.get('reservationDate').invalid
+                    && resourceReservationForm.get('reservationDate').touched">
         Time difference has to be at least 12h.
       </mat-error>
     </mat-form-field>

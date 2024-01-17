@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
@@ -28,10 +27,10 @@ public class ReservationController {
   private final ResourceReservationService resourceReservationService;
 
   @PostMapping("reservations")
-  public ResponseEntity<ResourceResponse> reserveResource(@Valid @RequestBody ReserveResourceRequest resourceRequest,
+  public ResponseEntity<ReservationResponse> reserveResource(@Valid @RequestBody ReserveResourceRequest resourceRequest,
                                                           @AuthenticationPrincipal Jwt jwt) {
 
-    ResourceResponse resource = resourceReservationService.reserveResource(resourceRequest, jwt);
+    ReservationResponse resource = resourceReservationService.reserveResource(resourceRequest, jwt);
     return new ResponseEntity<>(resource, HttpStatus.CREATED);
   }
 

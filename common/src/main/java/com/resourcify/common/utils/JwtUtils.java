@@ -1,5 +1,6 @@
 package com.resourcify.common.utils;
 
+import com.resourcify.common.exception.BadRequestException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.jwt.Jwt;
@@ -53,5 +54,19 @@ public class JwtUtils {
   public static boolean hasAdminRole(Jwt jwt) {
     Collection<String> roles = extractRolesFromJwt(jwt);
     return roles.stream().anyMatch(role -> role.equals(ADMIN_ROLE_NAME));
+  }
+
+  private static boolean isRequestAllowedForThisUser(Jwt jwt, String userId) {
+    if (hasAdminRole(jwt)) {
+      return true;
+    }
+    return getUserId(jwt).equals(userId);
+  }
+
+  // admins can do anything, and if users is doing something to himself
+  public static void isRequestForUserValid(Jwt jwt, String userId) {
+    if (!isRequestAllowedForThisUser(jwt, userId)) {
+      throw new BadRequestException("This request is not allowed");
+    }
   }
 }

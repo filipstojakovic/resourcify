@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
+import {ChangeDetectorRef, Component, OnInit, ViewChild} from '@angular/core';
 import {ResourceType} from '../../model/ResourceType';
 import {MatDialog} from '@angular/material/dialog';
 import {ResourceService} from '../../service/resource.service';
@@ -12,6 +12,8 @@ import {AuthService} from "../../service/auth.service";
 import {
   ResourceReservationDialog,
 } from '../../component/dialog/resource-reservation-dialog/resource-reservation-dialog';
+import {ResourceReservationService} from '../../service/resource-reservation.service';
+import {FullCalendarComponent} from "@fullcalendar/angular";
 
 @Component({
   selector: 'app-resource',
@@ -20,6 +22,7 @@ import {
 })
 export class ResourceComponent implements OnInit {
 
+  @ViewChild('fullcalendar') fullcalendar?: FullCalendarComponent;
   loading: boolean = true;
 
   calendarOptions: CalendarOptions = {
@@ -32,8 +35,9 @@ export class ResourceComponent implements OnInit {
   resources: ResourceType[] = [];
 
   constructor(public dialog: MatDialog,
-              private resourceService: ResourceService,
               private resourceEventMapper: ResourceEventMapperService,
+              private resourceService: ResourceService,
+              private resourceReservationService: ResourceReservationService,
               private toastService: ToastService,
               public authService: AuthService,
               private changeDetector: ChangeDetectorRef, //TODO: mozda ce trebati
@@ -50,7 +54,7 @@ export class ResourceComponent implements OnInit {
 
   handleDateClick(arg: DateClickArg) {
     console.log(arg);
-    alert(arg.date);
+    // alert(arg.);
   }
 
   handleEventClick(arg: EventClickArg) {
@@ -63,40 +67,51 @@ export class ResourceComponent implements OnInit {
     this.loading = true;
     if (typeof resource === "string") {
       return this.resourceService.findAll().subscribe({
-            next: (res) => {
-              this.resources = res;
-              this.calendarOptions.events = this.resourceEventMapper.mapResourcesToReservationEvents(res);
-              this.loading = false;
-            },
-            error: (err) => {
-              console.error(err.message);
-              this.toastService.error('Error fetch resources');
-              this.loading = false;
-            },
-          },
-      )
-    }
-    return this.resourceService.findById(resource.id).subscribe({
           next: (res) => {
-            this.calendarOptions.events = this.resourceEventMapper.mapResourceToReservationEvents(res);
+            this.resources = res;
+            this.calendarOptions.events = this.resourceEventMapper.mapResourcesToReservationEvents(res);
             this.loading = false;
           },
           error: (err) => {
             console.error(err.message);
-            this.toastService.error(`Error fetch resource ${resource.name}`);
+            this.toastService.error('Error fetch resources');
             this.loading = false;
           },
         },
+      )
+    }
+    return this.resourceService.findById(resource.id).subscribe({
+        next: (res) => {
+          this.calendarOptions.events = this.resourceEventMapper.mapResourceToReservationEvents(res);
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error(err.message);
+          this.toastService.error(`Error fetch resource ${resource.name}`);
+          this.loading = false;
+        },
+      },
     )
   }
 
   openReservationDialog() {
-    const dialogRef = this.dialog.open(ResourceReservationDialog, { data: null });
+    const dialogRef = this.dialog.open(ResourceReservationDialog, {data: null});
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log("resource.component.ts > (): "+ JSON.stringify(result, null, 2));
-      if (result == null)
+      if (result == null) {
         return;
+      }
+      this.resourceReservationService.createResourceReservationReq(result).subscribe({
+          next: (res) => {
+            const resource = this.resources.find(resource => resource.name === res.resourceName);
+            const resourceEvent = this.resourceEventMapper.mapReservationToEventReservation(res, resource);
+            this.fullcalendar.getApi().addEvent(resourceEvent);
+          },
+          error: (err) => {
+            console.error(err.message);
+          },
+        },
+      )
     });
   }
 }
