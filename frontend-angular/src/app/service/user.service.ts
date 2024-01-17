@@ -14,5 +14,9 @@ export class UserService {
   getAllUsers() {
     return this.http.get<UserType[]>(BackendUrl.USERS);
   }
+
+  getUserById(userId: string) {
+    return this.http.get<UserType>(`${BackendUrl.USERS}/${userId}`);
+  }
 }
 
