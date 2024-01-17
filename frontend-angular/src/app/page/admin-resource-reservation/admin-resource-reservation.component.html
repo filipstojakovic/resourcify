@@ -29,7 +29,7 @@
   <ng-container matColumnDef="date">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
     <td mat-cell
-        *matCellDef="let row"> {{row.reservationDate | date:'HH:mm dd-MM-Y'  }} </td>
+        *matCellDef="let row"> {{row.reservationDate | date:'dd/MM/Y HH:mm'  }} </td>
   </ng-container>
 
   <ng-container matColumnDef="action">

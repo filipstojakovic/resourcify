@@ -2,7 +2,6 @@ import {ChangeDetectorRef, Component, OnInit} from '@angular/core';
 import {ResourceType} from '../../model/ResourceType';
 import {MatDialog} from '@angular/material/dialog';
 import {ResourceService} from '../../service/resource.service';
-import {ResourceDialogComponent} from '../../component/dialog/resource-dialog/resource-dialog.component';
 import {ResourceEventMapperService} from '../../mapper/resourceEventMapper.service';
 import {CalendarOptions, EventClickArg} from '@fullcalendar/core';
 import {calendarConfig} from '../../component/calendar/calendarConfig';
@@ -10,6 +9,9 @@ import {DateClickArg} from '@fullcalendar/interaction';
 import {ToastService} from 'angular-toastify';
 import {ResourceReservationType} from '../../model/ResourceReservationType';
 import {AuthService} from "../../service/auth.service";
+import {
+  ResourceReservationDialog,
+} from '../../component/dialog/resource-reservation-dialog/resource-reservation-dialog';
 
 @Component({
   selector: 'app-resource',
@@ -89,23 +91,12 @@ export class ResourceComponent implements OnInit {
   }
 
   openReservationDialog() {
-    const dialogRef = this.dialog.open(ResourceDialogComponent, { data: null });
+    const dialogRef = this.dialog.open(ResourceReservationDialog, { data: null });
 
     dialogRef.afterClosed().subscribe(result => {
+      console.log("resource.component.ts > (): "+ JSON.stringify(result, null, 2));
       if (result == null)
         return;
-      this.resourceService.postResource(result as ResourceType).subscribe({
-            next: (res) => {
-              console.log("resource.component.ts > next(): " + JSON.stringify(res, null, 2));
-              this.resources.push(res);
-              this.toastService.success('Resource saved')
-            },
-            error: (err) => {
-              console.error(err.message);
-              this.toastService.success('Resource not saved')
-            },
-          },
-      )
     });
   }
 }

@@ -5,3 +5,13 @@
   get to jwt
 </button>
 <p>{{result}}</p>
+
+<mat-form-field>
+  <input matInput [ngxMatDatetimePicker]="picker" type="datetime" placeholder="Choose a date" [formControl]="dateControl"
+         [min]="minDate" [max]="maxDate" [disabled]="disabled" readonly>
+  <ngx-mat-datepicker-toggle matSuffix [for]="picker"></ngx-mat-datepicker-toggle>
+  <ngx-mat-datetime-picker #picker [showSpinners]="showSpinners" [showSeconds]="showSeconds"
+                           [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond" [touchUi]="touchUi"
+                           [color]="color" [enableMeridian]="enableMeridian" [disableMinute]="disableMinute" [hideTime]="hideTime">
+  </ngx-mat-datetime-picker>
+</mat-form-field>

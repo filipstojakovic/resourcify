@@ -24,6 +24,9 @@ import {LoadingComponent} from './component/loading/loading.component';
 import {
   AdminResourceReservationComponent,
 } from './page/admin-resource-reservation/admin-resource-reservation.component';
+import {ResourceReservationDialog} from './component/dialog/resource-reservation-dialog/resource-reservation-dialog';
+import {NgxMaterialModule} from './routing/ngx.material.module';
+
 
 @NgModule({
   declarations: [
@@ -37,6 +40,8 @@ import {
     ConfirmDialogComponent,
     LoadingComponent,
     AdminResourceReservationComponent,
+    ResourceReservationDialog,
+
   ],
   imports: [
     BrowserModule,
@@ -50,6 +55,7 @@ import {
     FullCalendarModule,
     AngularToastifyModule,
     ColorPickerModule,
+    NgxMaterialModule
   ],
   providers: [{
     provide: APP_INITIALIZER,

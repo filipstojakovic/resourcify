@@ -1,5 +1,9 @@
 .color-box {
   color: white;
   text-align: center;
-  border-radius: 15px
+  border-radius: 15px;
+}
+
+mat-dialog-actions {
+  margin-bottom: 8px;
 }
