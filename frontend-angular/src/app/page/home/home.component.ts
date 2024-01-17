@@ -17,21 +17,7 @@ import {ThemePalette} from '@angular/material/core';
 export class HomeComponent implements OnInit {
 
   @ViewChild('picker', { static: true }) picker: any;
-
-  public disabled = false;
-  public showSpinners = true;
-  public showSeconds = false;
-  public touchUi = false;
-  public enableMeridian = false;
-  public minDate: Date;
-  public maxDate: Date;
-  public stepHour = 1;
-  public stepMinute = 1;
-  public stepSecond = 1;
-  public color: ThemePalette = 'primary';
-  public disableMinute = false;
-  public hideTime = false;
-
+  public minDate: Date = new Date();
   public dateControl = new FormControl(new Date());
 
   result = "";
@@ -64,5 +50,10 @@ export class HomeComponent implements OnInit {
     this.keycloakService.getToken().then(res => {
       this.result = res;
     })
+  }
+
+  openDateTimePicker() {
+    console.log("home.component.ts > openDateTimePicker(): "+ "");
+    this.picker.open();
   }
 }

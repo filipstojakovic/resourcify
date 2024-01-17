@@ -1,19 +1,3 @@
-/* You can add global styles to this file, and also import other style files */
-.mat-datepicker-content {
-  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px rgba(0, 0, 0, 0.1411764706), 0 1px 10px rgba(0, 0, 0, 0.1215686275);
-  background-color: #fff;
-  color: rgba(0, 0, 0, 0.8705882353);
-}
-
-.mat-calendar-body-selected {
-  background-color: var(--primary-color);
-  color: #fff;
-}
-
-.mat-calendar-body-cell-content {
-  border: none !important;
-}
-
 body, html {
   height: 100%;
 }
@@ -70,4 +54,19 @@ mat-form-field {
   align-items: center;
   column-gap: 10px;
   margin-bottom: 10px;
+}
+
+.mat-datepicker-content {
+  box-shadow: 0 2px 4px -1px rgba(0, 0, 0, 0.2), 0 4px 5px rgba(0, 0, 0, 0.1411764706), 0 1px 10px rgba(0, 0, 0, 0.1215686275);
+  background-color: #fff;
+  color: rgba(0, 0, 0, 0.8705882353);
+}
+
+.mat-calendar-body-selected {
+  background-color: var(--primary-color);
+  color: #fff;
+}
+
+.mat-calendar-body-cell-content {
+  border: none !important;
 }

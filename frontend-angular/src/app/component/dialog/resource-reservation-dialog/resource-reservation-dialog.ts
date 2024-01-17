@@ -1,4 +1,4 @@
-import {Component, Inject, ViewChild} from '@angular/core';
+import {Component, Inject} from '@angular/core';
 import {ResourceType} from '../../../model/ResourceType';
 import {FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
@@ -7,10 +7,9 @@ import {
   initResourceReservationReq,
   ResourceReservationRequest,
 } from '../../../model/request/ResourceReservationRequest';
+import {AuthService} from "../../../service/auth.service";
 import {DateValidators} from "../../../validator/DateValidator";
 import {Constants} from "../../../constants/constants";
-import {AuthService} from "../../../service/auth.service";
-import {ThemePalette} from '@angular/material/core';
 
 @Component({
   selector: 'app-resource-reservation-dialog',
@@ -19,24 +18,7 @@ import {ThemePalette} from '@angular/material/core';
 })
 export class ResourceReservationDialog {
 
-  @ViewChild('picker', { static: true }) picker: any;
-
-  public disabled = false;
-  public showSpinners = true;
-  public showSeconds = false;
-  public touchUi = false;
-  public enableMeridian = false;
-  public minDate: Date;
-  public maxDate: Date;
-  public stepHour = 1;
-  public stepMinute = 1;
-  public stepSecond = 1;
-  public color: ThemePalette = 'primary';
-  public disableMinute = false;
-  public hideTime = false;
-
-  public dateControl = new FormControl(new Date());
-
+  minDate = new Date();
   resources: ResourceType[] = [];
   resourceReservationForm: FormGroup;
 

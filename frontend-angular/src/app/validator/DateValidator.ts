@@ -5,7 +5,11 @@ export class DateValidators {
 
   static isThisMuchHoursInFuture(hours: number): ValidatorFn {
     return (selectedDateControl: AbstractControl): ValidationErrors | null => {
-      const selectedDate: Date = selectedDateControl.value;
+
+      let selectedDate = selectedDateControl.value;
+      if (selectedDate['_isAMomentObject'] != null && selectedDate['_isAMomentObject']) {
+        selectedDate = selectedDate.toDate();
+      }
       const futureDate: Date = addHours(new Date(), hours);
 
       if (!isAfter(selectedDate, futureDate)) {

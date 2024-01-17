@@ -1,82 +1,45 @@
 <h1 mat-dialog-title>{{ data ? 'Update Resource' : 'Create Resource' }}</h1>
 
 <form [formGroup]="resourceReservationForm">
-  <mat-dialog-content>
-    <mat-form-field subscriptSizing="dynamic">
-      <mat-label>Select resource</mat-label>
-      <mat-select formControlName="selectedResourceId">
-        <mat-option *ngFor="let resource of resources" [value]="resource.id">
-          {{resource.name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
+    <mat-dialog-content>
+        <mat-form-field>
+            <mat-label>Select resource</mat-label>
+            <mat-select formControlName="selectedResourceId">
+                <mat-option *ngFor="let resource of resources" [value]="resource.id">
+                    {{resource.name}}
+                </mat-option>
+            </mat-select>
+            <mat-error
+                    *ngIf="resourceReservationForm.get('selectedResourceId').invalid
+                    && resourceReservationForm.get('selectedResourceId').touched">
+                Resource is required.
+            </mat-error>
+        </mat-form-field>
 
-    <mat-form-field>
-      <mat-label>Description</mat-label>
-      <textarea formControlName="description" matInput
-                placeholder="Description"></textarea>
-    </mat-form-field>
+        <mat-form-field>
+            <input matInput [ngxMatDatetimePicker]="picker" placeholder="Choose a date" formControlName="date"
+                   [min]="minDate">
+            <ngx-mat-datepicker-toggle matSuffix [for]="picker"></ngx-mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #picker>
+            </ngx-mat-datetime-picker>
+            <mat-error
+                    *ngIf="resourceReservationForm.get('date').invalid
+                    && resourceReservationForm.get('date').touched">
+                Time difference has to be at least 12h.
+            </mat-error>
+        </mat-form-field>
 
-    <mat-form-field>
-      <input matInput [ngxMatDatetimePicker]="picker" type="datetime" placeholder="Choose a date" [formControl]="dateControl"
-             [min]="minDate" [max]="maxDate" [disabled]="disabled">
-      <ngx-mat-datepicker-toggle matSuffix [for]="picker"></ngx-mat-datepicker-toggle>
-      <ngx-mat-datetime-picker #picker [showSpinners]="showSpinners" [showSeconds]="showSeconds"
-                               [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="stepSecond" [touchUi]="touchUi"
-                               [color]="color" [enableMeridian]="enableMeridian" [disableMinute]="disableMinute" [hideTime]="hideTime">
-      </ngx-mat-datetime-picker>
-    </mat-form-field>
+        <mat-form-field>
+            <mat-label>Description</mat-label>
+            <textarea formControlName="description" matInput
+                      placeholder="Description"></textarea>
+        </mat-form-field>
+    </mat-dialog-content>
 
-
-    <!--    <mat-form-field>-->
-    <!--    </mat-form-field>-->
-    <!--    <mat-form-field>-->
-    <!--      <mat-label>Name</mat-label>-->
-    <!--      <input formControlName="name" matInput placeholder="Name"/>-->
-    <!--      <mat-error-->
-    <!--          *ngIf="resourceForm.get('name').invalid && resourceForm.get('name').touched">-->
-    <!--        Name is required.-->
-    <!--      </mat-error>-->
-    <!--    </mat-form-field>-->
-
-    <!--    <mat-form-field>-->
-    <!--      <mat-label>Amount</mat-label>-->
-    <!--      <input formControlName="amount" matInput placeholder="Amount"-->
-    <!--             type="number"/>-->
-    <!--      <mat-error-->
-    <!--          *ngIf="resourceForm.get('amount').invalid && resourceForm.get('amount').touched">-->
-    <!--        Amount is required.-->
-    <!--      </mat-error>-->
-    <!--    </mat-form-field>-->
-
-    <!--    <div style="display:flex; gap: 10px; margin-bottom: 20px">-->
-    <!--      <button #ignoredButton (click)="toggle=!toggle" color="primary"-->
-    <!--              mat-raised-button>-->
-    <!--        Change color-->
-    <!--      </button>-->
-    <!--      <input #ignoredInput-->
-    <!--             (colorPickerChange)="onChangeColor($event)"-->
-    <!--             [(colorPicker)]="backgroundColor"-->
-    <!--             [(cpToggle)]="toggle"-->
-    <!--             [cpIgnoredElements]="[ignoredButton, ignoredInput]"-->
-    <!--             [cpOutputFormat]="'hex'"-->
-    <!--             [style.background]="backgroundColor"-->
-    <!--             class="color-box"-->
-    <!--             readonly-->
-    <!--             value="Event example"/>-->
-    <!--    </div>-->
-
-    <!--    <mat-form-field>-->
-    <!--      <mat-label>Description</mat-label>-->
-    <!--      <textarea formControlName="description" matInput-->
-    <!--                placeholder="Description"></textarea>-->
-    <!--    </mat-form-field>-->
-  </mat-dialog-content>
-
-  <mat-dialog-actions>
-    <button (click)="onCancelClicked()" color="warn" mat-raised-button>Cancel
-    </button>
-    <button (click)="onSaveClicked()" color="primary" mat-raised-button>Save
-    </button>
-  </mat-dialog-actions>
+    <mat-dialog-actions>
+        <button (click)="onCancelClicked()" color="warn" mat-raised-button>Cancel
+        </button>
+        <button (click)="onSaveClicked()" color="primary" mat-raised-button>Save
+        </button>
+    </mat-dialog-actions>
 </form>
