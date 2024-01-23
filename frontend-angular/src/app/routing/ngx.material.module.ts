@@ -1,11 +1,17 @@
 import {NgModule} from '@angular/core';
 import {
-  NGX_MAT_DATE_FORMATS,
+  NgxMatDateAdapter,
   NgxMatDateFormats,
   NgxMatDatetimePickerModule,
+  NgxMatNativeDateModule,
 } from '@angular-material-components/datetime-picker';
-import {NgxMatMomentModule, NgxMomentDateModule} from '@angular-material-components/moment-adapter';
+import {
+  NgxMatMomentAdapter,
+  NgxMatMomentModule,
+  NgxMomentDateModule,
+} from '@angular-material-components/moment-adapter';
 import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MAT_DATE_LOCALE} from '@angular/material/core';
 
 const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
   parse: {
@@ -21,19 +27,23 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
 
 @NgModule({
   imports: [
+    NgxMatNativeDateModule,
+    NgxMatMomentModule,
     MatDatepickerModule,
     NgxMomentDateModule,
-    NgxMatMomentModule,
     NgxMatDatetimePickerModule,
   ],
   exports: [
+    NgxMatNativeDateModule,
+    NgxMatMomentModule,
     MatDatepickerModule,
     NgxMomentDateModule,
-    NgxMatMomentModule,
     NgxMatDatetimePickerModule,
   ],
   providers: [
-    {provide: NGX_MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS},
+    // { provide: NGX_MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } },
+    {provide: MAT_DATE_LOCALE, useValue: 'bs'},
+    {provide: NgxMatDateAdapter, useClass: NgxMatMomentAdapter},
   ],
 })
 export class NgxMaterialModule {

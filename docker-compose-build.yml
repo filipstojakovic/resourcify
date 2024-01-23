@@ -111,7 +111,7 @@ services:
   notification-service:
     image: 'node:16.16-alpine'
     working_dir: '/home/node/app'
-    command: 'sh -c "npm run start-docker"'
+    command: 'sh -c "apk --no-cache add curl && while ! curl -f http://keycloak:8080/realms/resourcify; do sleep 1; done && npm run start-docker"'
     restart: always
     ports:
       - '8000:8000'

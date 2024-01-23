@@ -27,12 +27,22 @@ public class ResourceMapper {
   public ResourceResponse toResponse(Resource resource, boolean isAdmin) {
     ResourceResponse resourceResponse = modelMapper.map(resource, ResourceResponse.class);
     List<User> users = userService.getAllUser();
-    List<ReservationResponse> reservationResponses = resource.getReservations().stream().filter(reservation1 -> {
+    List<ReservationResponse> reservationResponses = resource.getReservations().stream().filter(reservation -> {
       if (!isAdmin) {
-        return reservation1.isApproved();
+        return reservation.isApproved();
       }
       return true;
     }).map(reservation -> reservationMapper.toReservationResponse(resource.getName(), reservation, users)).toList();
+    resourceResponse.setReservations(reservationResponses);
+    return resourceResponse;
+  }
+
+  public ResourceResponse toResponseNoApprovalFilter(String userId, Resource resource) {
+    ResourceResponse resourceResponse = modelMapper.map(resource, ResourceResponse.class);
+    List<User> users = userService.getAllUser();
+    List<ReservationResponse> reservationResponses = resource.getReservations().stream()
+        .filter(reservation -> reservation.getForUserId().equals(userId))
+        .map(reservation -> reservationMapper.toReservationResponse(resource.getName(), reservation, users)).toList();
     resourceResponse.setReservations(reservationResponses);
     return resourceResponse;
   }

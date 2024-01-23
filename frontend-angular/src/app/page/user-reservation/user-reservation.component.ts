@@ -1,61 +1,38 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
-import {MatTableDataSource} from '@angular/material/table';
-import {ResourceType} from '../../model/ResourceType';
+import {Component, ViewChild} from '@angular/core';
 import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
+import {ResourceReservationType} from '../../model/ResourceReservationType';
 import {MatDialog} from '@angular/material/dialog';
 import {ResourceService} from '../../service/resource.service';
-import {ToastService} from 'angular-toastify';
-import {ResourceReservationType} from '../../model/ResourceReservationType';
-import {ResourceReservationService} from '../../service/resource-reservation.service';
+import {ResourceType} from '../../model/ResourceType';
+import {AuthService} from '../../service/auth.service';
 
 @Component({
-  selector: 'app-resource-reservation-approval',
-  templateUrl: './admin-resource-reservation.component.html',
-  styleUrls: ['./admin-resource-reservation.component.css'],
+  selector: 'app-user-reservation',
+  templateUrl: './user-reservation.component.html',
+  styleUrls: ['./user-reservation.component.css'],
 })
-export class AdminResourceReservationComponent implements OnInit {
-
-  displayedColumns: string[] = ['name', 'resourceName', 'description', 'date', 'action'];
+export class UserReservationComponent {
+  displayedColumns: string[] = ['name', 'resourceName', 'description', 'date', 'status'];
   @ViewChild(MatSort) sort: MatSort;
-  dataSource = new MatTableDataSource([] as ResourceReservationType[]);
-
   resources: ResourceType[] = [];
+  dataSource = new MatTableDataSource([] as ResourceReservationType[]);
 
   constructor(public dialog: MatDialog,
               private resourceService: ResourceService,
-              private resourceReservationService: ResourceReservationService,
-              private toastService: ToastService,
+              private authService: AuthService
   ) {
-
   }
 
   ngOnInit() {
-    this.resourceService.findAll().subscribe({
+    const userId = this.authService.getId();
+    this.resourceService.findByUserId(userId).subscribe({
           next: (result) => {
             this.resources = result;
             this.dataSource.data = this.resources.flatMap(resource => resource.reservations);
             this.dataSource.sortingDataAccessor = this.customFullNameSort;
             this.dataSource.filterPredicate = this.dataSourceFilter;
             this.dataSource.sort = this.sort;
-          },
-          error: (err) => {
-            console.error(err.message);
-          },
-        },
-    )
-  }
-
-
-  changeApproval(row: ResourceReservationType) {
-    const resource = this.resources.find(resource => resource.name == row.resourceName);
-    this.resourceReservationService.handleResourceReservationApproval(resource.id, row.reservationId).subscribe({
-          next: (res) => {
-            const reservations = this.dataSource.data;
-            this.dataSource.data = reservations.map(reservation => {
-              if (reservation.reservationId === row.reservationId)
-                return res;
-              return reservation;
-            });
           },
           error: (err) => {
             console.error(err.message);

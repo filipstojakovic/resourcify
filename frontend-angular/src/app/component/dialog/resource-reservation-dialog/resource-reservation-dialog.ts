@@ -14,6 +14,11 @@ import {UserType} from '../../../model/UserType';
 import {UserService} from '../../../service/user.service';
 import {ResourceReservationType} from "../../../model/ResourceReservationType";
 
+export type ResourceReservationDialogType = {
+  resourceReservation?: ResourceReservationType;
+  date?: Date
+}
+
 @Component({
   selector: 'app-resource-reservation-dialog',
   templateUrl: './resource-reservation-dialog.html',
@@ -27,35 +32,39 @@ export class ResourceReservationDialog {
   resourceReservationForm: FormGroup;
 
   constructor(
-    public dialogRef: MatDialogRef<ResourceReservationDialog>,
-    private resourceService: ResourceService,
-    private authService: AuthService,
-    private userService: UserService,
-    @Inject(MAT_DIALOG_DATA) public data: ResourceReservationType | null,
-    private fb: FormBuilder,
+      public dialogRef: MatDialogRef<ResourceReservationDialog>,
+      private resourceService: ResourceService,
+      private authService: AuthService,
+      private userService: UserService,
+      @Inject(MAT_DIALOG_DATA) public data: ResourceReservationDialogType | null,
+      private fb: FormBuilder,
   ) {
     //TODO: if not admin && had data => lock all fields
+
     let displayReservation: ResourceReservationRequest = initResourceReservationReq();
+    if (data?.date) {
+      displayReservation.reservationDate = data.date;
+    }
     displayReservation.forUserId = this.authService.getId();
 
     this.resourceService.findAll().subscribe(res => {
       this.resources = res;
-      if (data) {
-        const resource = this.resources.find(resource => resource.name === data.resourceName);
+      if (data != null && data.resourceReservation != null) {
+        const resource = this.resources.find(resource => resource.name === data.resourceReservation.resourceName);
         displayReservation.resourceId = resource.id;
         this.resourceReservationForm?.controls['resourceId']?.setValue(resource.id);
       }
     })
 
-    if (data) {
-      displayReservation.forUserId = data.user.id;
-      displayReservation.description = data.description;
-      displayReservation.reservationDate = data.reservationDate;
+    if (data?.resourceReservation != null) {
+      displayReservation.forUserId = data.resourceReservation.user.id;
+      displayReservation.description = data.resourceReservation.description;
+      displayReservation.reservationDate = data.resourceReservation.reservationDate;
       if (this.authService.isAdmin()) {
         this.userService.getAllUsers().subscribe(res => this.users = res);
         //ima podataka i admin je
       } else {
-        this.users.push(data.user);
+        this.users.push(data.resourceReservation.user);
         //ima podataka ali nije admin
       }
     } else {
@@ -69,18 +78,21 @@ export class ResourceReservationDialog {
     }
 
     this.resourceReservationForm = this.fb.group({
-      forUserId: [{value: displayReservation.forUserId, disabled: !this.isAllowedToChange(data)}, Validators.required],
+      forUserId: [{
+        value: displayReservation.forUserId,
+        disabled: !this.isAllowedToChange(data?.resourceReservation),
+      }, Validators.required],
       resourceId: [{
         value: displayReservation.resourceId,
-        disabled: !this.isAllowedToChange(data),
+        disabled: !this.isAllowedToChange(data?.resourceReservation),
       }, Validators.required],
       reservationDate: [
-        {value: displayReservation.reservationDate, disabled: !this.isAllowedToChange(data)},
+        { value: displayReservation.reservationDate, disabled: !this.isAllowedToChange(data?.resourceReservation) },
         [Validators.required, DateValidators.isThisMuchHoursInFuture(Constants.RESERVATION_TIME_DIFFERENCE)],
       ],
       description: [{
         value: displayReservation.description,
-        disabled: !this.isAllowedToChange(data),
+        disabled: !this.isAllowedToChange(data?.resourceReservation),
       }, Validators.required],
     });
   }

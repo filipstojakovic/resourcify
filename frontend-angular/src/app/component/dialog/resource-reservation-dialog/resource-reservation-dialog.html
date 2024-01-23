@@ -1,63 +1,73 @@
 <h1 mat-dialog-title>{{ data ? 'Update Resource' : 'Create Resource' }}</h1>
 
 <form [formGroup]="resourceReservationForm">
-    <mat-dialog-content>
-        <mat-form-field>
-            <mat-label>User</mat-label>
-            <mat-select formControlName="forUserId">
-                <mat-option *ngFor="let user of users" [value]="user.id">
-                    {{user.firstName + " " + user.lastName}}
-                </mat-option>
-            </mat-select>
-            <mat-error
-                    *ngIf="resourceReservationForm.get('forUserId').invalid
+  <mat-dialog-content>
+    <mat-form-field>
+      <mat-label>User</mat-label>
+      <mat-select formControlName="forUserId">
+        <mat-option *ngFor="let user of users" [value]="user.id">
+          {{user.firstName + " " + user.lastName}}
+        </mat-option>
+      </mat-select>
+      <mat-error
+          *ngIf="resourceReservationForm.get('forUserId').invalid
                     && resourceReservationForm.get('forUserId').touched">
-                User is required.
-            </mat-error>
-        </mat-form-field>
+        User is required.
+      </mat-error>
+    </mat-form-field>
 
-        <mat-form-field>
-            <mat-label>Select resource</mat-label>
-            <mat-select formControlName="resourceId">
-                <mat-option *ngFor="let resource of resources" [value]="resource.id">
-                    {{resource.name}}
-                </mat-option>
-            </mat-select>
-            <mat-error
-                    *ngIf="resourceReservationForm.get('resourceId').invalid
+    <mat-form-field>
+      <mat-label>Select resource</mat-label>
+      <mat-select formControlName="resourceId">
+        <mat-option *ngFor="let resource of resources" [value]="resource.id">
+          {{resource.name}}
+        </mat-option>
+      </mat-select>
+      <mat-error
+          *ngIf="resourceReservationForm.get('resourceId').invalid
                     && resourceReservationForm.get('resourceId').touched">
-                Resource is required.
-            </mat-error>
-        </mat-form-field>
+        Resource is required.
+      </mat-error>
+    </mat-form-field>
 
-        <mat-form-field>
-            <input matInput [ngxMatDatetimePicker]="picker"
-                   placeholder="Choose a date" formControlName="reservationDate"
-                   [min]="minDate">
-            <ngx-mat-datepicker-toggle matSuffix
-                                       [for]="picker"></ngx-mat-datepicker-toggle>
-            <ngx-mat-datetime-picker #picker>
-            </ngx-mat-datetime-picker>
-            <mat-error
-                    *ngIf="resourceReservationForm.get('reservationDate').invalid
+    <mat-form-field>
+      <input matInput [ngxMatDatetimePicker]="picker"
+             readonly
+             (click)="picker.open()"
+             placeholder="Choose a date" formControlName="reservationDate"
+             [min]="minDate">
+      <ngx-mat-datepicker-toggle matSuffix
+                                 [for]="picker"></ngx-mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #picker>
+        <ngx-mat-datepicker-actions>
+          <button mat-button ngxMatDatepickerCancel>Cancel</button>
+          <button mat-raised-button color="primary" ngxMatDatepickerApply>
+            Apply
+          </button>
+        </ngx-mat-datepicker-actions>
+      </ngx-mat-datetime-picker>
+      <mat-error
+          *ngIf="resourceReservationForm.get('reservationDate').invalid
                     && resourceReservationForm.get('reservationDate').touched">
-                Time difference has to be at least 12h.
-            </mat-error>
-        </mat-form-field>
+        Time difference has to be at least 12h.
+      </mat-error>
+    </mat-form-field>
 
-        <mat-form-field>
-            <mat-label>Reason</mat-label>
-            <textarea formControlName="description" matInput
-                      placeholder="Reason"></textarea>
-        </mat-form-field>
+    <mat-form-field>
+      <mat-label>Reason</mat-label>
+      <textarea formControlName="description" matInput
+                placeholder="Reason"></textarea>
+    </mat-form-field>
 
-    </mat-dialog-content>
-    <mat-dialog-actions>
-        <button *ngIf="isAllowedToChange(data)" color="warn" mat-raised-button>Delete
-        </button>
-        <button (click)="onCancelClicked()" color="accent" mat-raised-button>Cancel
-        </button>
-        <button (click)="onSaveClicked()" color="primary" mat-raised-button>Save
-        </button>
-    </mat-dialog-actions>
+  </mat-dialog-content>
+  <mat-dialog-actions>
+    <button *ngIf="isAllowedToChange(data?.resourceReservation)" color="warn"
+            mat-raised-button>
+      Delete
+    </button>
+    <button (click)="onCancelClicked()" mat-button>Cancel
+    </button>
+    <button (click)="onSaveClicked()" color="primary" mat-raised-button>Save
+    </button>
+  </mat-dialog-actions>
 </form>

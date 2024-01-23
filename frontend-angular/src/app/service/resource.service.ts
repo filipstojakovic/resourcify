@@ -15,8 +15,12 @@ export class ResourceService {
     return this.http.get<ResourceType[]>(BackendUrl.RESOURCES);
   }
 
-  findById(userId: string) {
-    return this.http.get<ResourceType>(`${BackendUrl.RESOURCES}/${userId}`);
+  findByUserId(userId: string) {
+    return this.http.get<ResourceType[]>(`${BackendUrl.RESOURCES}/all/${userId}`);
+  }
+
+  findById(resourceId: string) {
+    return this.http.get<ResourceType>(`${BackendUrl.RESOURCES}/${resourceId}`);
   }
 
   postResource(resource: ResourceType) {

@@ -1,6 +1,5 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
-import {HomeComponent} from '../page/home/home.component';
 import {ResourceComponent} from '../page/resource/resource.component';
 import {canActivateFn} from '../auth/canActivateFn';
 import {Paths} from '../constants/paths';
@@ -10,24 +9,25 @@ import {ErrorPageComponent} from '../page/error-page/error-page.component';
 import {
   AdminResourceReservationComponent,
 } from "../page/admin-resource-reservation/admin-resource-reservation.component";
+import {UserReservationComponent} from '../page/user-reservation/user-reservation.component';
 
 export const routes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: Paths.HOME,
+    redirectTo: Paths.RESOURCES,
   },
   {
-    path: Paths.HOME,
-    pathMatch: 'full',
-    canActivate: [canActivateFn],
-    component: HomeComponent,
-  },
-  {
-    path: Paths.RESOURCES_RESERVATION,
+    path: Paths.RESOURCES,
     pathMatch: 'full',
     canActivate: [canActivateFn],
     component: ResourceComponent,
+  },
+  {
+    path: Paths.USER_RESERVATION,
+    pathMatch: 'full',
+    canActivate: [canActivateFn],
+    component: UserReservationComponent,
   },
   {
     path: Paths.ADMIN_RESOURCES,
@@ -45,7 +45,6 @@ export const routes: Routes = [
   },
   {
     path: '**',
-    pathMatch: 'full',
     component: ErrorPageComponent,
   },
 ];

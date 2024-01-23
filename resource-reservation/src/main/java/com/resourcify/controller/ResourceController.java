@@ -35,6 +35,11 @@ public class ResourceController {
     return resourceService.findAll(isAdmin);
   }
 
+  @GetMapping("all/{userId}")
+  public List<ResourceResponse> findAll(@PathVariable String userId) {
+    return resourceService.findAllByUserId(userId);
+  }
+
   @GetMapping("{id}")
   public ResponseEntity<ResourceResponse> findById(@PathVariable String id, @AuthenticationPrincipal Jwt jwt) {
     boolean isAdmin = JwtUtils.hasAdminRole(jwt);

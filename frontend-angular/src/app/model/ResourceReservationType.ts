@@ -6,5 +6,5 @@ export type ResourceReservationType = {
   user: UserType;
   description: string;
   reservationDate: Date;
-  isApproved: boolean;
+  approved: boolean;
 }

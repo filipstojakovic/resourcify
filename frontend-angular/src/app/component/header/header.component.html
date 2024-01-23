@@ -1,15 +1,15 @@
 <mat-toolbar class="button-gap app-toolbar" color="primary">
 
-  <button [routerLink]=[paths.HOME] mat-button
-          routerLinkActive="active-link">
-    <mat-icon>home</mat-icon>
-    <span>Home</span>
-  </button>
-
-  <button [routerLink]=[paths.RESOURCES_RESERVATION] mat-button
+  <button [routerLink]=[paths.RESOURCES] mat-button
           routerLinkActive="active-link">
     <mat-icon>devices</mat-icon>
     <span>Resource Reservation</span>
+  </button>
+
+  <button [routerLink]=[paths.USER_RESERVATION] mat-button
+          routerLinkActive="active-link">
+    <mat-icon>home</mat-icon>
+    <span>Your Reservations</span>
   </button>
 
   <button *ngIf="isAdmin()"
@@ -30,23 +30,23 @@
     <span>Resource Approvals</span>
   </button>
 
-  <button *ngIf="isAdmin()"
-          [routerLinkActiveOptions]="{exact: true}"
-          [routerLink]=[paths.ADMIN_WORKSPACE]
-          mat-button
-          routerLinkActive="active-link">
-    <mat-icon>location_city</mat-icon>
-    <span>Workspace</span>
-  </button>
+<!--  <button *ngIf="isAdmin()"-->
+<!--          [routerLinkActiveOptions]="{exact: true}"-->
+<!--          [routerLink]=[paths.ADMIN_WORKSPACE]-->
+<!--          mat-button-->
+<!--          routerLinkActive="active-link">-->
+<!--    <mat-icon>location_city</mat-icon>-->
+<!--    <span>Workspace</span>-->
+<!--  </button>-->
 
-  <button *ngIf="isAdmin()"
-          [routerLinkActiveOptions]="{exact: true}"
-          [routerLink]=[paths.ADMIN_WORKSPACE_RESERVATION]
-          mat-button
-          routerLinkActive="active-link">
-    <mat-icon>thumb_up</mat-icon>
-    <span>Workspace Approvals</span>
-  </button>
+<!--  <button *ngIf="isAdmin()"-->
+<!--          [routerLinkActiveOptions]="{exact: true}"-->
+<!--          [routerLink]=[paths.ADMIN_WORKSPACE_RESERVATION]-->
+<!--          mat-button-->
+<!--          routerLinkActive="active-link">-->
+<!--    <mat-icon>thumb_up</mat-icon>-->
+<!--    <span>Workspace Approvals</span>-->
+<!--  </button>-->
 
   <span class="spacer"></span>
 

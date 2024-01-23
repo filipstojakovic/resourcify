@@ -7,7 +7,6 @@ import {MaterialModule} from "./routing/material.module";
 import {HTTP_INTERCEPTORS, HttpClientModule} from "@angular/common/http";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AppRoutingModule} from "./routing/app-routing.module";
-import {HomeComponent} from './page/home/home.component';
 import {ResourceComponent} from './page/resource/resource.component';
 import {KeycloakAngularModule, KeycloakService} from "keycloak-angular";
 import {initializeKeycloak} from "./auth/initKeycloak";
@@ -26,12 +25,12 @@ import {
 } from './page/admin-resource-reservation/admin-resource-reservation.component';
 import {ResourceReservationDialog} from './component/dialog/resource-reservation-dialog/resource-reservation-dialog';
 import {NgxMaterialModule} from './routing/ngx.material.module';
+import { UserReservationComponent } from './page/user-reservation/user-reservation.component';
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    HomeComponent,
     ResourceComponent,
     HeaderComponent,
     ResourceDialogComponent,
@@ -41,7 +40,7 @@ import {NgxMaterialModule} from './routing/ngx.material.module';
     LoadingComponent,
     AdminResourceReservationComponent,
     ResourceReservationDialog,
-
+    UserReservationComponent,
   ],
   imports: [
     BrowserModule,

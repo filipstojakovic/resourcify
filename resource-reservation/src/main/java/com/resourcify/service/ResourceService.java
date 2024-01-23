@@ -20,10 +20,14 @@ public class ResourceService {
   public final ResourceRepository resourceRepository;
   private final ResourceMapper resourceMapper;
 
-  // TODO: remove !isActive reservations
   public List<ResourceResponse> findAll(boolean isAdmin) {
     List<Resource> resources = resourceRepository.findAll();
     return resources.stream().map(resource -> resourceMapper.toResponse(resource, isAdmin)).toList();
+  }
+
+  public List<ResourceResponse> findAllByUserId(String userId) {
+    List<Resource> resources = resourceRepository.findAll();
+    return resources.stream().map(resource -> resourceMapper.toResponseNoApprovalFilter(userId, resource)).toList();
   }
 
   public ResourceResponse findById(String id, boolean isAdmin) {
@@ -55,4 +59,5 @@ public class ResourceService {
     }
     resourceRepository.deleteById(id);
   }
+
 }

@@ -85,7 +85,9 @@ export class AdminResourceComponent implements OnInit {
 
   deleteRow(row: ResourceType) {
     console.log("admin-resource.component.ts > deleteElement(): " + JSON.stringify(row, null, 2));
-    const dialogRef = this.dialog.open(ConfirmDialogComponent);
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      autoFocus: false,
+    });
     dialogRef.afterClosed().subscribe(dialogResult => {
       if (dialogResult) {
         this.resourceService.deleteResource(row.id).subscribe({

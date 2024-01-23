@@ -20,6 +20,6 @@ public class ResourceRequest {
   private String description;
   @NotNull
   @Positive
-  private Integer amount;
+  private Long amount;
   private String backgroundColor;
 }

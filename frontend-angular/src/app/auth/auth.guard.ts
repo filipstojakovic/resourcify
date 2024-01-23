@@ -33,7 +33,7 @@ export class AuthGuard extends KeycloakAuthGuard {
     const hasRequiredRole = keycloak.hasResourceRole(requiredRoles, AuthService.KEYCLOAK_CLIENT_NAME)
 
     if (!hasRequiredRole) {
-      await this.router.navigate([Paths.HOME]);
+      await this.router.navigate([Paths.RESOURCES]);
       return false;
     }
 

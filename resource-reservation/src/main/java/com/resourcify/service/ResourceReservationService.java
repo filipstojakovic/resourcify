@@ -8,7 +8,6 @@ import com.resourcify.common.utils.DateTimeUtils;
 import com.resourcify.common.utils.JwtUtils;
 import com.resourcify.common.utils.LoggingUtil;
 import com.resourcify.mapper.ReservationMapper;
-import com.resourcify.mapper.ResourceMapper;
 import com.resourcify.model.entity.Reservation;
 import com.resourcify.model.entity.Resource;
 import com.resourcify.model.request.ReserveResourceRequest;
@@ -24,70 +23,78 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 public class ResourceReservationService {
 
-    private final ResourceRepository resourceRepository;
-    private final UserService userService;
-    private final NotificationClient notificationClient;
+  private final ResourceRepository resourceRepository;
+  private final UserService userService;
+  private final NotificationClient notificationClient;
 
-    private final ReservationMapper reservationMapper;
+  private final ReservationMapper reservationMapper;
 
-    public ReservationResponse reserveResource(ReserveResourceRequest reserveResourceReq, Jwt jwt) {
-        JwtUtils.isRequestForUserValid(jwt, reserveResourceReq.getForUserId());
-        // TODO: check if not admin, he can reserve for other users
-        if (!DateTimeUtils.isAtLeast12HoursFromNow(reserveResourceReq.getReservationDate())) {
-            throw new BadRequestException("Time difference has to be at least " + DateTimeUtils.TIME_DIFFERENCE + "h");
-        }
+  public ReservationResponse reserveResource(ReserveResourceRequest reserveResourceReq, Jwt jwt) {
+    JwtUtils.isRequestForUserValid(jwt, reserveResourceReq.getForUserId());
+    if (!DateTimeUtils.isAtLeast12HoursFromNow(reserveResourceReq.getReservationDate())) {
+      throw new BadRequestException("Time difference has to be at least " + DateTimeUtils.TIME_DIFFERENCE + "h");
+    }
+    Resource resource = resourceRepository.findById(reserveResourceReq.getResourceId())
+        .orElseThrow(() -> new NotFoundException(Resource.class, reserveResourceReq.getResourceId()));
 
-        Resource resource = resourceRepository.findById(reserveResourceReq.getResourceId())
-                .orElseThrow(() -> new NotFoundException(Resource.class, reserveResourceReq.getResourceId()));
-        userService.getUserById(reserveResourceReq.getForUserId()); // check if user exist
+    Long amountUsed = resource.getReservations().stream()
+        .filter(reservation -> reservation.getReservationDate().toLocalDate()
+            .equals(reserveResourceReq.getReservationDate().toLocalDate()))
+        .count();
 
-        // TODO: check if 12h period
-        Reservation reservation = reservationMapper.fromRequest(reserveResourceReq, jwt);
-        resource.getReservations().add(reservation);
-        resource = resourceRepository.save(resource);
-
-        return reservationMapper.toReservationResponse(resource.getName(), reservation);
+    if (resource.getAmount() <= amountUsed) {
+      throw new BadRequestException("That resource is fully reserved on that date");
     }
 
-    public ReservationResponse handleResourceReservationApproval(String resourceId, String reservationId) {
-        Resource resource = resourceRepository.findById(resourceId)
-                .orElseThrow(() -> new NotFoundException(Resource.class, resourceId));
-        // TODO: check if in future/past
-        Reservation reservation = resource.getReservations()
-                .stream()
-                .filter(res -> res.getReservationId().equals(reservationId))
-                .findFirst()
-                .orElseThrow(() -> new NotFoundException(Reservation.class, reservationId));
+    userService.getUserById(reserveResourceReq.getForUserId()); // check if user exist
 
-        reservation.setApproved(!reservation.isApproved());
-        resource = resourceRepository.save(resource);
-        ReservationResponse reservationResponse = reservationMapper.toReservationResponse(resource.getName(),
-                reservation);
-        NotificationMessage message = new NotificationMessage(reservationResponse.getUser()
-                .getUsername(),
-                "Your resource (" + resource.getName() + ") reservation has been " + (reservation.isApproved() ?
-                        "approved" : "declined"), reservationResponse.isApproved());
-        try {
-            this.notificationClient.sendNotificationMessage(message);
-        } catch (Exception ex) {
-            LoggingUtil.logException(ex, NotificationClient.class);
-        }
+    Reservation reservation = reservationMapper.fromRequest(reserveResourceReq, jwt);
+    resource.getReservations().add(reservation);
+    resource = resourceRepository.save(resource);
 
-        return reservationResponse;
+    return reservationMapper.toReservationResponse(resource.getName(), reservation);
+  }
+
+  public ReservationResponse handleResourceReservationApproval(String resourceId, String reservationId) {
+    Resource resource = resourceRepository.findById(resourceId)
+        .orElseThrow(() -> new NotFoundException(Resource.class, resourceId));
+    Reservation reservation = resource.getReservations()
+        .stream()
+        .filter(res -> res.getReservationId().equals(reservationId))
+        .findFirst()
+        .orElseThrow(() -> new NotFoundException(Reservation.class, reservationId));
+
+    reservation.setApproved(!reservation.isApproved());
+    resource = resourceRepository.save(resource);
+    ReservationResponse reservationResponse = reservationMapper.toReservationResponse(resource.getName(),
+        reservation);
+    NotificationMessage message = new NotificationMessage(reservationResponse.getUser()
+        .getUsername(),
+        "Your resource (" + resource.getName() + ") reservation has been " + (reservation.isApproved() ?
+            "approved" : "declined"), reservationResponse.isApproved());
+    try {
+      this.notificationClient.sendNotificationMessage(message);
+    } catch (Exception ex) {
+      LoggingUtil.logException(ex, NotificationClient.class);
     }
 
-    public void deleteReservation(final String resourceId, final String reservationId, Jwt jwt) {
-        Resource resource = resourceRepository.findById(resourceId)
-                .orElseThrow(() -> new NotFoundException(Resource.class, resourceId));
+    return reservationResponse;
+  }
 
-        Reservation reservation = resource.getReservations()
-                .stream()
-                .filter(res -> res.getReservationId().equals(reservationId))
-                .findFirst()
-                .orElseThrow(() -> new NotFoundException(Reservation.class, reservationId));
+  public void deleteReservation(final String resourceId, final String reservationId, Jwt jwt) {
 
-        //TODO: something smells here
-        resourceRepository.deleteById(resourceId);
-    }
+    Resource resource = resourceRepository.findById(resourceId)
+        .orElseThrow(() -> new NotFoundException(Resource.class, resourceId));
+
+    Reservation reservation = resource.getReservations()
+        .stream()
+        .filter(res -> res.getReservationId().equals(reservationId))
+        .findFirst()
+        .orElseThrow(() -> new NotFoundException(Reservation.class, reservationId));
+
+    JwtUtils.isRequestForUserValid(jwt, reservation.getForUserId());
+
+    resourceRepository.deleteReservationByReservationsReservationId(resourceId, reservationId);
+  }
 
 }

@@ -14,7 +14,7 @@ public class ResourceResponse {
   private String id;
   private String name;
   private String description;
-  private Integer amount;
+  private Long amount;
   private String backgroundColor;
   private List<ReservationResponse> reservations;
 }

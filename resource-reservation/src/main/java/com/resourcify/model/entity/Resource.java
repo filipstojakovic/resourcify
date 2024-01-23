@@ -26,7 +26,7 @@ public class Resource {
   @Indexed(unique = true)
   private String name;
   private String description;
-  private Integer amount = 1;
+  private Long amount = 1L;
   private String backgroundColor;
 
   private List<Reservation> reservations = new ArrayList<>();
@@ -38,10 +38,5 @@ public class Resource {
   private LocalDateTime lastModifiedDate;
   @LastModifiedBy
   private String modifiedByUser;
-  public Resource(final String id, final String name, final String description, Integer amount) {
-    this.id = id;
-    this.name = name;
-    this.description = description;
-    this.amount = amount;
-  }
+
 }
