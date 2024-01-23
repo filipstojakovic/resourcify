@@ -59,32 +59,41 @@ export class ResourceComponent implements OnInit {
   handleDateClick(arg: DateClickArg) {
     console.log(arg);
     const date = dateTimeUtil.combineDateWithCurrentTime(arg.date);
-    const dialogRef = this.dialog.open(ResourceReservationDialog, { data: { date: date } });
+    const dialogRef = this.dialog.open(ResourceReservationDialog, {data: {date: date}});
     dialogRef.afterClosed().subscribe(result => this.createReservation(result));
   }
 
   handleEventClick(arg: EventClickArg) {
-    const reservation: ResourceReservationType = arg.event._def.extendedProps['data'];
     // console.log(arg.event._def);
-    const dialogRef = this.dialog.open(ResourceReservationDialog, { data: { resourceReservation: reservation } });
+    const reservation: ResourceReservationType = arg.event._def.extendedProps['data'];
+    const dialogRef = this.dialog.open(ResourceReservationDialog, {data: {resourceReservation: reservation}});
 
     dialogRef.afterClosed().subscribe(result => {
 
       if (result == null) {
         return;
       }
-      //TODO:
-      // this.resourceReservationService.createResourceReservationReq(result).subscribe({
-      //       next: (res) => {
-      //         const resource = this.resources.find(resource => resource.name === res.resourceName);
-      //         const resourceEvent = this.resourceEventMapper.mapReservationToEventReservation(res, resource);
-      //         this.fullcalendar.getApi().addEvent(resourceEvent);
-      //       },
-      //       error: (err) => {
-      //         console.error(err.message);
-      //       },
-      //     },
-      // )
+      if (result.delete == true) {
+        const resource = this.resources.find(x => x.name === result.data.resourceName);
+        this.resourceReservationService.deleteUserResourceReservation(resource.id, result.data.reservationId).subscribe({
+            next: (res) => {
+              const calendarApi = this.fullcalendar.getApi();
+              const eventToRemove = calendarApi.getEventById(result.data.reservationId);
+
+              if (eventToRemove) {
+                eventToRemove.remove();
+                this.toastService.success("Reservation deleted!");
+              }
+            },
+            error: (err) => {
+              console.error(err.message);
+            },
+          },
+        )
+      } else {
+        // TODO: update
+        console.log("resource.component.ts > update event():");
+      }
     });
 
   }
@@ -93,36 +102,35 @@ export class ResourceComponent implements OnInit {
     this.loading = true;
     if (typeof resource === "string") {
       return this.resourceService.findAll().subscribe({
-            next: (res) => {
-              this.resources = res;
-              this.calendarOptions.events = this.resourceEventMapper.mapResourcesToReservationEvents(res);
-              this.loading = false;
-            },
-            error: (err) => {
-              console.error(err.message);
-              this.toastService.error('Error fetch resources');
-              this.loading = false;
-            },
-          },
-      )
-    }
-    return this.resourceService.findById(resource.id).subscribe({
           next: (res) => {
-            this.calendarOptions.events = this.resourceEventMapper.mapResourceToReservationEvents(res);
+            this.resources = res;
+            this.calendarOptions.events = this.resourceEventMapper.mapResourcesToReservationEvents(res);
             this.loading = false;
           },
           error: (err) => {
             console.error(err.message);
-            this.toastService.error(`Error fetch resource ${resource.name}`);
+            this.toastService.error('Error fetch resources');
             this.loading = false;
           },
         },
+      )
+    }
+    return this.resourceService.findById(resource.id).subscribe({
+        next: (res) => {
+          this.calendarOptions.events = this.resourceEventMapper.mapResourceToReservationEvents(res);
+          this.loading = false;
+        },
+        error: (err) => {
+          console.error(err.message);
+          this.toastService.error(`Error fetch resource ${resource.name}`);
+          this.loading = false;
+        },
+      },
     )
   }
 
   openReservationDialog() {
-    const dialogRef = this.dialog.open(ResourceReservationDialog, { data: null });
-
+    const dialogRef = this.dialog.open(ResourceReservationDialog, {data: null});
     dialogRef.afterClosed().subscribe(result => this.createReservation(result));
   }
 
@@ -131,16 +139,16 @@ export class ResourceComponent implements OnInit {
       return;
     }
     this.resourceReservationService.createResourceReservationReq(result).subscribe({
-          next: (res) => {
-            const resource = this.resources.find(resource => resource.name === res.resourceName);
-            const resourceEvent = this.resourceEventMapper.mapReservationToEventReservation(res, resource);
-            this.fullcalendar.getApi().addEvent(resourceEvent);
-            this.toastService.info("Reservation is waiting for approval");
-          },
-          error: (err) => {
-            console.error(err.message);
-          },
+        next: (res) => {
+          const resource = this.resources.find(resource => resource.name === res.resourceName);
+          const resourceEvent = this.resourceEventMapper.mapReservationToEventReservation(res, resource);
+          this.fullcalendar.getApi().addEvent(resourceEvent);
+          this.toastService.info("Reservation is waiting for approval");
         },
+        error: (err) => {
+          console.error(err.message);
+        },
+      },
     )
   }
 }

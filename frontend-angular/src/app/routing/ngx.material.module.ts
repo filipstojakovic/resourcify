@@ -18,7 +18,7 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
     dateInput: 'l, LTS',
   },
   display: {
-    dateInput: 'DD/MM/YYYY HH:mm',
+    dateInput: 'DD.MM.YYYY, HH:mm',
     monthYearLabel: 'MMM YYYY',
     dateA11yLabel: 'LL',
     monthYearA11yLabel: 'MMMM YYYY',
@@ -42,8 +42,8 @@ const CUSTOM_DATE_FORMATS: NgxMatDateFormats = {
   ],
   providers: [
     // { provide: NGX_MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: true } },
-    {provide: MAT_DATE_LOCALE, useValue: 'bs'},
-    {provide: NgxMatDateAdapter, useClass: NgxMatMomentAdapter},
+    { provide: MAT_DATE_LOCALE, useValue: 'bs' },
+    { provide: NgxMatDateAdapter, useClass: NgxMatMomentAdapter },
   ],
 })
 export class NgxMaterialModule {

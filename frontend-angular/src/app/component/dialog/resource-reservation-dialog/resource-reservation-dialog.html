@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>{{ data ? 'Update Resource' : 'Create Resource' }}</h1>
+<h1 mat-dialog-title>{{ data?.resourceReservation ? 'Update Resource' : 'Create Resource' }}</h1>
 
 <form [formGroup]="resourceReservationForm">
   <mat-dialog-content>
@@ -61,7 +61,8 @@
 
   </mat-dialog-content>
   <mat-dialog-actions>
-    <button *ngIf="isAllowedToChange(data?.resourceReservation)" color="warn"
+    <button *ngIf="isDeleteAllowed()" color="warn"
+            (click)="deleteReservation()"
             mat-raised-button>
       Delete
     </button>

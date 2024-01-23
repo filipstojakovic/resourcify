@@ -13,6 +13,8 @@ import {Constants} from "../../../constants/constants";
 import {UserType} from '../../../model/UserType';
 import {UserService} from '../../../service/user.service';
 import {ResourceReservationType} from "../../../model/ResourceReservationType";
+import {ResourceReservationService} from '../../../service/resource-reservation.service';
+import {ToastService} from 'angular-toastify';
 
 export type ResourceReservationDialogType = {
   resourceReservation?: ResourceReservationType;
@@ -72,7 +74,7 @@ export class ResourceReservationDialog {
         this.userService.getAllUsers().subscribe(res => this.users = res);
         //nema podataka ali je admin
       } else {
-        this.userService.getUserById( this.authService.getId()).subscribe(res => this.users.push(res));
+        this.userService.getUserById(this.authService.getId()).subscribe(res => this.users.push(res));
         //nema podataka, ali nije admin
       }
     }
@@ -80,19 +82,19 @@ export class ResourceReservationDialog {
     this.resourceReservationForm = this.fb.group({
       forUserId: [{
         value: displayReservation.forUserId,
-        disabled: !this.isAllowedToChange(data?.resourceReservation),
+        disabled: !this.isAllowedToChange(),
       }, Validators.required],
       resourceId: [{
         value: displayReservation.resourceId,
-        disabled: !this.isAllowedToChange(data?.resourceReservation),
+        disabled: !this.isAllowedToChange(),
       }, Validators.required],
       reservationDate: [
-        { value: displayReservation.reservationDate, disabled: !this.isAllowedToChange(data?.resourceReservation) },
+        { value: displayReservation.reservationDate, disabled: !this.isAllowedToChange() },
         [Validators.required, DateValidators.isThisMuchHoursInFuture(Constants.RESERVATION_TIME_DIFFERENCE)],
       ],
       description: [{
         value: displayReservation.description,
-        disabled: !this.isAllowedToChange(data?.resourceReservation),
+        disabled: !this.isAllowedToChange(),
       }, Validators.required],
     });
   }
@@ -107,11 +109,27 @@ export class ResourceReservationDialog {
     }
   }
 
-  async isAllowedToChange(data: ResourceReservationType) {
+  isDeleteAllowed() {
+    if (this.data?.resourceReservation) {
+      if (this.authService.isAdmin())
+        return true;
+      return this.authService.getId() === this.data.resourceReservation.user.id;
+    }
+    return false;
+  }
+
+  isAllowedToChange() {
     if (this.authService.isAdmin())
       return true;
-    if (data == null)
-      return true;
-    return this.authService.getId() === data.user.id;
+
+    return this.data == null || this.data.resourceReservation == null || this.data.date != null;
+  }
+
+  deleteReservation() {
+    const resourceReservation = this.data.resourceReservation;
+    this.dialogRef.close({
+      delete:true,
+      data: resourceReservation
+    });
   }
 }
