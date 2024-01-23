@@ -28,19 +28,17 @@ public class ReservationController {
 
   @PostMapping("reservations")
   public ResponseEntity<ReservationResponse> reserveResource(@Valid @RequestBody ReserveResourceRequest resourceRequest,
-                                                          @AuthenticationPrincipal Jwt jwt) {
+                                                             @AuthenticationPrincipal Jwt jwt) {
     ReservationResponse resource = resourceReservationService.reserveResource(resourceRequest, jwt);
     return new ResponseEntity<>(resource, HttpStatus.CREATED);
   }
 
   @PreAuthorize("hasRole('client-admin-role')")
-  @PutMapping("reservations")
-  public ResponseEntity<ReservationResponse> updateReserveResource(@Valid @RequestBody ReserveResourceRequest resourceRequest,
-                                                             @AuthenticationPrincipal Jwt jwt) {
-    //TODO: only user can update reservation
-//     ReservationResponse resource = resourceReservationService.reserveResource(resourceRequest, jwt);
-//     return new ResponseEntity<>(resource, HttpStatus.CREATED);
-    return null;
+  @PutMapping("reservations/{reservationId}")
+  public ResponseEntity<ReservationResponse> updateReserveResource(@PathVariable String reservationId,
+                                                                   @Valid @RequestBody ReserveResourceRequest resourceRequest) {
+    ReservationResponse resource = resourceReservationService.updateReserveResource(reservationId, resourceRequest);
+    return new ResponseEntity<>(resource, HttpStatus.CREATED);
   }
 
   @PreAuthorize("hasRole('client-admin-role')")

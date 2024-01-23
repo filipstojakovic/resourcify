@@ -20,4 +20,7 @@ export class ResourceReservationService {
     return this.http.patch<ResourceReservationType>(`${BackendUrl.RESOURCES}/${resourceId}/${BackendUrl.RESERVATIONS}/${reservationId}`, null)
   }
 
+  deleteUserResourceReservation(resourceId: string, reservationId: string) {
+    return this.http.delete(`${BackendUrl.RESOURCES}/${resourceId}/${BackendUrl.RESERVATIONS}/${reservationId}`)
+  }
 }

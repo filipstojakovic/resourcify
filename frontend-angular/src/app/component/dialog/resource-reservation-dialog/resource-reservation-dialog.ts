@@ -72,7 +72,7 @@ export class ResourceReservationDialog {
         this.userService.getAllUsers().subscribe(res => this.users = res);
         //nema podataka ali je admin
       } else {
-        this.userService.getUserById(this.authService.getId()).subscribe(res => this.users.push(res));
+        this.userService.getUserById( this.authService.getId()).subscribe(res => this.users.push(res));
         //nema podataka, ali nije admin
       }
     }
@@ -107,7 +107,7 @@ export class ResourceReservationDialog {
     }
   }
 
-  isAllowedToChange(data: ResourceReservationType) {
+  async isAllowedToChange(data: ResourceReservationType) {
     if (this.authService.isAdmin())
       return true;
     if (data == null)

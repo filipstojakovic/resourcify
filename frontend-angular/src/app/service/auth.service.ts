@@ -44,6 +44,11 @@ export class AuthService {
     return this.keycloak?.getKeycloakInstance()?.profile?.id as string;
   }
 
+  async getIdAsync() {
+    const userDetails = await this.keycloak.getKeycloakInstance().loadUserProfile();
+    return userDetails.id;
+  }
+
   isAdmin(): boolean {
     const keycloakInstance = this.keycloak.getKeycloakInstance();
     const isAdmin = keycloakInstance.hasResourceRole(AuthService.ADMIN_ROLE_NAME, AuthService.KEYCLOAK_CLIENT_NAME);

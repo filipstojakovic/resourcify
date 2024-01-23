@@ -11,6 +11,4 @@ public interface ResourceRepository extends MongoRepository<Resource, String> {
 
   Optional<Resource> findByName(String name);
 
-  void deleteReservationByReservationsReservationId(String resourceId, String reservationId);
-
 }
