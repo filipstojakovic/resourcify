@@ -3,7 +3,7 @@ import {ResourceType} from '../../model/ResourceType';
 import {MatDialog} from '@angular/material/dialog';
 import {ResourceService} from '../../service/resource.service';
 import {ResourceEventMapperService} from '../../mapper/resourceEventMapper.service';
-import {CalendarOptions, EventClickArg} from '@fullcalendar/core';
+import {CalendarOptions, DateSelectArg, EventClickArg} from '@fullcalendar/core';
 import {calendarConfig} from '../../component/calendar/calendarConfig';
 import {DateClickArg} from '@fullcalendar/interaction';
 import {ToastService} from 'angular-toastify';
@@ -16,6 +16,8 @@ import {FullCalendarComponent} from "@fullcalendar/angular";
 import {MatSelect} from "@angular/material/select";
 import {MatButton} from "@angular/material/button";
 import dateTimeUtil from '../../util/dateTimeUtil';
+import {NotificationEmitterService} from '../../service/notification-emitter.service';
+import {addDays, addHours} from "date-fns";
 
 @Component({
   selector: 'app-resource',
@@ -33,6 +35,7 @@ export class ResourceComponent implements OnInit {
     ...calendarConfig,
     dateClick: this.handleDateClick.bind(this),
     eventClick: this.handleEventClick.bind(this),
+    select: this.handleSelectEvent.bind(this),
   };
 
   selectedResource: ResourceType | string = "";
@@ -43,7 +46,9 @@ export class ResourceComponent implements OnInit {
               private resourceService: ResourceService,
               private resourceReservationService: ResourceReservationService,
               private toastService: ToastService,
+              private notificationEmitterService: NotificationEmitterService,
   ) {
+    this.notificationEmitterService.eventEmitter.subscribe(() => this.ngOnInit());
   }
 
   ngOnInit(): void {
@@ -57,8 +62,16 @@ export class ResourceComponent implements OnInit {
 
   handleDateClick(arg: DateClickArg) {
     console.log(arg);
-    const date = dateTimeUtil.combineDateWithCurrentTime(arg.date);
-    const dialogRef = this.dialog.open(ResourceReservationDialog, {data: {date: date}});
+    const start = dateTimeUtil.combineDateWithCurrentTime(arg.date);
+    const end = addHours(start, 8);
+    const dialogRef = this.dialog.open(ResourceReservationDialog, {data: {date: {start: start, end: end}}});
+    dialogRef.afterClosed().subscribe(result => this.createReservation(result));
+  }
+
+  handleSelectEvent(arg: DateSelectArg) {
+    const start: Date = dateTimeUtil.combineDateWithCurrentTime(arg.start);
+    const end: Date = dateTimeUtil.combineDateWithCurrentTime(addDays(arg.end, -1));
+    const dialogRef = this.dialog.open(ResourceReservationDialog, {data: {date: {start: start, end: end}}});
     dialogRef.afterClosed().subscribe(result => this.createReservation(result));
   }
 
@@ -153,9 +166,9 @@ export class ResourceComponent implements OnInit {
     } else {
       this.resourceReservationService.createResourceReservationReq(result.data).subscribe({
           next: (res) => {
-            const resource = this.resources.find(resource => resource.name === res.resourceName);
-            const resourceEvent = this.resourceEventMapper.mapReservationToEventReservation(res, resource);
-            this.fullcalendar.getApi().addEvent(resourceEvent);
+            // const resource = this.resources.find(resource => resource.name === res.resourceName);
+            // const resourceEvent = this.resourceEventMapper.mapReservationToEventReservation(res, resource);
+            // this.fullcalendar.getApi().addEvent(resourceEvent);
             this.toastService.info("Reservation is waiting for approval");
           },
           error: (err) => {

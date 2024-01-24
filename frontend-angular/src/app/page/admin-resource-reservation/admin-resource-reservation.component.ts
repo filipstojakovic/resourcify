@@ -7,6 +7,7 @@ import {ResourceService} from '../../service/resource.service';
 import {ToastService} from 'angular-toastify';
 import {ResourceReservationType} from '../../model/ResourceReservationType';
 import {ResourceReservationService} from '../../service/resource-reservation.service';
+import {StatusEnum} from "../../model/NotificationMessage";
 
 @Component({
   selector: 'app-resource-reservation-approval',
@@ -31,36 +32,36 @@ export class AdminResourceReservationComponent implements OnInit {
 
   ngOnInit() {
     this.resourceService.findAll().subscribe({
-          next: (result) => {
-            this.resources = result;
-            this.dataSource.data = this.resources.flatMap(resource => resource.reservations);
-            this.dataSource.sortingDataAccessor = this.customFullNameSort;
-            this.dataSource.filterPredicate = this.dataSourceFilter;
-            this.dataSource.sort = this.sort;
-          },
-          error: (err) => {
-            console.error(err.message);
-          },
+        next: (result) => {
+          this.resources = result;
+          this.dataSource.data = this.resources.flatMap(resource => resource.reservations);
+          this.dataSource.sortingDataAccessor = this.customFullNameSort;
+          this.dataSource.filterPredicate = this.dataSourceFilter;
+          this.dataSource.sort = this.sort;
         },
+        error: (err) => {
+          console.error(err.message);
+        },
+      },
     )
   }
 
 
-  changeApproval(row: ResourceReservationType) {
+  changeApproval(row: ResourceReservationType, status: StatusEnum) {
     const resource = this.resources.find(resource => resource.name == row.resourceName);
-    this.resourceReservationService.handleResourceReservationApproval(resource.id, row.reservationId).subscribe({
-          next: (res) => {
-            const reservations = this.dataSource.data;
-            this.dataSource.data = reservations.map(reservation => {
-              if (reservation.reservationId === row.reservationId)
-                return res;
-              return reservation;
-            });
-          },
-          error: (err) => {
-            console.error(err.message);
-          },
+    this.resourceReservationService.handleResourceReservationApproval(resource.id, row.reservationId, status).subscribe({
+        next: (res) => {
+          const reservations = this.dataSource.data;
+          this.dataSource.data = reservations.map(reservation => {
+            if (reservation.reservationId === row.reservationId)
+              return res;
+            return reservation;
+          });
         },
+        error: (err) => {
+          console.error(err.message);
+        },
+      },
     )
   }
 
@@ -102,4 +103,5 @@ export class AdminResourceReservationComponent implements OnInit {
     return false;
   }
 
+  protected readonly StatusEnum = StatusEnum;
 }

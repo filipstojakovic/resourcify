@@ -36,11 +36,26 @@
     <ng-container matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
         <td mat-cell *matCellDef="let row">
-<!--          TODO: maybe both buttons-->
-<!--            <button mat-raised-button color="{{row.approved?'warn':'primary'}}"-->
-<!--                    (click)="changeApproval(row)">-->
-<!--                {{row.approved ? "Decline" : "Accept"}}-->
-<!--            </button>-->
+            <ng-container *ngIf="row.status===StatusEnum.PENDING" style="">
+                <button mat-raised-button color="primary"
+                        style="margin-right: 5px"
+                        (click)="changeApproval(row, StatusEnum.APPROVED)">
+                    Approve
+                </button>
+                <button mat-raised-button color="warn"
+                        style="margin-left: 5px"
+                        (click)="changeApproval(row,StatusEnum.DECLINED)">
+                    Decline
+                </button>
+            </ng-container>
+            <button *ngIf="row.status===StatusEnum.DECLINED" mat-raised-button color="primary"
+                    (click)="changeApproval(row, StatusEnum.APPROVED)">
+                Approve
+            </button>
+            <button *ngIf="row.status===StatusEnum.APPROVED" mat-raised-button color="warn"
+                    (click)="changeApproval(row,StatusEnum.DECLINED)">
+                Decline
+            </button>
         </td>
     </ng-container>
 

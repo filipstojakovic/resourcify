@@ -16,7 +16,10 @@ import {ResourceReservationType} from "../../../model/ResourceReservationType";
 
 export type ResourceReservationDialogType = {
   resourceReservation?: ResourceReservationType;
-  date?: Date
+  date?: {
+    start: Date
+    end: Date
+  }
 }
 
 @Component({
@@ -41,7 +44,9 @@ export class ResourceReservationDialog {
 
     let displayReservation: ResourceReservationRequest = initResourceReservationReq();
     if (data?.date) {
-      displayReservation.fromDate = data.date;
+      displayReservation.fromDate = data.date.start;
+      displayReservation.toDate = data.date.end;
+
     }
     displayReservation.forUserId = this.authService.getId();
 
@@ -58,6 +63,8 @@ export class ResourceReservationDialog {
       displayReservation.forUserId = data.resourceReservation.user.id;
       displayReservation.description = data.resourceReservation.description;
       displayReservation.fromDate = data.resourceReservation.fromDate;
+      displayReservation.toDate = data.resourceReservation.toDate;
+
       if (this.authService.isAdmin()) {
         this.userService.getAllUsers().subscribe(res => this.users = res);
         //ima podataka i admin je
@@ -86,6 +93,9 @@ export class ResourceReservationDialog {
       }, Validators.required],
       fromDate: [
         {value: displayReservation.fromDate, disabled: !this.isAllowedToChange()}, this.validators(),
+      ],
+      toDate: [
+        {value: displayReservation.toDate, disabled: !this.isAllowedToChange()}, this.validators(),
       ],
       description: [{
         value: displayReservation.description,

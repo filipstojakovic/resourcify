@@ -31,13 +31,13 @@
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput [ngxMatDatetimePicker]="picker"
+      <input matInput [ngxMatDatetimePicker]="pickerStart"
              readonly
-             (click)="picker.open()"
+             (click)="pickerStart.open()"
              placeholder="Choose a date" formControlName="fromDate">
       <ngx-mat-datepicker-toggle matSuffix
-                                 [for]="picker"></ngx-mat-datepicker-toggle>
-      <ngx-mat-datetime-picker #picker>
+                                 [for]="pickerStart"></ngx-mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #pickerStart>
         <ngx-mat-datepicker-actions>
           <button mat-button ngxMatDatepickerCancel>Cancel</button>
           <button mat-raised-button color="primary" ngxMatDatepickerApply>
@@ -48,6 +48,28 @@
       <mat-error
           *ngIf="resourceReservationForm.get('fromDate').invalid
                     && resourceReservationForm.get('fromDate').touched">
+        Time difference has to be at least 12h.
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput [ngxMatDatetimePicker]="pickerEnd"
+             readonly
+             (click)="pickerEnd.open()"
+             placeholder="Choose a date" formControlName="toDate">
+      <ngx-mat-datepicker-toggle matSuffix
+                                 [for]="pickerEnd"></ngx-mat-datepicker-toggle>
+      <ngx-mat-datetime-picker #pickerEnd>
+        <ngx-mat-datepicker-actions>
+          <button mat-button ngxMatDatepickerCancel>Cancel</button>
+          <button mat-raised-button color="primary" ngxMatDatepickerApply>
+            Apply
+          </button>
+        </ngx-mat-datepicker-actions>
+      </ngx-mat-datetime-picker>
+      <mat-error
+              *ngIf="resourceReservationForm.get('toDate').invalid
+                    && resourceReservationForm.get('toDate').touched">
         Time difference has to be at least 12h.
       </mat-error>
     </mat-form-field>

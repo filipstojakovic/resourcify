@@ -3,6 +3,7 @@ import {HttpClient} from '@angular/common/http';
 import {BackendUrl} from '../constants/backendUrl';
 import {ResourceReservationType} from '../model/ResourceReservationType';
 import {ResourceReservationRequest} from '../model/request/ResourceReservationRequest';
+import {StatusEnum} from "../model/NotificationMessage";
 
 @Injectable({
   providedIn: 'root',
@@ -20,8 +21,8 @@ export class ResourceReservationService {
     return this.http.put(`${BackendUrl.RESOURCES}/${BackendUrl.RESERVATIONS}/${reservationId}`, resourceReservationReq);
   }
 
-  handleResourceReservationApproval(resourceId: string, reservationId: string) {
-    return this.http.patch<ResourceReservationType>(`${BackendUrl.RESOURCES}/${resourceId}/${BackendUrl.RESERVATIONS}/${reservationId}`, null)
+  handleResourceReservationApproval(resourceId: string, reservationId: string, status: StatusEnum) {
+    return this.http.patch<ResourceReservationType>(`${BackendUrl.RESOURCES}/${resourceId}/${BackendUrl.RESERVATIONS}/${reservationId}`, {status: status})
   }
 
   deleteUserResourceReservation(resourceId: string, reservationId: string) {
