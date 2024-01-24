@@ -1,6 +1,7 @@
 package com.resourcify.controller;
 
 import com.resourcify.model.request.ReserveResourceRequest;
+import com.resourcify.model.request.StatusRequest;
 import com.resourcify.model.response.ReservationResponse;
 import com.resourcify.service.ResourceReservationService;
 import jakarta.validation.Valid;
@@ -44,8 +45,10 @@ public class ReservationController {
   @PreAuthorize("hasRole('client-admin-role')")
   @PatchMapping("{resourceId}/reservations/{reservationId}")
   public ResponseEntity<ReservationResponse> handleResourceReservationApproval(@PathVariable String resourceId,
-                                                                               @PathVariable String reservationId) {
-    ReservationResponse resourceResponse = resourceReservationService.handleResourceReservationApproval(resourceId, reservationId);
+                                                                               @PathVariable String reservationId,
+                                                                               @RequestBody StatusRequest status
+  ) {
+    ReservationResponse resourceResponse = resourceReservationService.handleResourceReservationApproval(resourceId, reservationId, status);
     return ResponseEntity.ok(resourceResponse);
   }
 

@@ -13,8 +13,6 @@ import {Constants} from "../../../constants/constants";
 import {UserType} from '../../../model/UserType';
 import {UserService} from '../../../service/user.service';
 import {ResourceReservationType} from "../../../model/ResourceReservationType";
-import {ResourceReservationService} from '../../../service/resource-reservation.service';
-import {ToastService} from 'angular-toastify';
 
 export type ResourceReservationDialogType = {
   resourceReservation?: ResourceReservationType;
@@ -28,24 +26,22 @@ export type ResourceReservationDialogType = {
 })
 export class ResourceReservationDialog {
 
-  minDate = new Date();
   resources: ResourceType[] = [];
   users: UserType[] = [];
   resourceReservationForm: FormGroup;
 
   constructor(
-      public dialogRef: MatDialogRef<ResourceReservationDialog>,
-      private resourceService: ResourceService,
-      private authService: AuthService,
-      private userService: UserService,
-      @Inject(MAT_DIALOG_DATA) public data: ResourceReservationDialogType | null,
-      private fb: FormBuilder,
+    public dialogRef: MatDialogRef<ResourceReservationDialog>,
+    private resourceService: ResourceService,
+    private authService: AuthService,
+    private userService: UserService,
+    @Inject(MAT_DIALOG_DATA) public data: ResourceReservationDialogType | null,
+    private fb: FormBuilder,
   ) {
-    //TODO: if not admin && had data => lock all fields
 
     let displayReservation: ResourceReservationRequest = initResourceReservationReq();
     if (data?.date) {
-      displayReservation.reservationDate = data.date;
+      displayReservation.fromDate = data.date;
     }
     displayReservation.forUserId = this.authService.getId();
 
@@ -61,7 +57,7 @@ export class ResourceReservationDialog {
     if (data?.resourceReservation != null) {
       displayReservation.forUserId = data.resourceReservation.user.id;
       displayReservation.description = data.resourceReservation.description;
-      displayReservation.reservationDate = data.resourceReservation.reservationDate;
+      displayReservation.fromDate = data.resourceReservation.fromDate;
       if (this.authService.isAdmin()) {
         this.userService.getAllUsers().subscribe(res => this.users = res);
         //ima podataka i admin je
@@ -88,9 +84,8 @@ export class ResourceReservationDialog {
         value: displayReservation.resourceId,
         disabled: !this.isAllowedToChange(),
       }, Validators.required],
-      reservationDate: [
-        { value: displayReservation.reservationDate, disabled: !this.isAllowedToChange() },
-        [Validators.required, DateValidators.isThisMuchHoursInFuture(Constants.RESERVATION_TIME_DIFFERENCE)],
+      fromDate: [
+        {value: displayReservation.fromDate, disabled: !this.isAllowedToChange()}, this.validators(),
       ],
       description: [{
         value: displayReservation.description,
@@ -99,13 +94,23 @@ export class ResourceReservationDialog {
     });
   }
 
+  validators() {
+    if (!this.authService.isAdmin()) {
+      return [Validators.required, DateValidators.isThisMuchHoursInFuture(Constants.RESERVATION_TIME_DIFFERENCE)]
+    }
+    return [Validators.required]
+  }
+
   onCancelClicked(): void {
     this.dialogRef.close(null);
   }
 
   onSaveClicked() {
     if (this.resourceReservationForm.valid) {
-      this.dialogRef.close(this.resourceReservationForm.value);
+      this.dialogRef.close({
+        update: this.data?.resourceReservation != null,
+        data: this.resourceReservationForm.value,
+      });
     }
   }
 
@@ -128,8 +133,8 @@ export class ResourceReservationDialog {
   deleteReservation() {
     const resourceReservation = this.data.resourceReservation;
     this.dialogRef.close({
-      delete:true,
-      data: resourceReservation
+      delete: true,
+      data: resourceReservation,
     });
   }
 }

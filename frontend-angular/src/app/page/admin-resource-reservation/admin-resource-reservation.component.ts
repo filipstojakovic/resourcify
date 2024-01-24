@@ -69,7 +69,7 @@ export class AdminResourceReservationComponent implements OnInit {
       case 'name':
         return item.user.firstName + " " + item.user.lastName;
       case 'date':
-        return item.reservationDate;
+        return item.fromDate;
       default:
         return (item as any)[property];
     }

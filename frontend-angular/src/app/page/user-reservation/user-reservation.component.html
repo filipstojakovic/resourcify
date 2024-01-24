@@ -30,14 +30,15 @@
   <ng-container matColumnDef="date">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Date</th>
     <td mat-cell
-        *matCellDef="let row"> {{row.reservationDate | date:'dd.MM.Y, HH:mm'  }} </td>
+        *matCellDef="let row"> {{row.fromDate | date:'dd.MM.Y, HH:mm'  }} </td>
   </ng-container>
 
   <ng-container matColumnDef="status">
     <th mat-header-cell *matHeaderCellDef mat-sort-header>Action</th>
     <td mat-cell *matCellDef="let row">
-      <span *ngIf="row.approved" style="color:green">Approved</span>
-      <span *ngIf="!row.approved" style="color:red">Not approved</span>
+      <span *ngIf="row.status==StatusEnum.APPROVED" style="color:green">{{StatusEnum.APPROVED}}</span>
+      <span *ngIf="row.status==StatusEnum.DECLINED" style="color:red">{{StatusEnum.DECLINED}}</span>
+      <span *ngIf="row.status==StatusEnum.PENDING" style="color:lightslategray">{{StatusEnum.PENDING}}</span>
     </td>
   </ng-container>
 

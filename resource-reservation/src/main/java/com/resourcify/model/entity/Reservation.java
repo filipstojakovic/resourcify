@@ -1,5 +1,6 @@
 package com.resourcify.model.entity;
 
+import com.resourcify.common.model.enums.StatusEnum;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +15,8 @@ public class Reservation {
   private String forUserId;
   private String createdBy;
   private String description;
-  private LocalDateTime reservationDate;
-  private boolean isApproved = false;
+  private LocalDateTime fromDate;
+  private LocalDateTime toDate;
+  private StatusEnum status = StatusEnum.PENDING;
 
 }

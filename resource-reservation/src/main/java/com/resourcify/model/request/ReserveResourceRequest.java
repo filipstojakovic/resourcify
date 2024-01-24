@@ -17,6 +17,8 @@ public class ReserveResourceRequest {
   private String resourceId;
   private String description;
   @NotNull
-  private LocalDateTime reservationDate;
+  private LocalDateTime fromDate;
+  @NotNull
+  private LocalDateTime toDate;
 
 }

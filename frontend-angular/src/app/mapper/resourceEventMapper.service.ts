@@ -25,7 +25,7 @@ export class ResourceEventMapperService {
     return {
       id: reservation.reservationId,
       title: reservation.user.username + " (" + resource.name + ")",
-      start: reservation.reservationDate,
+      start: reservation.fromDate,
       allDay: true,
       backgroundColor: resource.backgroundColor, // || "#FF0000" //default color
       // textColor : complementaryColor,

@@ -9,6 +9,8 @@ import {AuthService} from '../../service/auth.service';
 import {ResourceReservationService} from '../../service/resource-reservation.service';
 import {ToastService} from 'angular-toastify';
 import {ConfirmDialogComponent} from "../../component/dialog/confirm-dialog/confirm-dialog.component";
+import {StatusEnum} from "../../model/NotificationMessage";
+import {NotificationEmitterService} from '../../service/notification-emitter.service';
 
 @Component({
   selector: 'app-user-reservation',
@@ -26,23 +28,28 @@ export class UserReservationComponent implements OnInit {
               private resourceReservationService: ResourceReservationService,
               private authService: AuthService,
               private toastService: ToastService,
+              private notificationEmitterService: NotificationEmitterService,
   ) {
+    this.notificationEmitterService.eventEmitter.subscribe(async () => {
+      console.log("user-reservation.component.ts > event emitter callback(): " + "");
+      await this.ngOnInit();
+    })
   }
 
   async ngOnInit() {
     const userId = await this.authService.getIdAsync();
     this.resourceService.findByUserId(userId).subscribe({
-        next: (result) => {
-          this.resources = result;
-          this.dataSource.data = this.resources.flatMap(resource => resource.reservations);
-          this.dataSource.sortingDataAccessor = this.customFullNameSort;
-          this.dataSource.filterPredicate = this.dataSourceFilter;
-          this.dataSource.sort = this.sort;
+          next: (result) => {
+            this.resources = result;
+            this.dataSource.data = this.resources.flatMap(resource => resource.reservations);
+            this.dataSource.sortingDataAccessor = this.customFullNameSort;
+            this.dataSource.filterPredicate = this.dataSourceFilter;
+            this.dataSource.sort = this.sort;
+          },
+          error: (err) => {
+            console.error(err.message);
+          },
         },
-        error: (err) => {
-          console.error(err.message);
-        },
-      },
     )
   }
 
@@ -56,14 +63,14 @@ export class UserReservationComponent implements OnInit {
         return;
       }
       this.resourceReservationService.deleteUserResourceReservation(resource.id, row.reservationId).subscribe({
-          next: (res) => {
-            this.toastService.success("Reservation deleted");
-            this.dataSource.data = this.dataSource.data.filter(x => x.reservationId !== row.reservationId);
+            next: (res) => {
+              this.toastService.success("Reservation deleted");
+              this.dataSource.data = this.dataSource.data.filter(x => x.reservationId !== row.reservationId);
+            },
+            error: (err) => {
+              console.error(err.message);
+            },
           },
-          error: (err) => {
-            console.error(err.message);
-          },
-        },
       )
     });
   }
@@ -73,7 +80,7 @@ export class UserReservationComponent implements OnInit {
       case 'name':
         return item.user.firstName + " " + item.user.lastName;
       case 'date':
-        return item.reservationDate;
+        return item.fromDate;
       default:
         return (item as any)[property];
     }
@@ -106,4 +113,5 @@ export class UserReservationComponent implements OnInit {
     return false;
   }
 
+  protected readonly StatusEnum = StatusEnum;
 }

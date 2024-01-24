@@ -16,7 +16,6 @@ import {FullCalendarComponent} from "@fullcalendar/angular";
 import {MatSelect} from "@angular/material/select";
 import {MatButton} from "@angular/material/button";
 import dateTimeUtil from '../../util/dateTimeUtil';
-import {ResourceReservationRequest} from '../../model/request/ResourceReservationRequest';
 
 @Component({
   selector: 'app-resource',
@@ -63,9 +62,10 @@ export class ResourceComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => this.createReservation(result));
   }
 
+  //update event if can
   handleEventClick(arg: EventClickArg) {
-    // console.log(arg.event._def);
     const reservation: ResourceReservationType = arg.event._def.extendedProps['data'];
+    // console.log(arg.event._def);
     const dialogRef = this.dialog.open(ResourceReservationDialog, {data: {resourceReservation: reservation}});
 
     dialogRef.afterClosed().subscribe(result => {
@@ -91,8 +91,18 @@ export class ResourceComponent implements OnInit {
           },
         )
       } else {
-        // TODO: update
-        console.log("resource.component.ts > update event():");
+        this.resourceReservationService.updateResourceReservation(reservation.reservationId, result.data).subscribe({
+            next: (res) => {
+              this.toastService.success("Reservation updated!")
+              const calendarApi = this.fullcalendar.getApi();
+              const eventToRemove = calendarApi.getEventById(reservation.reservationId);
+              //TODO: update event
+            },
+            error: (err) => {
+              console.error(err.message);
+            },
+          },
+        )
       }
     });
 
@@ -134,21 +144,25 @@ export class ResourceComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => this.createReservation(result));
   }
 
-  private createReservation(result: ResourceReservationRequest) {
+  private createReservation(result: any) {
     if (result == null) {
       return;
     }
-    this.resourceReservationService.createResourceReservationReq(result).subscribe({
-        next: (res) => {
-          const resource = this.resources.find(resource => resource.name === res.resourceName);
-          const resourceEvent = this.resourceEventMapper.mapReservationToEventReservation(res, resource);
-          this.fullcalendar.getApi().addEvent(resourceEvent);
-          this.toastService.info("Reservation is waiting for approval");
+    if (result.update) {
+
+    } else {
+      this.resourceReservationService.createResourceReservationReq(result.data).subscribe({
+          next: (res) => {
+            const resource = this.resources.find(resource => resource.name === res.resourceName);
+            const resourceEvent = this.resourceEventMapper.mapReservationToEventReservation(res, resource);
+            this.fullcalendar.getApi().addEvent(resourceEvent);
+            this.toastService.info("Reservation is waiting for approval");
+          },
+          error: (err) => {
+            console.error(err.message);
+          },
         },
-        error: (err) => {
-          console.error(err.message);
-        },
-      },
-    )
+      )
+    }
   }
 }

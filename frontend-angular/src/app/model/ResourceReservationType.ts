@@ -1,10 +1,12 @@
 import {UserType} from './UserType';
+import {Status} from './NotificationMessage';
 
 export type ResourceReservationType = {
   reservationId: string;
   resourceName: string;
   user: UserType;
   description: string;
-  reservationDate: Date;
-  approved: boolean;
+  fromDate: Date;
+  toDate: Date;
+  status: Status;
 }

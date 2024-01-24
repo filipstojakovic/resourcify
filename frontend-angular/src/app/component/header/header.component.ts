@@ -3,7 +3,8 @@ import {Paths} from '../../constants/paths';
 import {AuthService} from '../../service/auth.service';
 import {SocketService} from '../../service/socket.service';
 import {ToastService} from 'angular-toastify';
-import {NotificationMessage} from '../../model/NotificationMessage';
+import {NotificationMessage, StatusEnum} from '../../model/NotificationMessage';
+import {NotificationEmitterService} from '../../service/notification-emitter.service';
 
 @Component({
   selector: 'app-header',
@@ -16,7 +17,9 @@ export class HeaderComponent implements OnInit {
 
   constructor(private authService: AuthService,
               private socketService: SocketService,
-              private toastService: ToastService) {
+              private toastService: ToastService,
+              private notificationEmitterService: NotificationEmitterService,
+  ) {
   }
 
   getLoggedUserName() {
@@ -36,13 +39,14 @@ export class HeaderComponent implements OnInit {
       if (res) {
         this.socketService.connect().subscribe({
               next: (res) => {
-                console.log("header.component.ts > next(): " + JSON.stringify(res, null, 2));
+                // console.log("header.component.ts > next(): " + JSON.stringify(res, null, 2));
                 const notificationMessage: NotificationMessage = JSON.parse(res);
-                if (notificationMessage.approved) {
+                if (notificationMessage.status === StatusEnum.APPROVED) {
                   this.toastService.success(notificationMessage.message);
-                } else {
+                } else if (notificationMessage.status === StatusEnum.DECLINED) {
                   this.toastService.error(notificationMessage.message);
                 }
+                this.notificationEmitterService.eventEmitter.emit();
               },
               error: (err) => {
                 console.error(err.message);

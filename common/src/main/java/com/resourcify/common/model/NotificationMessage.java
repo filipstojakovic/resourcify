@@ -1,5 +1,6 @@
 package com.resourcify.common.model;
 
+import com.resourcify.common.model.enums.StatusEnum;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -18,5 +19,5 @@ public class NotificationMessage {
   @NotEmpty
   private String message;
 
-  private boolean isApproved;
+  private StatusEnum status;
 }

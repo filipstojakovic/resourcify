@@ -2,6 +2,7 @@ package com.resourcify.mapper;
 
 import com.resourcify.common.model.User;
 import com.resourcify.model.entity.Resource;
+import com.resourcify.common.model.enums.StatusEnum;
 import com.resourcify.model.request.ResourceRequest;
 import com.resourcify.model.response.ReservationResponse;
 import com.resourcify.model.response.ResourceResponse;
@@ -29,7 +30,7 @@ public class ResourceMapper {
     List<User> users = userService.getAllUser();
     List<ReservationResponse> reservationResponses = resource.getReservations().stream().filter(reservation -> {
       if (!isAdmin) {
-        return reservation.isApproved();
+        return StatusEnum.APPROVED.equals(reservation.getStatus());
       }
       return true;
     }).map(reservation -> reservationMapper.toReservationResponse(resource.getName(), reservation, users)).toList();

@@ -16,6 +16,10 @@ export class ResourceReservationService {
     return this.http.post<ResourceReservationType>(`${BackendUrl.RESOURCES}/${BackendUrl.RESERVATIONS}`, resourceReservationReq);
   }
 
+  updateResourceReservation(reservationId: string, resourceReservationReq: ResourceReservationRequest) {
+    return this.http.put(`${BackendUrl.RESOURCES}/${BackendUrl.RESERVATIONS}/${reservationId}`, resourceReservationReq);
+  }
+
   handleResourceReservationApproval(resourceId: string, reservationId: string) {
     return this.http.patch<ResourceReservationType>(`${BackendUrl.RESOURCES}/${resourceId}/${BackendUrl.RESERVATIONS}/${reservationId}`, null)
   }
