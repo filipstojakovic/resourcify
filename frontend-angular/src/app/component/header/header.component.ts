@@ -39,7 +39,6 @@ export class HeaderComponent implements OnInit {
       if (res) {
         this.socketService.connect().subscribe({
               next: (res) => {
-                // console.log("header.component.ts > next(): " + JSON.stringify(res, null, 2));
                 const notificationMessage: NotificationMessage = JSON.parse(res);
                 if (notificationMessage.status === StatusEnum.APPROVED) {
                   this.toastService.success(notificationMessage.message);

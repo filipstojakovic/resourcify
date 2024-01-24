@@ -12,4 +12,6 @@ public interface NotificationClient {
   @PostMapping("ws/notifications")
   void sendNotificationMessage(@Valid @RequestBody NotificationMessage notificationMessage);
 
+  @PostMapping("ws/notifications/admin")
+  void sendNewReservationNotificationMessage(@Valid @RequestBody NotificationMessage notificationMessage);
 }

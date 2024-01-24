@@ -1,5 +1,6 @@
 import amqplib = require('amqplib');
 import {Channel} from "amqplib";
+import {NotificationMessage} from "./NotificationMessageType";
 
 let rabbitConnection = null;
 const rabbitChannels: Map<string, Channel> = new Map<string, Channel>();
@@ -8,8 +9,7 @@ export async function connectToRabbitMQ() {
   rabbitConnection = await amqplib.connect(process.env.AMQP_URL);
 }
 
-export async function sendToRabbitMQ(notificationMessage) {
-  const queueName = notificationMessage.forUsername;
+export async function sendToRabbitMQ(notificationMessage: NotificationMessage, queueName:string) {
   let rabbitChannel = rabbitChannels.get(queueName);
   if (rabbitChannel == null) {
     rabbitChannel = await createUserRabbitChannel(queueName);
@@ -19,11 +19,10 @@ export async function sendToRabbitMQ(notificationMessage) {
   rabbitChannel.sendToQueue(queueName, Buffer.from(JSON.stringify(notificationMessage)));
 }
 
-export async function consumeFromChannel(username: string, ws) {
-  const queueName = username;
+export async function consumeFromChannel(queueName:string , username: string, ws) {
   const rabbitChannel = rabbitChannels.get(username);
   await rabbitChannel.assertQueue(queueName, {durable: true});
-  rabbitChannel.consume(queueName, (message) => {
+  await rabbitChannel.consume(queueName, (message) => {
       const content = message.content.toString();
       console.log('receiving from queue name: ' + queueName);
 
@@ -36,10 +35,9 @@ export async function consumeFromChannel(username: string, ws) {
   );
 }
 
-export async function createUserRabbitChannel(username: string) {
-  const queueName = username;
+export async function createUserRabbitChannel(queueName: string) {
   const rabbitChannel = await rabbitConnection.createChannel();
-  rabbitChannels.set(username, rabbitChannel);
+  rabbitChannels.set(queueName, rabbitChannel);
   return rabbitChannel;
 }
 

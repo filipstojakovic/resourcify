@@ -1,6 +1,7 @@
 import * as passport from 'passport';
 import {sendToRabbitMQ} from './rabbitmq';
 import {Request} from 'express'
+import {isValidNotificationMessage, NotificationMessage} from "./NotificationMessageType";
 import KeycloakBearerStrategy = require('passport-keycloak-bearer');
 
 passport.use(new KeycloakBearerStrategy({
@@ -9,38 +10,39 @@ passport.use(new KeycloakBearerStrategy({
 }, (jwtPayload, done) => {
 
   const username = jwtPayload['preferred_username'];
-  return done(null, username);
+  const roles = jwtPayload['resource_access']['frontend']['roles']
+  return done(null, {username, roles});
 }));
 
-
-type NotificationMessage = {
-  forUsername: string;
-  message: string;
-  status: string;
-}
+export const ADMIN_RESERVATION_EVENT = "admin_reservation_event";
 
 export function setupExpressApp(app) {
   app.post(
-      '/ws/notifications',
-      passport.authenticate('keycloak', { session: false }),
-      (req: Request<{}, {}, NotificationMessage>, res) => {
-        const body: NotificationMessage = req.body;
-        if (!isValidNotificationMessage(body)) {
-          return res.status(400).json({ error: 'Invalid request body' });
-        }
+    '/ws/notifications',
+    passport.authenticate('keycloak', {session: false}),
+    (req: Request<{}, {}, NotificationMessage>, res) => {
+      const body: NotificationMessage = req.body;
+      if (!isValidNotificationMessage(body)) {
+        return res.status(400).json({error: 'Invalid request body'});
+      }
 
-        sendToRabbitMQ(body).catch(console.error);
-        res.send('pong');
-      },
+      sendToRabbitMQ(body, body.forUsername).catch(console.error);
+      res.send('pong');
+    },
   );
-}
+  app.post(
+    '/ws/notifications/admin',
+    passport.authenticate('keycloak', {session: false}),
+    (req, res) => {
+      // const roles = passport.user.roles
+      const body: NotificationMessage = {
+        forUsername: "admin",
+        message: "admin",
+        status: null,
+      }
 
-function isValidNotificationMessage(obj: any): obj is NotificationMessage {
-  return (
-      typeof obj === 'object' &&
-      obj !== null &&
-      typeof obj.forUsername === 'string' &&
-      typeof obj.message === 'string' &&
-      typeof obj.status === 'string'
+      sendToRabbitMQ(body, ADMIN_RESERVATION_EVENT).catch(console.error);
+      res.send('pong');
+    },
   );
 }

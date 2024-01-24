@@ -8,6 +8,7 @@ import {ToastService} from 'angular-toastify';
 import {ResourceReservationType} from '../../model/ResourceReservationType';
 import {ResourceReservationService} from '../../service/resource-reservation.service';
 import {StatusEnum} from "../../model/NotificationMessage";
+import {NotificationEmitterService} from "../../service/notification-emitter.service";
 
 @Component({
   selector: 'app-resource-reservation-approval',
@@ -25,9 +26,11 @@ export class AdminResourceReservationComponent implements OnInit {
   constructor(public dialog: MatDialog,
               private resourceService: ResourceService,
               private resourceReservationService: ResourceReservationService,
-              private toastService: ToastService,
+              private notificationEmitterService: NotificationEmitterService,
   ) {
-
+    this.notificationEmitterService.eventEmitter.subscribe(() => {
+      this.ngOnInit();
+    })
   }
 
   ngOnInit() {
