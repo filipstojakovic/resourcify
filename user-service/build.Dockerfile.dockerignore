@@ -1,5 +1,12 @@
 *.jar
-node_modules/
 .idea
 .git
 Concepts
+node_modules
+node_modules/*
+**/node_modules
+**/frontend-angular
+**/notification-service
+**/npm-debug.log
+**/target
+

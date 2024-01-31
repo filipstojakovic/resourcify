@@ -25,8 +25,8 @@ export class AdminResourceReservationComponent implements OnInit {
 
   constructor(public dialog: MatDialog,
               private resourceService: ResourceService,
-              private resourceReservationService: ResourceReservationService,
               private notificationEmitterService: NotificationEmitterService,
+              private resourceReservationService: ResourceReservationService,
   ) {
     this.notificationEmitterService.eventEmitter.subscribe(() => {
       this.ngOnInit();

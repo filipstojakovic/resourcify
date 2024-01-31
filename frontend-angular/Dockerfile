@@ -1,8 +1,10 @@
-FROM node:16.16-alpine
-RUN mkdir /home/node/app && chown node:node /home/node/app
-RUN mkdir /home/node/app/node_modules && chown node:node /home/node/app/node_modules
-WORKDIR  /home/node/app
-USER node
-COPY --chown=node:node package.json package-lock.json ./
-RUN npm ci --quiet
-COPY --chown=node:node . .
+FROM node:16.16-alpine AS builder
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build-docker
+
+FROM nginx
+COPY --from=builder /app/dist/frontend/ /usr/share/nginx/html
+COPY /nginx/nginx-custom.conf /etc/nginx/conf.d/default.conf

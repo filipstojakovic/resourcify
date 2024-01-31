@@ -1,4 +1,6 @@
-<h1 mat-dialog-title>{{ data?.resourceReservation ? 'Update Resource' : 'Create Resource' }}</h1>
+<h1 mat-dialog-title style="text-align: center">
+  {{ data?.resourceReservation ? 'Update Resource' : 'Create Resource' }}
+</h1>
 
 <form [formGroup]="resourceReservationForm">
   <mat-dialog-content>
@@ -68,9 +70,14 @@
         </ngx-mat-datepicker-actions>
       </ngx-mat-datetime-picker>
       <mat-error
-              *ngIf="resourceReservationForm.get('toDate').invalid
+          *ngIf="resourceReservationForm.get('toDate').hasError('required')
                     && resourceReservationForm.get('toDate').touched">
-        Time difference has to be at least 12h.
+        Time is required
+      </mat-error>
+      <mat-error
+          *ngIf="resourceReservationForm.get('toDate').hasError('dateLessThan')
+                    && resourceReservationForm.get('toDate').touched">
+        End date must be after start date
       </mat-error>
     </mat-form-field>
 
@@ -81,6 +88,10 @@
     </mat-form-field>
 
   </mat-dialog-content>
+
+  <mat-error *ngIf="isResourceNotAvailable" style="text-align: center">
+    This resource is not available in given time span
+  </mat-error>
   <mat-dialog-actions>
     <button *ngIf="isDeleteAllowed()" color="warn"
             (click)="deleteReservation()"
@@ -89,7 +100,8 @@
     </button>
     <button (click)="onCancelClicked()" mat-button>Cancel
     </button>
-    <button *ngIf="isAllowedToChange()" (click)="onSaveClicked()" color="primary" mat-raised-button>Save
+    <button *ngIf="isAllowedToChange()" (click)="onSaveClicked()"
+            color="primary" mat-raised-button>Save
     </button>
   </mat-dialog-actions>
 </form>

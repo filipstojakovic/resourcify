@@ -13,6 +13,8 @@ import {Constants} from "../../../constants/constants";
 import {UserType} from '../../../model/UserType';
 import {UserService} from '../../../service/user.service';
 import {ResourceReservationType} from "../../../model/ResourceReservationType";
+import {OverlapService} from '../../../service/overlap.service';
+import dateTimeUtil from '../../../util/dateTimeUtil';
 
 export type ResourceReservationDialogType = {
   resourceReservation?: ResourceReservationType;
@@ -32,14 +34,16 @@ export class ResourceReservationDialog {
   resources: ResourceType[] = [];
   users: UserType[] = [];
   resourceReservationForm: FormGroup;
+  isResourceNotAvailable: boolean = false;
 
   constructor(
-    public dialogRef: MatDialogRef<ResourceReservationDialog>,
-    private resourceService: ResourceService,
-    private authService: AuthService,
-    private userService: UserService,
-    @Inject(MAT_DIALOG_DATA) public data: ResourceReservationDialogType | null,
-    private fb: FormBuilder,
+      public dialogRef: MatDialogRef<ResourceReservationDialog>,
+      private resourceService: ResourceService,
+      private authService: AuthService,
+      private userService: UserService,
+      private overlapService: OverlapService,
+      @Inject(MAT_DIALOG_DATA) public data: ResourceReservationDialogType | null,
+      private fb: FormBuilder,
   ) {
 
     let displayReservation: ResourceReservationRequest = initResourceReservationReq();
@@ -92,23 +96,43 @@ export class ResourceReservationDialog {
         disabled: !this.isAllowedToChange(),
       }, Validators.required],
       fromDate: [
-        {value: displayReservation.fromDate, disabled: !this.isAllowedToChange()}, this.validators(),
+        {
+          value: displayReservation.fromDate,
+          disabled: !this.isAllowedToChange(),
+        },
+        this.fromDateValidators(),
       ],
       toDate: [
-        {value: displayReservation.toDate, disabled: !this.isAllowedToChange()}, this.validators(),
+        {
+          value: displayReservation.toDate,
+          disabled: !this.isAllowedToChange(),
+        },
+        this.toDateValidators(),
       ],
       description: [{
         value: displayReservation.description,
         disabled: !this.isAllowedToChange(),
       }, Validators.required],
     });
+    this.resourceReservationForm.valueChanges.subscribe(() => this.isResourceNotAvailable = this.shouldShowError())
   }
 
-  validators() {
+  fromDateValidators() {
+    const validators = [Validators.required]
     if (!this.authService.isAdmin()) {
-      return [Validators.required, DateValidators.isThisMuchHoursInFuture(Constants.RESERVATION_TIME_DIFFERENCE)]
+      validators.push(DateValidators.isThisMuchHoursInFuture(Constants.RESERVATION_TIME_DIFFERENCE));
     }
-    return [Validators.required]
+    return validators;
+  }
+
+  toDateValidators() {
+    const validators = [
+      Validators.required,
+      DateValidators.dateLessThanValidator('fromDate')]
+    if (!this.authService.isAdmin()) {
+      validators.push(DateValidators.isThisMuchHoursInFuture(Constants.RESERVATION_TIME_DIFFERENCE))
+    }
+    return validators;
   }
 
   onCancelClicked(): void {
@@ -116,7 +140,7 @@ export class ResourceReservationDialog {
   }
 
   onSaveClicked() {
-    if (this.resourceReservationForm.valid) {
+    if (this.resourceReservationForm.valid && !this.isResourceNotAvailable) {
       this.dialogRef.close({
         update: this.data?.resourceReservation != null,
         data: this.resourceReservationForm.value,
@@ -147,4 +171,16 @@ export class ResourceReservationDialog {
       data: resourceReservation,
     });
   }
+
+
+  shouldShowError() {
+    if (this.resourceReservationForm.valid) {
+      const resource = this.resources.find(x => x.id === this.resourceReservationForm.get('resourceId').value)
+      const startDate = dateTimeUtil.convertFormControlMomentToDate(this.resourceReservationForm.get('fromDate'));
+      const endDate = dateTimeUtil.convertFormControlMomentToDate(this.resourceReservationForm.get('toDate'));
+      return !this.overlapService.isResourceAvailable(resource.reservations, startDate, endDate, resource.amount);
+    }
+    return false;
+  }
+
 }

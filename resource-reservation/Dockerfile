@@ -1,4 +1,4 @@
-FROM eclipse-temurin:21.0.1_12-jre
+FROM eclipse-temurin:21-jre-alpine
 WORKDIR /opt/resource-service
 COPY ./target/*.jar ./resource-service.jar
 EXPOSE 8082

@@ -35,6 +35,12 @@ services:
     depends_on:
       - keycloak-postgres
     entrypoint: '/opt/bitnami/keycloak/bin/kc.sh start-dev --import-realm'
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -s -o /dev/null http://keycloak:8080/health/live" ]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 10s
 
     ################## API-GATEWAY ##################
   api-gateway:
@@ -50,7 +56,12 @@ services:
     environment:
       PORT: 8083
     depends_on:
-      - user-service
+      user-service:
+        condition: service_started
+      resource-reservation:
+        condition: service_started
+      notification-service:
+        condition: service_started
 
   ################## RESOURCE-RESERVATION ##################
   resource-reservation:
@@ -65,7 +76,10 @@ services:
     environment:
       PORT: 8082
     depends_on:
-      - keycloak
+      keycloak:
+        condition: service_healthy
+      resource-reservation-mongo:
+        condition: service_started
 
   resource-reservation-mongo:
     image: mongo
@@ -91,7 +105,8 @@ services:
     environment:
       PORT: 8084
     depends_on:
-      - keycloak
+      keycloak:
+        condition: service_healthy
 
   ################## RABBITMQ ##################
   rabbitmq:
@@ -118,23 +133,19 @@ services:
     volumes:
       - ./notification-service:/home/node/app
     depends_on:
-      - 'keycloak'
-      - 'rabbitmq'
+      keycloak:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_started
 
   ################## FRONTEND ##################
   frontend:
     build: ./frontend-angular
-    command: 'sh -c "npm run start-docker"'
-    working_dir: /home/node/app
     ports:
-      - '4200:4200'
-    volumes:
-      - ./frontend-angular/:/home/node/app
-      - node_modules:/home/node/app/node_modules
+      - '4200:80'
     depends_on:
-      - 'keycloak'
-      - 'api-gateway'
-      - 'user-service'
+      api-gateway:
+        condition: service_started
 
 volumes:
   data:
