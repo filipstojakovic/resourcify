@@ -29,6 +29,13 @@ public class Resource {
   private Long amount = 1L;
   private String backgroundColor;
 
+  public Resource(final String name, final String description, final Long amount, final String backgroundColor) {
+    this.name = name;
+    this.description = description;
+    this.amount = amount;
+    this.backgroundColor = backgroundColor;
+  }
+
   private List<Reservation> reservations = new ArrayList<>();
   @CreatedDate
   private LocalDateTime createdDate;

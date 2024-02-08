@@ -1,5 +1,5 @@
 version: "3.8"
-name: resourcify-build
+name: resourcify-dev
 
 services:
   ################## KEYCLOAK ##################
@@ -35,20 +35,10 @@ services:
     depends_on:
       - keycloak-postgres
     entrypoint: '/opt/bitnami/keycloak/bin/kc.sh start-dev --import-realm'
-    healthcheck:
-      test: [ "CMD-SHELL", "curl -s -o /dev/null http://keycloak:8080/health/live" ]
-      interval: 10s
-      timeout: 10s
-      retries: 10
-      start_period: 10s
 
-    ################## API-GATEWAY ##################
+  ################## API-GATEWAY ##################
   api-gateway:
-    build:
-      dockerfile: ./api-gateway/build.Dockerfile
-      args:
-        DOCKER_BUILDKIT: 1
-      #context: ./api-gateway # Note: we don't use this because then we can't copy parent from this context. We need parent folder to build jars
+    build: ./api-gateway
     ports:
       - '8083:8083'
     env_file:
@@ -56,19 +46,11 @@ services:
     environment:
       PORT: 8083
     depends_on:
-      user-service:
-        condition: service_started
-      resource-reservation:
-        condition: service_started
-      notification-service:
-        condition: service_started
+      - user-service
 
   ################## RESOURCE-RESERVATION ##################
   resource-reservation:
-    build:
-      dockerfile: ./resource-reservation/build.Dockerfile
-      args:
-        DOCKER_BUILDKIT: 1
+    build: ./resource-reservation
     ports:
       - '8082:8082'
     env_file:
@@ -76,10 +58,7 @@ services:
     environment:
       PORT: 8082
     depends_on:
-      keycloak:
-        condition: service_healthy
-      resource-reservation-mongo:
-        condition: service_started
+      - keycloak
 
   resource-reservation-mongo:
     image: mongo
@@ -94,10 +73,7 @@ services:
 
     ################## USER-SERVICE ##################
   user-service:
-    build:
-      dockerfile: ./user-service/build.Dockerfile
-      args:
-        DOCKER_BUILDKIT: 1
+    build: ./user-service
     ports:
       - '8084:8084'
     env_file:
@@ -105,8 +81,7 @@ services:
     environment:
       PORT: 8084
     depends_on:
-      keycloak:
-        condition: service_healthy
+      - keycloak
 
   ################## RABBITMQ ##################
   rabbitmq:
@@ -126,28 +101,30 @@ services:
   notification-service:
     image: 'node:16.16-alpine'
     working_dir: '/home/node/app'
-    command: 'sh -c "apk --no-cache add curl && while ! curl -f http://keycloak:8080/realms/resourcify; do sleep 1; done && npm run start-docker"'
+    command: 'sh -c "apk --no-cache add curl && while ! curl -f http://keycloak:8080/realms/resourcify; do sleep 1; done && npm run start-docker-dev"'
     restart: always
     ports:
       - '8000:8000'
     volumes:
       - ./notification-service:/home/node/app
     depends_on:
-      keycloak:
-        condition: service_healthy
-      rabbitmq:
-        condition: service_started
+      - 'keycloak'
+      - 'rabbitmq'
 
   ################## FRONTEND ##################
   frontend:
-    build: ./frontend-angular
+    image: 'node:16.16-alpine'
+    working_dir: '/home/node/app'
+    command: 'sh -c "npm run start-docker"'
     ports:
-      - '4200:80'
+      - '4200:4200'
+      - "49153:49153"  # This is for LiveReload
+    volumes:
+      - ./frontend-angular:/home/node/app
     depends_on:
-      api-gateway:
-        condition: service_started
+      - 'keycloak'
 
 volumes:
   data:
   keycloak_postgres_db:
-  node_modules:
+

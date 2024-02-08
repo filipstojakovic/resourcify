@@ -43,3 +43,4 @@ build/
 ### Mac OS ###
 .DS_Store
 /notification-service/node_modules
+/measure-docker-compose.ps1

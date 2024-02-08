@@ -19,5 +19,7 @@ const httpServer = app.listen(port, async () => {
 connectToRabbitMQ().then(() => {
   setupExpressApp(app);
   setupWebSocketServer(httpServer);
+}).catch((ex) => {
+  throw new Error("Unable to connect to: " + ex.port);
 });
 
