@@ -18,7 +18,7 @@ import {NotificationEmitterService} from '../../service/notification-emitter.ser
   styleUrls: ['./user-reservation.component.css'],
 })
 export class UserReservationComponent implements OnInit {
-  displayedColumns: string[] = ['name', 'resourceName', 'description', 'date', 'status', 'action'];
+  displayedColumns: string[] = ['name', 'resourceName', 'description', 'from_date',"to_date", 'status', 'action'];
   @ViewChild(MatSort) sort: MatSort;
   resources: ResourceType[] = [];
   dataSource = new MatTableDataSource([] as ResourceReservationType[]);

@@ -17,7 +17,7 @@ import {NotificationEmitterService} from "../../service/notification-emitter.ser
 })
 export class AdminResourceReservationComponent implements OnInit {
 
-  displayedColumns: string[] = ['name', 'resourceName', 'description', 'date', 'action'];
+  displayedColumns: string[] = ['name', 'resourceName', 'description', 'from_date','to_date', 'action'];
   @ViewChild(MatSort) sort: MatSort;
   dataSource = new MatTableDataSource([] as ResourceReservationType[]);
 

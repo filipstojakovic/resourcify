@@ -1,10 +1,16 @@
 For development only: <br/>
 `
-docker-compose up -V -d --build`
+docker compose -f .\docker-compose-dev.yml up -d -V --build
+`
 
 For complete build and run: <br/>
 `
-docker compose -f .\docker-compose-multiStage.yml up -d -V --build
+docker compose up -d -V --build
+`
+
+To rebuild and start specific service from docker compose: 
+`
+docker-compose up -d --no-deps --build <service_name>
 `
 
 [Keycloak configuration](./keycloak/README.md).
