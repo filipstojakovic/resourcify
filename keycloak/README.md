@@ -1,4 +1,4 @@
-To get started with Docker how to use it with Docker as well as how to configure it,
+To get started with Keycloak how to use it with Docker as well as how to configure it,
 **[Click here](https://www.keycloak.org/getting-started/getting-started-docker)**
 
 To export a Keycloak realm along **with its users**, utilize the Keycloak container terminal with the following command:
