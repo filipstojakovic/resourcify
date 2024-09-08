@@ -130,7 +130,7 @@ services:
   ################## NOTIFICATION-SERVICE ##################
   notification-service:
     build: ./notification-service
-    restart: on-failure
+    restart: unless-stopped
     ports:
       - '8000:8000'
     depends_on:

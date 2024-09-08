@@ -1,0 +1,9 @@
+node_modules
+.dockerignore
+.idea
+.git
+Concepts
+*.jar
+.angular
+**/node_modules
+node_modules/**

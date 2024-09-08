@@ -11,5 +11,6 @@
     "moduleResolution": "node",
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
+    "outDir": "dist"
   },
 }

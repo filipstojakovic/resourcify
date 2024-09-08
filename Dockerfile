@@ -1,23 +1,23 @@
-FROM maven:3.9.6-eclipse-temurin-21-alpine AS build
+FROM maven:3.9.6-eclipse-temurin-21-alpine AS dependencies
 WORKDIR /resourcify
 COPY ./pom.xml ./pom.xml
 COPY ./api-gateway/pom.xml ./api-gateway/pom.xml
 COPY ./user-service/pom.xml ./user-service/pom.xml
 COPY ./resource-reservation/pom.xml ./resource-reservation/pom.xml
 COPY ./common/pom.xml ./common/pom.xml
-
 RUN mvn -q -ntp -B -pl common -am dependency:go-offline
 COPY ./common/src ./common/src
 RUN mvn -q -B -pl common install
-
 RUN mvn -e -B dependency:resolve
 
+FROM dependencies AS test
 COPY ./api-gateway/src ./api-gateway/src
 COPY ./user-service/src ./user-service/src
 COPY ./resource-reservation/src ./resource-reservation/src
+RUN mvn -e -B test
 
+FROM test AS build
 RUN mvn -e -B package -Dmaven.test.skip
-
 
 FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
