@@ -3,7 +3,6 @@ WORKDIR /app
 COPY package*.json ./
 RUN npm install
 
-# Stage 2: Build TypeScript to JavaScript
 FROM dependencies AS build
 WORKDIR /app
 COPY . .

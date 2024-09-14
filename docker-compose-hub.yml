@@ -1,0 +1,141 @@
+version: "3.8"
+name: resourcify
+
+services:
+  ################## KEYCLOAK ##################
+  keycloak-postgres:
+    image: postgres
+    volumes:
+      - keycloak_postgres_db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: keycloak_postgres_db
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+    ports:
+      - "6543:5432"
+
+  keycloak:
+    image: docker.io/bitnami/keycloak
+    ports:
+      - "8080:8080"
+    environment:
+      KEYCLOAK_CREATE_ADMIN_USER: true
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_USER: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KEYCLOAK_DATABASE_HOST: postgres
+      KEYCLOAK_DATABASE_PORT: 5432
+      KEYCLOAK_DATABASE_NAME: keycloak_postgres_db
+      KEYCLOAK_DATABASE_USER: root
+      KEYCLOAK_DATABASE_PASSWORD: root
+      KC_HEALTH_ENABLED: true
+      KEYCLOAK_IMPORT: /opt/bitnami/keycloak/data/import/realm-export.json
+    volumes:
+      - ./keycloak/realms:/opt/bitnami/keycloak/data/import
+    depends_on:
+      - keycloak-postgres
+    entrypoint: '/opt/bitnami/keycloak/bin/kc.sh start-dev --import-realm'
+    healthcheck:
+      test: [ "CMD-SHELL", "curl -s -o /dev/null http://keycloak:8080/health/live" ]
+      interval: 3s
+      timeout: 3s
+      retries: 30
+
+    ################## API-GATEWAY ##################
+  api-gateway:
+    image: filipstojakovic/resourcify-api-gateway:v1
+    ports:
+      - '8083:8083'
+    env_file:
+      - ./api-gateway/.env
+    environment:
+      PORT: 8083
+    depends_on:
+      user-service:
+        condition: service_started
+      resource-reservation:
+        condition: service_started
+      notification-service:
+        condition: service_started
+
+  ################## RESOURCE-RESERVATION ##################
+  resource-reservation:
+    image: filipstojakovic/resourcify-resource-reservation:v1
+    ports:
+      - '8082:8082'
+    env_file:
+      - ./resource-reservation/.env
+    environment:
+      PORT: 8082
+    depends_on:
+      keycloak:
+        condition: service_healthy
+      resource-reservation-mongo:
+        condition: service_started
+
+  resource-reservation-mongo:
+    image: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+      - MONGO_INITDB_DATABASE=resource_db
+    volumes:
+      - data:/data
+
+    ################## USER-SERVICE ##################
+  user-service:
+    image: filipstojakovic/resourcify-user-service:v1
+    ports:
+      - '8084:8084'
+    env_file:
+      - ./user-service/.env
+    environment:
+      PORT: 8084
+    depends_on:
+      keycloak:
+        condition: service_healthy
+
+  ################## RABBITMQ ##################
+  rabbitmq:
+    image: rabbitmq:3.8-management
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+    ports:
+      - "5672:5672" # default rabbitmq port
+      - "15672:15672" # UI management port
+      - "15674:15674" # RabbitMQ STOMP (WebSocket) port
+      - "61613:61613" # STOMP port
+    volumes:
+      - "./rabbitmq/enabled_plugins:/etc/rabbitmq/enabled_plugins"
+    healthcheck:
+#      test: rabbitmq-diagnostics -q ping
+      test: rabbitmq-diagnostics check_port_connectivity
+      interval: 3s
+      timeout: 3s
+      retries: 30
+
+  ################## NOTIFICATION-SERVICE ##################
+  notification-service:
+    image: filipstojakovic/resourcify-notification-service:v1
+    restart: unless-stopped
+    ports:
+      - '8000:8000'
+    depends_on:
+      keycloak:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+
+  ################## FRONTEND ##################
+  frontend:
+    image: filipstojakovic/resourcify-frontend:v1
+    ports:
+      - '4200:80'
+
+volumes:
+  data:
+  keycloak_postgres_db:
+  node_modules:
